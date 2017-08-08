@@ -1,22 +1,22 @@
 {
     "agents": [
         {
-            "hostname": "172.16.1.112",
+            "hostname": "10.0.15.30",
             "principal": "root",
             "roles": [
                 {
                     "name": "dev",
                     "cpus": 0.5,
-                    "mem": 300,
-                    "disks": 10000,
+                    "mem": 100,
+                    "disks": 1000,
                     "begin_port": 1025,
                     "end_port": 2180
                 },
                 {
                     "name": "svc",
                     "cpus": 0.2,
-                    "mem": 400,
-                    "disks": 10000,
+                    "mem": 100,
+                    "disks": 1000,
                     "begin_port": 2182,
                     "end_port": 3887
                 }
