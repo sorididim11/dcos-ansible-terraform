@@ -1,0 +1,12 @@
+
+
+[dcos_bootstrap]
+10.0.15.10 ansible_connection=local
+
+[dcos_masters]
+10.0.15.20
+
+[dcos_slaves]
+10.0.15.30
+
+[dcos_slaves_public]

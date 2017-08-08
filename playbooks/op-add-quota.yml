@@ -1,0 +1,6 @@
+- name: "Reserve dynamic resources based on roles"
+  hosts: "dcos_bootstrap"
+  become: yes
+  roles:
+    - { role: dcos/node/quota, op_type: reserve_resources } 
+  environment: "{{ proxy_env }}"

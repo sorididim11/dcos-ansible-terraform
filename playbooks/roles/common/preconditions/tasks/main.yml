@@ -1,0 +1,77 @@
+---
+
+  - name: debug home dir 
+    debug: 
+      msg: "{{ ansible_user_dir }}"
+  
+
+  - name: Allow 'wheel' group to have passwordless sudo
+    lineinfile:
+      dest: /etc/sudoers
+      state: present
+      regexp: '^%wheel'
+      line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+
+
+  - name: Disable firewalld. known issue of docker
+    service:
+      name: firewalld.service
+      state: stopped
+      enabled: no
+    ignore_errors: yes
+
+    
+  - name: Add group, nogroup
+    group: name=nogroup state=present
+
+
+  - name: Add Centos Repo
+    copy:
+      src: kin-centos.repo
+      dest: /etc/yum.repos.d/kin-centos.repo
+
+
+  - name: Install required utils 
+    yum: name={{item}} state=present update_cache=yes
+    with_items:
+      - epel-release
+      - tar
+      - xz
+      - unzip
+      - curl 
+      - ipset
+      - ntp
+      - python-docker-py #for ansible docker module
+
+
+  - name: Enable ntpd
+    systemd: name=ntpd.service state=restarted enabled=yes
+    changed_when: False
+
+
+  - name: Set selinux to "{{selinux_mode}}" mode.
+    selinux: policy=targeted state={{selinux_mode}}
+  
+
+  - name: Enable overlayfs
+    lineinfile: dest=/etc/modules-load.d/overlay.conf regexp="^overlay" line=overlay state=present create=yes
+    when: inventory_hostname not in groups['dcos_bootstrap']
+
+
+  - name: load overyfs to kernel 
+    modprobe: name=overlay state=present
+    when: inventory_hostname not in groups['dcos_bootstrap']
+
+
+  - name : Set DC/OS loacle, LANG=en_US.utf-8
+    command: localectl set-locale LANG=en_US.utf-8 
+    
+  
+  - name : Set DC/OS loacle, LC_ALL=en_US.utf-8
+    lineinfile: dest=/etc/locale.conf line='LC_ALL=en_US.utf-8' state=present create=yes
+
+
+  # - name: reboot for preconditions like overlay, selinux, locale 
+  #   command: systemctl reboot
+  #   delegate_to: {{item}}
+  #   with_items: {{ grous['nodes']}}

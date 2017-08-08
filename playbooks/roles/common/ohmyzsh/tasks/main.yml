@@ -1,0 +1,54 @@
+---
+  - name: debug home dir 
+    debug: 
+      msg: "{{ ansible_user_dir }}"
+  
+
+  - name: Install zsh 
+    package: name={{item}} state=present
+    become_user: root
+    with_items:
+      - zsh
+      - git
+
+
+  - name: Cloning oh-my-zsh
+    git: 
+      repo: https://github.com/robbyrussell/oh-my-zsh
+      dest: "{{ansible_user_dir}}/.oh-my-zsh"
+    register: isCloned
+
+
+  - name: Check if ohmyzsh plugin exsits
+    stat: "path={{ansible_user_dir}}/.oh-my-zsh/plugins/zsh-autosuggestions"
+    register: is_installed
+
+
+  - name: Cloning autosuggestion plugins of oh-my-zsh
+    git: 
+      repo: https://github.com/zsh-users/zsh-autosuggestions
+      dest: "{{ansible_user_dir}}/.oh-my-zsh/plugins/zsh-autosuggestions"
+    when: is_installed.stat.exists == False
+
+  
+  - name: Set Suggestion color to fg=5
+    lineinfile: "dest={{ansible_user_dir}}/.oh-my-zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh regexp='^ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE=' line=ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=5'"
+
+  - name: Createing new zshrc 
+    template:
+      src: templates/zshrc.in
+      dest: "{{ansible_user_dir}}/.zshrc"  
+  
+
+  - name: Chanage to zsh 
+    user:  "name={{ansible_user_id}} shell=/usr/bin/zsh"
+    become: yes
+    become_user: root
+
+
+  - name: Source zshrc
+    shell: "source {{ansible_user_dir}}/.zshrc"
+    become: yes
+    become_user: root
+
+ 

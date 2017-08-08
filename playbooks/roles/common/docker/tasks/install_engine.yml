@@ -1,0 +1,47 @@
+---
+
+- name: Add the YUM Docker repository.
+  yum_repository:
+    name: dockerrepo
+    description: Docker Repository.
+    baseurl: "{{ docker_repo }}"
+    enabled: yes
+    gpgcheck: yes
+    gpgkey:  http://yum.dockerproject.org/gpg
+
+
+- name: Create docker.service dropin directroy
+  file: 
+    path: /etc/systemd/system/docker.service.d
+    state: directory
+
+
+- name: Configure systemd to run the Docker Daemon with OverlayFS
+  copy:
+    src: override.conf
+    dest: /etc/systemd/system/docker.service.d/override.conf
+  when: inventory_hostname not in groups['dcos_bootstrap']
+
+
+- name: Configure systemd to run the Docker Daemon with Http proxy 
+  template:
+    src: http.conf.j2
+    dest: /etc/systemd/system/docker.service.d/http.conf
+  when: proxy_env.http_proxy is defined
+
+# makecache is added whenever update_cache: yes
+- name: Install Docker Engine & Selinux 
+  yum: name={{item}} state=present update_cache=yes
+  with_items:
+    - docker-engine-{{ docker_version }}
+    - docker-engine-selinux-{{ docker_version }}
+
+
+# from ansible version 2.2
+- name: Reload systemd and restat docker service
+  systemd:
+    name: docker
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  changed_when: false

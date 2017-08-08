@@ -1,0 +1,14 @@
+
+---
+
+- include: step2-deploy-docker.yml
+
+- include: step3-build-bootfiles.yml
+
+- include: step4-deploy-cluster.yml
+
+- include : pkg-install-cli.yml
+
+- include : pkg-install-docker-registry.yml
+
+- include : pkg-install-monitoring.yml

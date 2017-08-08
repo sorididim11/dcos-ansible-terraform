@@ -1,0 +1,18 @@
+---
+
+- name: "Run Bootstrap web server"
+  gather_facts: False
+  hosts: "dcos_bootstrap"
+  become: yes
+  roles:
+    - { role: dcos/node/bootstrap } 
+  environment: "{{ proxy_env }}"
+
+
+- name: "Add node to the cluster"
+  gather_facts: False
+  hosts: "dcos_slaves"
+  become: yes
+  roles:
+    - { role: dcos/node/add-node, node_type: slave, service_name: dcos-mesos-slave } 
+  environment: "{{ proxy_env }}"

@@ -1,0 +1,8 @@
+---
+- hosts: dcos_bootstrap
+  gather_facts: False
+  tasks:
+  - name: Install ssh pub key to authorized_key
+    authorized_key: user=vagrant
+                    key="{{ lookup('file', '/home/vagrant/.ssh/id_rsa.pub')}}"
+                    state=present

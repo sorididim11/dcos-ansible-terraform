@@ -1,0 +1,11 @@
+
+{  
+   "id":"/simple-service",
+   "instances":1,
+   "container":{  
+      "type":"MESOS"
+   },
+   "cpus":0.1,
+   "mem":128,
+   "cmd":"sleep 10"
+}

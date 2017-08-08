@@ -1,0 +1,9 @@
+--- 
+
+- name: "Install Monitoring platform"
+  gather_facts: False
+  hosts: dcos_bootstrap
+  become: yes
+  roles:
+    - { role: dcos/packages/monitoring } 
+  environment: "{{ proxy_env }}"

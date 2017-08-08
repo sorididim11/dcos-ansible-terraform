@@ -1,0 +1,8 @@
+--- 
+- name: "Run web server for file distribution"
+  gather_facts: False
+  hosts: dcos_bootstrap
+  become: yes
+  roles:
+    - { role: dcos/node/boot_web,  when: dcos_is_insecure_registry == False }
+    - { role: dcos/packages/docker-registry } 

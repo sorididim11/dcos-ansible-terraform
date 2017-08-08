@@ -1,0 +1,8 @@
+---
+
+- name: "Deploy DC/OS bootstreap"
+  gather_facts: False
+  hosts: dcos_bootstrap
+  become: yes
+  roles:
+    - role: dcos/bootstrap 
