@@ -1,4 +1,4 @@
-Ansible vault
+# Ansible vault
 ansible-valut create <file-name>      -  encrpy the file
 ansible-valut edit <file-name>      -  edit the file
 ansible-valut edit <file-name>      -  edit the file
@@ -18,46 +18,44 @@ license: !vault |
 other_plain_text: othervalue
 
 
-Ansible data type
-
-string, int, bool, list, map 
-
+# Ansible data type
 data_test: 
    foo: 5         # this is int 
+   foo: 1.0       # float
    goo: hello     # this is string in python like 'hello'
 
-
-group counting 
+# tip
+Group counting 
  (groups['dcos_slaves'] | length) +  (groups['dcos_slaves_public'] | length)
 
+Ansible multiline commands
+shell: |
+         command1
+         command2
+         commandN
 
-jinja expression 
+Ansible tagging
+ansible-playbook site.yml --limit webservers
 
+
+# jinja expression 
 {% ... %} for control statements
 {{ ... }} for expressions
 {# ... #} for comments
 
-Ansible multiline commands
-shell: |
 
 
-Ansible tagging
 
-ansible-playbook site.yml --limit webservers
-
-
-Filters
-
+# Filters
 To escape special characters within a regex, use the “regex_escape” filter:
 
-# convert '^f.*o(.*)$' to '\^f\.\*o\(\.\*\)\$'
+1) convert '^f.*o(.*)$' to '\^f\.\*o\(\.\*\)\$'
 {{ '^f.*o(.*)$' | regex_escape() }}
 
 
-To replace text in a string with regex, use the “regex_replace” filter:
-
-# convert "ansible" to "able"
+2) To replace text in a string with regex, use the “regex_replace” filter:
+convert "ansible" to "able"
 {{ 'ansible' | regex_replace('^a.*i(.*)$', 'a\\1') }}
 
-# convert "foobar" to "bar"
+convert "foobar" to "bar"
 {{ 'foobar' | regex_replace('^f.*o(.*)$', '\\1') }}
