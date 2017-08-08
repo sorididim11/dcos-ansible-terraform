@@ -1,0 +1,50 @@
+
+--- 
+
+
+- name: Install filebeat
+  yum:
+    name:  https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-5.0.0-x86_64.rpm
+    disable_gpg_check: yes
+    state: present
+    validate_certs: no
+
+
+- name: Create dcos log directory
+  file: 
+    path: /var/log/dcos
+    state: directory
+
+
+- name: Backup filebeat conf file 
+  copy:
+    src: filebeat.yml
+    dest: /etc/filebeat/filebeat.yml
+
+
+- name: Create dcos-journalctl-filebeat.service directory
+  copy: 
+    src: master-dcos-journalctl-filebeat.service
+    dest: /etc/systemd/system/dcos-journalctl-filebeat.service
+    mode: 0755
+  when: "'dcos_masters' in group_names"
+
+
+- name: Create dcos-journalctl-filebeat.service directory
+  copy: 
+    src: slave-dcos-journalctl-filebeat.service
+    dest: /etc/systemd/system/dcos-journalctl-filebeat.service
+    mode: 0755
+  when: "'dcos_masters' not in group_names"
+
+# from ansible version 2.2
+- name: Reload systemd and restat dcos-journalctl-filebeat.service
+  systemd:
+    name: "{{item}}"
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  with_items:
+    - dcos-journalctl-filebeat.service
+    - filebeat
+  changed_when: false

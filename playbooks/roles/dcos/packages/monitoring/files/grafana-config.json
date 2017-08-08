@@ -1,0 +1,17 @@
+{
+  "service": {
+    "name": "grafana"
+  },
+  "grafana": {
+    "cpus": 0.3,
+    "mem": 512,
+    "admin_password": "admin"
+  },
+  "networking": {
+    "external_access": {
+      "enable": true,
+      "external_access_port": 13000,
+      "virtual_host": "grafana.example.org"
+    }
+  }
+}

@@ -6,5 +6,3 @@
 ansible_dcos_hosts
 ihos.osrc
 terraform.tfstate*
-dcos
-dcos_generate_config.ee.sh

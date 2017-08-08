@@ -1,0 +1,34 @@
+---
+
+- name: Check if dcos installer/serve dir exists
+  stat:
+    path: "{{ dcos_bootstrap_root_path }}/genconf/serve"
+  register: installer
+
+  
+- name: Check if dcos backup files exist
+  stat: 
+    path: "{{ dcos_bootstrap_root_path }}/dcos-installer.tar"
+  register: backupfiles
+ 
+
+- name: Show error when Backup files are not found
+  fail: 
+    msg: "Backup files not found."
+  when: installer.stat.exists == False and backupfiles.stat.exists == False
+
+
+- name: Unarchive dcos-installer.tar
+  unarchive: 
+    path: "{{ dcos_bootstrap_root_path }}/dcos-installer.tar"
+  when: installer.stat.exists == False
+
+
+- name: Run bootfile web container 
+  docker_container: 
+    name: boot-nginx
+    detach: True
+    image: nginx
+    state: started
+    ports: "{{dcos_bootstrap_port}}:80"
+    volumes: "{{ dcos_bootstrap_root_path }}/genconf/serve:/usr/share/nginx/html:ro"

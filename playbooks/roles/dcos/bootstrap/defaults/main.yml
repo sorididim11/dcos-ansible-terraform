@@ -1,0 +1,41 @@
+---
+
+# enterprise
+edcos_license: <license>
+edcos_superuser: root          # dcos amdin permission 
+edcos_superuser_pwd: root      # dcos amdin permission 
+edcos_bouncer_expiration_auth_token_days: '5' # Autho toke Titme to Live (default : 5 days)
+edcos_security_mode: permissive # security type  disabed, permissive, strict 
+edcos_audit_logging: 'true'  # 'true' or 'false'  -  mesos, marathon and jobs logged (default: true)
+
+#bootstrap 
+dcos_is_enterprise: False #Ture or False
+dcos_bootstrap_root_path: /dcos # root dir for boostraping 
+dcos_bootstrap_port: 80         # home dir for installation
+dcos_bootstrap_url: "http://{{groups['dcos_bootstrap'][0]}}:{{dcos_bootstrap_port}}"
+dcos_installer_name: "{{ (dcos_is_enterprise) | ternary( 'dcos_generate_config.ee.sh', 'dcos_generate_config.sh')  }}"
+dcos_installer_download_url: "{{ (dcos_is_enterprise) | ternary('https://downloads.mesosphere.io/dcos-enterprise/stable/dcos_generate_config.ee.sh', 'https://downloads.dcos.io/dcos/stable/dcos_generate_config.sh') }}"
+dcos_nic_name: eno1 # for ip-detect - name of network interface card for ip detection  of all nodes
+dcos_nic_pub_name: eno1 # for ip-detect-public
+ssh_superuser: root # ansible become_user permission
+dcos_ssh_user: root
+dcos_ssh_port: 22
+
+
+#cluster setup 
+dcos_version: 1.9
+dcos_cluster_name: dcos
+dcos_exhibitor_storage_backend_type: static  #static, zookeepr, aws_s3, azure - if not static used, bootstrap node is part of the cluster
+dcos_master_discovery_type : static #static or master_http_loadbalancer( static only supported now) - conditions for static, agents discovery masters by static master_list specificed in config.yml. no ip changes allowed.
+dcos_is_cli_install: yes
+
+#dcos_docker_registry_url: <<cluster_docker_registry_url>>
+dcos_host_volume_registry: '/tmp'
+
+
+#performance  and Tuning
+dcos_telemetry_enabled: 'true'
+
+#networking
+dcos_resolver1: 8.8.8.8
+dcos_resolver2: 8.8.4.4

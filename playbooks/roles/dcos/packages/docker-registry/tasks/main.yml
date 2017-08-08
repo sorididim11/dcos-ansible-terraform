@@ -1,0 +1,50 @@
+
+---
+
+
+- name: Create dcos packages directory 
+  file: 
+    path: "{{ dcos_bootstrap_root_path }}/packages"
+    state: directory
+
+
+- name: Check if Docker certificates exist
+  stat:
+    path: "{{ dcos_bootstrap_root_path }}/genconf/serve/domain.crt"
+  register: is_cert_exists
+  when: dcos_is_insecure_registry == False
+
+
+- name: Generate self-signed certificate for registry
+  command: openssl req -newkey rsa:4096 -nodes -sha256 -subj "/emailAddress=jong-gun.kim@hpe.com/C=KR/ST=Seoul/L=Seoul/O=Global Security/OU=IT Deparment/CN=registry.marathon.l4lb.thisdcos.directory" -keyout domain.key -x509 -days 365 -out domain.crt  
+  args:
+    chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve"
+  when: dcos_is_insecure_registry == False and is_cert_exists.stat.exists == False
+
+
+- name: Copy domina key, certificte to Web directory
+  copy: "src={{item}} dest={{ dcos_bootstrap_root_path }}/genconf/serve"
+  with_items:
+    - domain.key
+    - domain.crt
+  when: dcos_is_insecure_registry == False 
+  
+
+- name: Create cert directories and insert crts, key to it andd restart docker engine in each agent
+  shell: |
+            mkdir -p /etc/docker/certs.d/registry.marathon.l4lb.thisdcos.directory:5000 
+            curl -o /etc/docker/certs.d/registry.marathon.l4lb.thisdcos.directory:5000/ca.crt http://{{groups['dcos_bootstrap'][0]}}:{{dcos_bootstrap_port}}/domain.crt 
+            sudo systemctl restart docker.service
+  delegate_to: "{{item}}"
+  when: inventory_hostname != item and  dcos_is_insecure_registry == False 
+  with_items: "{{ groups['all'] }}"
+  
+  
+- name: Generate docker registry config 
+  template:
+    src: registry-opt.json.j2
+    dest: "{{ dcos_bootstrap_root_path }}/packages/registry-opt.json"
+
+
+- name: Install Docker registry 
+  command: "dcos package install --options={{ dcos_bootstrap_root_path }}/packages/registry-opt.json registry --yes"

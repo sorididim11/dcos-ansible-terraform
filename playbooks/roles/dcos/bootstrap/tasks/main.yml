@@ -1,0 +1,69 @@
+
+
+- debug:
+    msg: "is enterprise? {{ dcos_is_enterprise }}, version: {{ dcos_version }}, repo:  {{ dcos_bootstrap_root_path }}"
+
+
+- name: Create a directory named genconf
+  file: 
+    path: "{{ dcos_bootstrap_root_path }}/genconf"
+    state: directory
+
+
+- name: Download DC/OS installer
+  get_url:
+    url: "{{ dcos_installer_download_url }}"
+    dest: "{{ dcos_bootstrap_root_path }}/{{ dcos_installer_name }}"
+    force: no
+    validate_certs: no
+    use_proxy: yes
+  environment: "{{proxy_env}}"
+
+
+- name: Generate DC/OS config file
+  template:
+    src: config.yaml.j2
+    dest: "{{ dcos_bootstrap_root_path }}/genconf/config.yaml"
+
+
+# write hashed pwd  to config.yml
+- name: Store hashed password to config.yaml
+  command: bash {{ dcos_installer_name }} --set-superuser-password {{ edcos_superuser_pwd }}
+  args:
+    chdir: "{{ dcos_bootstrap_root_path }}"
+  when: dcos_is_enterprise
+
+
+- name: Generate ip-detect
+  template:
+    src: ip-detect.j2
+    dest: "{{ dcos_bootstrap_root_path }}/genconf/ip-detect"
+
+
+- name: Generate ip-detect-public
+  template:
+    src: ip-detect-pub.j2
+    dest: "{{ dcos_bootstrap_root_path }}/genconf/ip-detect-public"
+
+
+- name: Generate a customized DC/OS build file
+  command: bash {{ dcos_installer_name }}
+  args:
+    chdir: "{{ dcos_bootstrap_root_path }}"
+
+
+- name: Run bootfile web container 
+  docker_container: 
+    name: boot-nginx
+    detach: True
+    image: nginx
+    state: started
+    ports: "{{dcos_bootstrap_port}}:80"
+    volumes: "{{ dcos_bootstrap_root_path }}/genconf/serve:/usr/share/nginx/html:ro"
+
+
+- name: Backup  DC/OS installer files
+  shell: tar cf "{{dcos_bootstrap_root_path}}"/dcos-install.tar *
+  args:
+    chdir: "{{ dcos_bootstrap_root_path }}/genconf"
+  

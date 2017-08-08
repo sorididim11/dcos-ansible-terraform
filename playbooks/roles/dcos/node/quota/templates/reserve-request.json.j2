@@ -1,0 +1,69 @@
+{% for target in nodes %}
+{% if item.hostname == target.hostname %} 
+{
+  "type": "{{op_type | upper}}",
+  "{{op_type | lower }}": {
+    "agent_id": {
+      "value": "{{ target.id }}"
+    },
+    "resources": [
+{% for role in item.roles %}
+      {
+        "type": "SCALAR",
+        "name": "cpus",
+        "reservation": {
+          "principal": "{{item.principal}}"
+        },
+        "role": "{{role.name}}",
+        "scalar": {
+          "value": {{ role.cpus | default(0.0) }}
+        }
+      },
+      {
+        "type": "SCALAR",
+        "name": "gpus",
+        "reservation": {
+          "principal": "{{item.principal}}"
+        },
+        "role": "{{role.name}}",
+        "scalar": {
+          "value": {{ role.gpus | default(0.0) }}
+        }
+      },
+  {% if role.begin_port is defined %}
+      {
+        "type": "RANGES",
+        "name": "ports",
+        "reservation": {
+          "principal": "{{item.principal}}"
+        },
+        "role": "{{role.name}}",
+        "ranges": {
+          "range": [
+            {
+              "begin": {{ role.begin_port }},
+              "end": {{ role.end_port }}
+            }
+          ]
+        }
+      },
+  {% endif %}
+      {
+        "type": "SCALAR",
+        "name": "mem",
+        "reservation": {
+          "principal": "{{item.principal}}"
+        },
+        "role": "{{role.name}}",
+        "scalar": {
+          "value": {{ role.mem | default(0) }}
+        }
+      }
+{% if not loop.last %}, {% endif %}
+{% endfor %}
+    ]
+  }
+}
+
+ {% endif %}
+{% endfor %}

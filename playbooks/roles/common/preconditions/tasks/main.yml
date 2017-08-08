@@ -58,7 +58,7 @@
     when: inventory_hostname not in groups['dcos_bootstrap']
 
 
-  - name: load overyfs to kernel 
+  - name: Load overyfs to kernel 
     modprobe: name=overlay state=present
     when: inventory_hostname not in groups['dcos_bootstrap']
 

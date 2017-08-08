@@ -1,0 +1,95 @@
+
+
+- name: Copy qutoa definition file to dcos cli node
+  copy: 
+    src: "{{item}}"
+    dest: "{{dcos_bootstrap_root_path}}/{{item}}"
+  with_items: 
+    - reserve_resources.json
+    - unreserve_resources.json
+
+
+- name: Load qutoa definition file 
+  shell: "cat {{dcos_bootstrap_root_path}}/{{op_type}}.json"
+  register: reservation_json
+
+
+- name: Aquire Auth token 
+  shell: dcos config show core.dcos_acs_token
+  register: auth_token
+
+
+- name: Get states of dcos nodes 
+  command: dcos node --json 
+  register: nodes_json
+
+
+- name: Convert node states to variable
+  set_fact: 
+    nodes: "{{nodes_json.stdout | from_json }}"
+    reservation: "{{ reservation_json.stdout | from_json }}"
+
+
+- debug:
+    msg: "{{reservation}}"
+
+
+
+# - name: Check if possible to reserve request
+#   set_fact:
+#     reservation: "{{ reservation | default({}) + {
+#      'name': 'item.1.hostname', 
+#      'cpus': (item.2 | map(attribute='cpus') | sum(start=0) , 
+#      'mem':  (item.2 | map(attribute='mem') | sum(start=0)), 
+#      'gpus':  (item.2 | map(attribute='gpus') | sum(start=0)),
+#      'disks: (item.2 | map(attribute='disks') | sum(start=0)) 
+#        }
+#     }}"
+#   with_subelements:
+#     - "{{reservation.agents}}"
+#     - "roles"
+
+- name: Generates {{op_type}}.json for each role
+  template:
+    src: reserve-request.json.j2
+    dest: "{{dcos_bootstrap_root_path}}/packages/{{op_type}}-{{item.hostname}}.json"
+  with_items: "{{reservation.agents}}"
+
+
+- name: Load {{op_type}}-{{item.hostname}}.json
+  shell: cat {{dcos_bootstrap_root_path}}/packages/{{op_type}}-{{item.hostname}}.json
+  register: req_body_list
+  with_items: "{{reservation.agents}}"
+ 
+
+- name: Do operation, {{op_type}} 
+  uri:
+    url: "https://{{dcos_first_master_internal_ip}}/mesos/api/v1"
+    method: POST
+    validate_certs: False
+    headers: 
+      Authorization: "token={{auth_token.stdout}}"
+      Content-Type: "application/json"
+      Accept: "application/json" 
+    body_format: json
+    body: "{{ item.stdout }}"
+    status_code: 202
+  with_items: "{{req_body_list.results}}"
+
+
+- name: Generates marathon config for each role
+  template:
+    src: marathon-config.json.j2
+    dest: "{{dcos_bootstrap_root_path}}/packages/marathon-opt-{{item.1.name}}.json"
+  with_subelements:
+    - "{{reservation.agents}}"
+    - "roles"
+  when: op_type == "reserve_resources"
+
+
+- name: Launch custom marathon with each role
+  command: "dcos package install --options={{dcos_bootstrap_root_path}}/packages/marathon-opt-{{item.1.name}}.json marathon --yes" 
+  with_subelements:
+    - "{{reservation.agents}}"
+    - "roles"
+  when: op_type == "reserve_resources"

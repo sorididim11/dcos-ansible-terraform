@@ -1,0 +1,46 @@
+--- 
+
+- debug:
+    msg: "proxy - {{proxy_env}}"
+ 
+ 
+- name: Download DC/OS client
+  get_url:
+    url: "https://downloads.dcos.io/binaries/cli/linux/x86-64/dcos-{{dcos_version}}/dcos"
+    dest: /usr/local/bin/dcos
+    validate_certs: no
+    mode: 0550
+    force: no
+  environment: "{{proxy_env}}" 
+
+
+- name: Set dcos master url to dcos cli 
+  command: "dcos config set core.dcos_url {{ dcos_cluster_url }}"
+
+
+- name: Download root Certificate from master
+  get_url: 
+    url: "{{ dcos_cluster_url }}/ca/dcos-ca.crt"
+    dest: "{{ dcos_bootstrap_root_path }}/dcos-ca.crt"
+    validate_certs: no
+    mode: 0400
+    force: yes
+  when: dcos_is_enterprise
+
+
+- name: Confige dcos with root certificate
+  command: "dcos config set core.ssl_verify {{ dcos_bootstrap_root_path }}/dcos-ca.crt"
+  when: dcos_is_enterprise
+
+
+- name: Login to DC/OS
+  command: dcos auth login --username={{edcos_superuser}} --password={{edcos_superuser_pwd}}
+  when: dcos_is_enterprise
+  
+
+- name: Install Enterprise CLI
+  command: dcos package install --cli dcos-enterprise-cli
+  when: dcos_is_enterprise
+  environment: "{{proxy_env}}"
+  
+  

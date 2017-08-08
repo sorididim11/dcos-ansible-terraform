@@ -1,0 +1,27 @@
+{
+  "type": "SET_QUOTA",
+  "set_quota": {
+    "quota_request": {
+     "role": "role1",
+      "force": true,
+      "guarantee": [
+        {
+          "name": "cpus",
+          "role": "*",
+          "scalar": {
+            "value": 1.0
+          },
+          "type": "SCALAR"
+        },
+        {
+          "name": "mem",
+          "role": "*",
+          "scalar": {
+            "value": 512.0
+          },
+          "type": "SCALAR"
+        }
+      ]
+    }
+  }
+}

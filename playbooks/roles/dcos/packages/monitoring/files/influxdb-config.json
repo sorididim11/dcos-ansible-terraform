@@ -1,0 +1,30 @@
+{
+  "service": {
+    "name": "influxdb",
+    "cpus": 1,
+    "mem": 2048
+  },
+  "storage": {
+    "pre_create_database": true,
+    "pre_create_database_name": "cadvisor",
+    "host_volume_influxdb": "/tmp",
+    "persistence": {
+      "enable": false,
+      "volume_size_influxdb": 2048,
+      "external": {
+        "enable": false,
+        "volume_name_influxdb": "influxdb",
+        "provider": "dvdi",
+        "driver": "rexray"
+      }
+    }
+  },
+  "networking": {
+    "port": 8083,
+    "port_api": 8086,
+    "external_access": {
+      "enable": false,
+      "external_access_port": 18083
+    }
+  }
+}

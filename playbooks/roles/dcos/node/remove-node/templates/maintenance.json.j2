@@ -1,0 +1,16 @@
+{
+    "windows": [
+        {
+             "machine_ids" : [
+            {% for host in groups['maintenance'] %}
+            {% raw %}  { "ip" : {% endraw %} {{ host }} {% raw %} } {% endraw %}
+              {% "," if not loop.last %}   
+            {% endfor %}
+             ],
+        "unavailability" : {
+            "start" : { "nanoseconds" : 1 }, 
+             "duration" : { "nanoseconds" : 3600000000000 }
+              }
+        }
+    ]
+}

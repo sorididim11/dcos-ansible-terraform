@@ -1,0 +1,64 @@
+---
+
+{# bootstrap #}
+bootstrap_url: {{ dcos_bootstrap_url }}
+ip_detect_filename: /genconf/ip-detect
+ip_detect_public_filename: /genconf/ip-detect-public
+
+
+{# enterprise dcos setup #}
+{% if dcos_is_enterprise %}
+customer_key: {{ edcos_license }}
+security: {{ edcos_security_mode }}
+dcos_audit_logging: {{ edcos_audit_logging }}
+superuser_username: {{ edcos_superuser }}
+{% endif %}
+
+{# cluster setup #}
+cluster_name: {{ dcos_cluster_name }}
+oauth_enabled: 'false'
+exhibitor_storage_backend: {{ dcos_exhibitor_storage_backend_type }}
+master_discovery: {{ dcos_master_discovery_type }}
+{% if dcos_docker_registry_url is defined %}
+cluster_docker_registry_url = {{ dcos_docker_registry_url }}
+{% endif %}
+process_timeout: 600
+
+
+agent_list:
+{% for slave_ip in groups['dcos_slaves'] %}
+- {{ hostvars[slave_ip]['ansible_' + dcos_nic_name]['ipv4']['address'] }}
+{% endfor %}
+
+
+{% if (groups['dcos_slaves_public'] | length) > 0 %}
+public_agent_list:
+{% for slave_public_ip in groups['dcos_slaves_public'] %}
+- {{ hostvars[slave_public_ip]['ansible_' + dcos_nic_name]['ipv4']['address'] }}
+{% endfor %}
+{% endif %}
+
+master_list:
+{% for master_ip in groups['dcos_masters'] %}
+- {{ hostvars[master_ip]['ansible_' + dcos_nic_name]['ipv4']['address'] }}
+{% endfor %}
+
+
+
+resolvers:
+- {{ dcos_resolver1 }} 
+- {{ dcos_resolver2 }}
+
+
+{% if (dcos_is_use_proxy is defined) and dcos_is_use_proxy == true %}
+use_proxy: 'true'
+http_proxy: {{ proxy_env.http_proxy }}
+https_proxy: {{ proxy_env.http_proxy }}
+no_proxy: 
+{% for ip in proxy_env.no_proxy.split(",") %}
+- {{ip}}
+{% endfor %}
+{% for ip in groups['all'] %}
+- {{ hostvars[ip]['ansible_' + dcos_nic_name]['ipv4']['address'] }}
+{% endfor %}
+{% endif %}

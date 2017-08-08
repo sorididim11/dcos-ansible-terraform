@@ -1,0 +1,37 @@
+--- 
+
+- name: Create dcos packages directory 
+  file: 
+    path: "{{ dcos_bootstrap_root_path }}/packages"
+    state: directory
+
+
+- name: Generate cadvisor config file 
+  template:
+    src: cadvisor-config.json.j2
+    dest: "{{ dcos_bootstrap_root_path }}/packages/cadvisor-config.json"
+
+
+- name: Copy configurations of , influxdb and grafana
+  copy:
+    src: "{{item}}"
+    dest: "{{ dcos_bootstrap_root_path }}/packages/{{item}}"
+  with_items:
+    - influxdb-config.json
+    - grafana-config.json
+  
+
+- name: Install marathon-lb
+  shell: "dcos package install marathon-lb --yes"
+
+
+- name: Install cadvisor on all agents in the cluster
+  shell: "dcos package install --options={{ dcos_bootstrap_root_path }}/packages/cadvisor-config.json cadvisor --yes"
+
+
+- name: Install Influxdb
+  shell: "dcos package install --options={{ dcos_bootstrap_root_path }}/packages/influxdb-config.json influxdb --yes"
+
+
+- name: Install Grafana
+  shell: "dcos package install --options={{ dcos_bootstrap_root_path }}/packages/grafana-config.json grafana --yes"
