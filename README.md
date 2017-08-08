@@ -5,7 +5,7 @@
 ansible:  2.3.1
 terraform 
 
-#General Parameters for both community and enterprise version 
+# General Parameters for both community and enterprise version 
 dcos_is_enterprise: True or False - enterprise dcos or open source 
 dcos_cluster_name:               - user-defined cluster name
 dcos_bootstrap_root_path: /dcos  - bootstrap installation home   
@@ -23,7 +23,7 @@ proxy_env:
   no_proxy: ".mesos,.thisdcos.directory,.dcos.directory,.zk,127.0.0.1,localhost,{{ groups['all'] | map('extract', hostvars, ['ansible_' + dcos_nic_name, 'ipv4', 'address']) | join(',') }}"
 
 
-#Enterprise Parameters when dcos_is_enterprise: True
+# Enterprise Parameters when dcos_is_enterprise: True
 dcos_license: <license>          - when enterise dcos used.
 dcos_superuser: root             - enterprise dcos superuser
 dcos_superuser_pwd: root         - enterprise dcos superuser pwd
@@ -65,7 +65,7 @@ install all prerequistes, docker, DC/OS cluster, CLI, Enterprise CLI, docker pri
  ansible-playbook -i <inventory file> pkg-install-monitoring.yml 
 
 
-#Dynamic Reservation 
+# Dynamic Reservation 
 Reserve resources dynamically and Install custome marathon on it.
 first specifiy roles including cpu, mem, gpu, disk and so on  quota.json in roles/dcos/node/quota/files/quota.json 
 ansible-playbook -i <inventory file> op-add-quota.yml 
