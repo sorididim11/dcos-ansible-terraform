@@ -30,14 +30,14 @@
   when: dcos_is_insecure_registry == False 
   
 
-- name: Create cert directories and insert crts, key to it andd restart docker engine in each agent
+- name: Insert crts, key to docker cert directory and restart docker engine in each agent
   shell: |
             mkdir -p /etc/docker/certs.d/registry.marathon.l4lb.thisdcos.directory:5000 
             curl -o /etc/docker/certs.d/registry.marathon.l4lb.thisdcos.directory:5000/ca.crt http://{{groups['dcos_bootstrap'][0]}}:{{dcos_bootstrap_port}}/domain.crt 
             sudo systemctl restart docker.service
   delegate_to: "{{item}}"
-  when: inventory_hostname != item and  dcos_is_insecure_registry == False 
-  with_items: "{{ groups['all'] }}"
+  when: dcos_is_insecure_registry == False 
+  with_items: "{{ groups['dcos_nodes'] }}"
   
   
 - name: Generate docker registry config 

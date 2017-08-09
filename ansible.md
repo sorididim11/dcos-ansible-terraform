@@ -24,9 +24,13 @@ data_test:
    foo: 1.0       # float
    goo: hello     # this is string in python like 'hello'
 
-# tip
+# Tips
 Group counting 
  (groups['dcos_slaves'] | length) +  (groups['dcos_slaves_public'] | length)
+
+Play을 그룹중에 하나의 서버만 실행할때 배열의 인덱스를 사용할 수있다. 
+hosts: dcos_cli[0]  //그룹의 첫번째
+webservers[-1]      //그룹의 두번째
 
 Ansible multiline commands
 shell: |

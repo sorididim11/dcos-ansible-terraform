@@ -2,8 +2,24 @@
 
 - debug:
     msg: "proxy - {{proxy_env}}"
- 
- 
+
+
+- name: Create DC/OS user directory structure
+  file: 
+    path: "{{ dcos_bootstrap_root_path }}/{{item}}"
+    state: directory
+  with_items:
+    - packages
+    - quota
+    - examples
+
+
+- name: Copy marathon examples to {{ dcos_bootstrap_root_path }}/examples
+  copy:
+    src: examples/
+    dest: "{{ dcos_bootstrap_root_path }}/examples"
+    
+
 - name: Download DC/OS client
   get_url:
     url: "https://downloads.dcos.io/binaries/cli/linux/x86-64/dcos-{{dcos_version}}/dcos"
@@ -23,7 +39,7 @@
     url: "{{ dcos_cluster_url }}/ca/dcos-ca.crt"
     dest: "{{ dcos_bootstrap_root_path }}/dcos-ca.crt"
     validate_certs: no
-    mode: 0400
+    mode: 0440
     force: yes
   when: dcos_is_enterprise
 

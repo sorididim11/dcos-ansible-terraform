@@ -3,14 +3,14 @@
 - name: Copy qutoa definition file to dcos cli node
   copy: 
     src: "{{item}}"
-    dest: "{{dcos_bootstrap_root_path}}/{{item}}"
+    dest: "{{dcos_bootstrap_root_path}}/quota/{{item}}"
   with_items: 
     - reserve_resources.json
     - unreserve_resources.json
 
 
 - name: Load qutoa definition file 
-  shell: "cat {{dcos_bootstrap_root_path}}/{{op_type}}.json"
+  shell: "cat {{dcos_bootstrap_root_path}}/quota/{{op_type}}.json"
   register: reservation_json
 
 
@@ -49,15 +49,15 @@
 #     - "{{reservation.agents}}"
 #     - "roles"
 
-- name: Generates {{op_type}}.json for each role
+- name: Generates {{op_type}}-request.json for each role
   template:
     src: reserve-request.json.j2
-    dest: "{{dcos_bootstrap_root_path}}/packages/{{op_type}}-{{item.hostname}}.json"
+    dest: "{{dcos_bootstrap_root_path}}/quota/{{op_type}}-request-{{item.hostname}}.json"
   with_items: "{{reservation.agents}}"
 
 
 - name: Load {{op_type}}-{{item.hostname}}.json
-  shell: cat {{dcos_bootstrap_root_path}}/packages/{{op_type}}-{{item.hostname}}.json
+  shell: cat {{dcos_bootstrap_root_path}}/quota/{{op_type}}-request-{{item.hostname}}.json
   register: req_body_list
   with_items: "{{reservation.agents}}"
  

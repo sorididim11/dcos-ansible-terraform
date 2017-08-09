@@ -3,7 +3,7 @@
 
 - name: "Install docker engine"
   gather_facts: False
-  hosts: all
+  hosts: dcos_nodes:dcos_bootstrap
   become: yes
   roles:
     - role: common/docker

@@ -12,3 +12,12 @@
 
 [dcos_slaves_public]
 192.168.111.203
+
+[dcos_cli]
+10.0.15.10 ansible_connection=local
+
+
+[dcos_nodes:children]
+dcos_masters
+dcos_slaves
+dcos_slaves_public

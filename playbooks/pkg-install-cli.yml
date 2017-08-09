@@ -1,7 +1,7 @@
 --- 
 
 - name: "Install CLI and Enterprise CLI"
-  hosts: dcos_bootstrap
+  hosts: dcos_cli
   gather_facts: False
   become: yes
   roles:

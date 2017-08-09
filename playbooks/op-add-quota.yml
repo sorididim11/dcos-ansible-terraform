@@ -1,5 +1,5 @@
 - name: "Reserve dynamic resources based on roles"
-  hosts: "dcos_bootstrap"
+  hosts: dcos_cli[0]
   become: yes
   roles:
     - { role: dcos/node/quota, op_type: reserve_resources } 

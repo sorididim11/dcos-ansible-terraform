@@ -1,6 +1,6 @@
 
 --- 
-- hosts: all 
+- hosts: dcos_nodes:dcos_bootstrap
   gather_facts: True
   become: yes
   roles:

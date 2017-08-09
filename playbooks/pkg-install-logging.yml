@@ -1,7 +1,7 @@
 --- 
 
 - name: "Install Elastic Logging platform"
-  hosts: all:!dcos_bootstrap   #ansible partition to excluse bootstrap nodes
+  hosts: dcos_cli[0]   #ansible partition to excluse bootstrap nodes
   gather_facts: False
   become: yes
   roles:

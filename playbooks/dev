@@ -10,3 +10,12 @@
 10.0.15.30
 
 [dcos_slaves_public]
+
+[dcos_cli]
+10.0.15.10 ansible_connection=local
+
+
+[dcos_nodes:children]
+dcos_masters
+dcos_slaves
+dcos_slaves_public
