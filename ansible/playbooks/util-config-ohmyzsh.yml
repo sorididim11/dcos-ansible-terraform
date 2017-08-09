@@ -1,7 +1,6 @@
 
 --- 
 - hosts: dcos_bootstrap
-  become: yes
   roles:
     - role: common/ohmyzsh
   environment: "{{ proxy_env }}"

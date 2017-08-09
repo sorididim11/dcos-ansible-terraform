@@ -50,11 +50,8 @@ Vagrant.configure('2') do |config|
         node.vm.provision "shell" do |s|
           ssh_insecure_key = File.readlines("#{Dir.home}/.vagrant.d/insecure_private_key")
           s.inline = <<-SHELL
-            echo #{ssh_insecure_key} >> /root/.ssh/id_rsa
             echo #{ssh_insecure_key} >> /home/vagrant/.ssh/id_rsa
-            chown vagrant /root/.ssh/id_rsa
             chown vagrant /home/vagrant/.ssh/id_rsa
-            chmod 400 /root/.ssh/id_rsa
             chmod 400 /home/vagrant/.ssh/id_rsa
           SHELL
         end
@@ -62,11 +59,12 @@ Vagrant.configure('2') do |config|
         node.vm.provision :ansible_local do |ansible|
           ansible.install_mode = :pip # or default( by os package manager)
           ansible.version = '2.3.1'
-          ansible.provisioning_path = 'ansible'
-          ansible.inventory_path = 'inventories/ivagrant/hosts'
-          ansible.playbook = 'playbooks/util-config-ohmyzsh.yml'
+          ansible.config_file = 'ansible/ansible.cfg'
+          ansible.inventory_path = 'ansible/inventories/ivagrant/hosts'
+          ansible.playbook = 'ansible/playbooks/util-config-ohmyzsh.yml'
           ansible.limit = 'all'
           ansible.verbose = 'true'
+          ansible.vault_password_file = 'ansible/password'
         end
       end
     end

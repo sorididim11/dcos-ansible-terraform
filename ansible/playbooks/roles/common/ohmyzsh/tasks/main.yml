@@ -1,15 +1,17 @@
 ---
   - name: debug home dir 
     debug: 
-      msg: "{{ ansible_user_dir }}"
+      msg: "{{ ansible_user }} : {{ ansible_user_dir }}"
   
 
   - name: Install zsh 
+    become: yes
     package: name={{item}} state=present
     become_user: root
     with_items:
       - zsh
       - git
+    
 
 
   - name: Cloning oh-my-zsh
@@ -41,14 +43,12 @@
   
 
   - name: Chanage to zsh 
+    become: yes
     user:  "name={{ansible_user_id}} shell=/usr/bin/zsh"
     become: yes
-    become_user: root
-
+    
 
   - name: Source zshrc
     shell: "source {{ansible_user_dir}}/.zshrc"
-    become: yes
-    become_user: root
 
  
