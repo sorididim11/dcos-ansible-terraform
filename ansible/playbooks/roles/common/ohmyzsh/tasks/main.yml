@@ -7,12 +7,10 @@
   - name: Install zsh 
     become: yes
     package: name={{item}} state=present
-    become_user: root
     with_items:
       - zsh
       - git
     
-
 
   - name: Cloning oh-my-zsh
     git: 
@@ -36,6 +34,7 @@
   - name: Set Suggestion color to fg=5
     lineinfile: "dest={{ansible_user_dir}}/.oh-my-zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh regexp='^ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE=' line=ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=5'"
 
+
   - name: Createing new zshrc 
     template:
       src: templates/zshrc.in
@@ -45,7 +44,6 @@
   - name: Chanage to zsh 
     become: yes
     user:  "name={{ansible_user_id}} shell=/usr/bin/zsh"
-    become: yes
     
 
   - name: Source zshrc
