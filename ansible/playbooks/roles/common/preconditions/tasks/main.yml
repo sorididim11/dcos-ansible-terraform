@@ -48,7 +48,7 @@
     systemd: name=ntpd.service state=restarted enabled=yes
     changed_when: False
 
-
+# ansible selinux module requires libselinux-python & reboot required
   - name: Set selinux to "{{selinux_mode}}" mode.
     selinux: policy=targeted state={{selinux_mode}}
   

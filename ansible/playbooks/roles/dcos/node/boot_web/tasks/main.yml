@@ -24,7 +24,7 @@
   when: installer.stat.exists == False
 
 
-- name: Run bootfile web container 
+- name: Run web container for bootfiles
   docker_container: 
     name: boot-nginx
     detach: True

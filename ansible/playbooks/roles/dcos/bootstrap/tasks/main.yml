@@ -16,7 +16,6 @@
     dest: "{{ dcos_bootstrap_root_path }}/{{ dcos_installer_name }}"
     force: no
     validate_certs: no
-    use_proxy: yes
   environment: "{{proxy_env}}"
 
 
@@ -55,7 +54,6 @@
 - name: Run bootfile web container 
   docker_container: 
     name: boot-nginx
-    detach: True
     image: nginx
     state: started
     ports: "{{dcos_bootstrap_port}}:80"

@@ -32,8 +32,8 @@ Vagrant.configure('2') do |config|
     # nat은  vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']  추가 하면 사용. 
     # vagrant가 설정 host-only virtualbox에서 선택 dhcp 는 disable 시켜야함 
     'slave1' => { 'ip' => '10.0.15.30', 'cpu' => '30', 'mem' => 500 },
-    'master' => { 'ip' => '10.0.15.20', 'cpu' => '50', 'mem' => 900 },
-    'bootstrap' => { 'ip' => '10.0.15.10', 'cpu' => '20', 'mem' => 400 }
+    'master' => { 'ip' => '10.0.15.20', 'cpu' => '60', 'mem' => 1000 },
+    'bootstrap' => { 'ip' => '10.0.15.10', 'cpu' => '20', 'mem' => 300 }
   }.each do |name, resource|
     config.vm.define name do |node|
       node.vm.hostname = name
@@ -43,7 +43,7 @@ Vagrant.configure('2') do |config|
         vb.memory = resource['mem']
         vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
         vb.customize ['modifyvm', :id, '--cpuexecutioncap', resource['cpu']] # 20% 씩 사용 
-        vb.customize [ "guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 1000 ] # for dcos ntptime
+        vb.customize [ 'guestproperty', 'set', :id, '/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold', 1000 ] # for dcos ntptime
       end
 
       if name == 'bootstrap'
@@ -62,8 +62,9 @@ Vagrant.configure('2') do |config|
         node.vm.provision :ansible_local do |ansible|
           ansible.install_mode = :pip # or default( by os package manager)
           ansible.version = '2.3.1'
+          ansible.provisioning_path = 'ansible'
+          ansible.inventory_path = 'inventories/ivagrant/hosts'
           ansible.playbook = 'playbooks/util-config-ohmyzsh.yml'
-          ansible.inventory_path = 'playbooks/dev'
           ansible.limit = 'all'
           ansible.verbose = 'true'
         end

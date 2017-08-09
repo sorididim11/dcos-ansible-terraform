@@ -1,0 +1,16 @@
+
+---
+
+- include: playbooks/step1-deploy-preconditions.yml
+
+- include: playbooks/step2-deploy-docker.yml
+
+- include: playbooks/step3-build-bootfiles.yml
+
+- include: playbooks/step4-deploy-cluster.yml
+
+- include : playbooks/pkg-install-cli.yml
+
+- include : playbooks/pkg-install-docker-registry.yml
+
+- include : playbooks/pkg-install-monitoring.yml
