@@ -50,6 +50,7 @@
 
 
 - name: Generate a customized DC/OS build file
+  become: yes
   command: bash {{ dcos_installer_name }}
   args:
     chdir: "{{ dcos_bootstrap_root_path }}"
