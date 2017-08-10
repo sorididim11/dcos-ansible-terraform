@@ -1,6 +1,7 @@
 --- 
-- name: Update ansible fact caching 
+- name: Update Centos Repository
   hosts: all 
+  become: yes
   gather_facts: True
   tasks: 
   - name: Add Centos Repo
