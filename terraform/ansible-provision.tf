@@ -40,7 +40,7 @@ resource "null_resource" "provision" {
   }
 
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=.${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/step1-deploy-preconditions.yml --vault-password-file=../password"
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/step1-deploy-preconditions.yml --vault-password-file=../password"
   }
   
   provisioner "local-exec" {
