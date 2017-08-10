@@ -36,35 +36,35 @@ resource "null_resource" "provision" {
   # }
 
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/util-helion-chores.yml --valut-password-file=../password"
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/util-helion-chores.yml --vault-password-file=../password"
   }
 
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=.${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/step1-deploy-preconditions.yml --valut-password-file=../password"
+    command = "ANSIBLE_CONFIG=.${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/step1-deploy-preconditions.yml --vault-password-file=../password"
   }
   
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/step2-deploy-docker.yml --valut-password-file=../password"
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/step2-deploy-docker.yml --vault-password-file=../password"
   }
   
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/step3-build-bootfiles.yml --valut-password-file=../password"
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/step3-build-bootfiles.yml --vault-password-file=../password"
   }
 
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/step4-deploy-cluster.yml --valut-password-file=../password"
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/step4-deploy-cluster.yml --vault-password-file=../password"
   }
   
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile} ../ansible/playbooks/pkg-install-cli.yml --valut-password-file=../password"
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile} ../ansible/playbooks/pkg-install-cli.yml --vault-password-file=../password"
   }
   
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile} ../ansible/playbooks/pkg-install-docker-registry.yml --valut-password-file=../password"
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile} ../ansible/playbooks/pkg-install-docker-registry.yml --vault-password-file=../password"
   }
   
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/pkg-install-monitoring.yml --valut-password-file=../password"
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/pkg-install-monitoring.yml --vault-password-file=../password"
   }
 
 
