@@ -30,7 +30,7 @@
 
 # write hashed pwd  to config.yml
 - name: Store hashed password to config.yaml
-  command: bash {{ dcos_installer_name }} --set-superuser-password {{ edcos_superuser_pwd }}
+  command: sudo bash {{ dcos_installer_name }} --set-superuser-password {{ edcos_superuser_pwd }}
   args:
     chdir: "{{ dcos_bootstrap_root_path }}"
   when: dcos_is_enterprise
