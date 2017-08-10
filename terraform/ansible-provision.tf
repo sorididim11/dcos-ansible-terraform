@@ -25,7 +25,7 @@ resource "null_resource" "provision" {
   }
 
  provisioner "local-exec" {
-    command = "echo '[dcos_nodes:children]\ndcos_masters\ndcos_slaves\ndcos_slaves_public' >> ansible_dcos_hosts"
+    command = "echo '[dcos_nodes:children]\ndcos_masters\ndcos_slaves\ndcos_slaves_public' >> ${var.ansible_inventory_home}/hosts"
   }
 
 
@@ -36,35 +36,35 @@ resource "null_resource" "provision" {
   # }
 
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile}  ../ansible/playbooks/util-helion-chores.yml"
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/util-helion-chores.yml"
   }
 
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=.${var.ansible_inventory_home}/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile}  ../ansible/playbooks/step1-deploy-preconditions.yml"
+    command = "ANSIBLE_CONFIG=.${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/step1-deploy-preconditions.yml"
   }
   
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile}  ../ansible/playbooks/step2-deploy-docker.yml"
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/step2-deploy-docker.yml"
   }
   
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile}  ../ansible/playbooks/step3-build-bootfiles.yml"
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/step3-build-bootfiles.yml"
   }
 
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile}  ../ansible/playbooks/step4-deploy-cluster.yml"
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/step4-deploy-cluster.yml"
   }
   
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile} ../ansible/playbooks/pkg-install-cli.yml"
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile} ../ansible/playbooks/pkg-install-cli.yml"
   }
   
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile} ../ansible/playbooks/pkg-install-docker-registry.yml"
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile} ../ansible/playbooks/pkg-install-docker-registry.yml"
   }
   
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile}  ../ansible/playbooks/pkg-install-monitoring.yml"
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/pkg-install-monitoring.yml"
   }
 
 
