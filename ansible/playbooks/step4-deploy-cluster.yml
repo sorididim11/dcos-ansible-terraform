@@ -5,7 +5,6 @@
 - name: "Deploy DC/OS masters"
   gather_facts: False
   hosts: dcos_masters
-  become: yes
   roles:
     - { role: dcos/node/add-node, node_type: master, service_name: dcos-mesos-master } 
   environment: "{{ proxy_env }}"
@@ -14,7 +13,6 @@
 - name: "Deploy DC/OS slaves"
   gather_facts: False
   hosts: dcos_slaves
-  become: yes
   roles:
     - { role: dcos/node/add-node, node_type: slave, service_name: dcos-mesos-slave }
   environment: "{{ proxy_env }}"
@@ -23,7 +21,6 @@
 - name: "Deploy DC/OS slaves public"
   gather_facts: False
   hosts: dcos_slaves_public
-  become: yes
   roles:
     - { role: dcos/node/add-node, node_type: slave_public, service_name: dcos-mesos-slave-public } 
   environment: "{{ proxy_env }}"

@@ -19,6 +19,7 @@
 
 
 - name: Install dcos "{{ node_type }}"
+  become: yes
   command: "bash dcos_install.sh {{ node_type }}"
   args:
     chdir: /tmp/dcos
@@ -26,6 +27,7 @@
 
 
 - name: Configure DC/OS for Proxy
+  become: yes
   lineinfile: 
     dest: /opt/mesosphere/etc/proxy.env
     regexp: "{{item.regex}}"
@@ -41,6 +43,7 @@
 
 
 - name: Restat dcos-cosmos
+  become: yes
   systemd:
     name: dcos-cosmos
     state: restarted

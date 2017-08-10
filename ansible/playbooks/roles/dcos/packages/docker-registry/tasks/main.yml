@@ -2,12 +2,6 @@
 ---
 
 
-- name: Create dcos packages directory 
-  file: 
-    path: "{{ dcos_bootstrap_root_path }}/packages"
-    state: directory
-
-
 - name: Check if Docker certificates exist
   stat:
     path: "{{ dcos_bootstrap_root_path }}/genconf/serve/domain.crt"
@@ -31,6 +25,7 @@
   
 
 - name: Insert crts, key to docker cert directory and restart docker engine in each agent
+  become: yes
   shell: |
             mkdir -p /etc/docker/certs.d/registry.marathon.l4lb.thisdcos.directory:5000 
             curl -o /etc/docker/certs.d/registry.marathon.l4lb.thisdcos.directory:5000/ca.crt http://{{groups['dcos_bootstrap'][0]}}:{{dcos_bootstrap_port}}/domain.crt 

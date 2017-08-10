@@ -1,11 +1,5 @@
 --- 
 
-- name: Create dcos packages directory 
-  file: 
-    path: "{{ dcos_bootstrap_root_path }}/packages"
-    state: directory
-
-
 - name: Generate cadvisor config file 
   template:
     src: cadvisor-config.json.j2

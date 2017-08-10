@@ -5,9 +5,12 @@
 
 
 - name: Create a directory named genconf
+  become: yes
   file: 
     path: "{{ dcos_bootstrap_root_path }}/genconf"
     state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
 
 
 - name: Download DC/OS installer
@@ -52,6 +55,7 @@
 
 
 - name: Run bootfile web container 
+  become: yes
   docker_container: 
     name: boot-nginx
     image: nginx

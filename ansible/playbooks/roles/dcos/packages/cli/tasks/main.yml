@@ -5,14 +5,17 @@
 
 
 - name: Create DC/OS user directory structure
+  become: yes
   file: 
     path: "{{ dcos_bootstrap_root_path }}/{{item}}"
     state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
   with_items:
     - packages
     - quota
     - examples
-
+  
 
 - name: Copy marathon examples to {{ dcos_bootstrap_root_path }}/examples
   copy:
@@ -21,11 +24,12 @@
     
 
 - name: Download DC/OS client
+  become: yes
   get_url:
     url: "https://downloads.dcos.io/binaries/cli/linux/x86-64/dcos-{{dcos_version}}/dcos"
     dest: /usr/local/bin/dcos
     validate_certs: no
-    mode: 0550
+    mode: 755
     force: no
   environment: "{{proxy_env}}" 
 
@@ -40,7 +44,6 @@
     dest: "{{ dcos_bootstrap_root_path }}/dcos-ca.crt"
     validate_certs: no
     mode: 0440
-    force: yes
   when: dcos_is_enterprise
 
 

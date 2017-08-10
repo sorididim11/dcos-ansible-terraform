@@ -1,7 +1,10 @@
 
 --- 
+
+- include: util-update-fact-cache.yml
+
 - hosts: dcos_nodes:dcos_bootstrap
-  gather_facts: True
+  gather_facts: False
   become: yes
   roles:
     - role: common/preconditions
