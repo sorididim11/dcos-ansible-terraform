@@ -13,7 +13,7 @@ resource "null_resource" "provision" {
   }
 
   provisioner "local-exec" {
-    command = "echo '[dcos_cli]\n${join("\n",openstack_compute_floatingip_v2.floatip-dcos-bootstrap.*.address)}\n' > ${var.ansible_inventory_home}/hosts"
+    command = "echo '[dcos_cli]\n${join("\n",openstack_compute_floatingip_v2.floatip-dcos-bootstrap.*.address)}\n' >> ${var.ansible_inventory_home}/hosts"
   }
 
   provisioner "local-exec" {
