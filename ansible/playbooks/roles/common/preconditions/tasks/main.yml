@@ -25,12 +25,6 @@
     group: name=nogroup state=present
 
 
-  - name: Add Centos Repo
-    copy:
-      src: kin-centos.repo
-      dest: /etc/yum.repos.d/kin-centos.repo
-
-
   - name: Install required utils 
     yum: name={{item}} state=present update_cache=yes
     with_items:

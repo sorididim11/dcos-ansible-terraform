@@ -9,19 +9,19 @@ resource "null_resource" "provision" {
   }
   // create ansible host files
   provisioner "local-exec" {
-    command = "echo '[dcos_bootstrap]\n${join("\n",openstack_compute_floatingip_v2.floatip-dcos-bootstrap.*.address)}\n' > ansible_dcos_hosts"
+    command = "echo '[dcos_bootstrap]\n${join("\n",openstack_compute_floatingip_v2.floatip-dcos-bootstrap.*.address)}\n' > ${var.ansible_inventory_home}/hosts"
   }
 
   provisioner "local-exec" {
-    command = "echo '[dcos_masters]\n${join("\n",openstack_compute_floatingip_v2.floatip-dcos-master.*.address)}\n' >> ansible_dcos_hosts"
+    command = "echo '[dcos_masters]\n${join("\n",openstack_compute_floatingip_v2.floatip-dcos-master.*.address)}\n' >> ${var.ansible_inventory_home}/hosts"
   }
 
   provisioner "local-exec" {
-    command = "echo '[dcos_slaves]\n${join("\n",openstack_compute_floatingip_v2.floatip-dcos-slave.*.address)}\n' >> ansible_dcos_hosts"
+    command = "echo '[dcos_slaves]\n${join("\n",openstack_compute_floatingip_v2.floatip-dcos-slave.*.address)}\n' >> ${var.ansible_inventory_home}/hosts"
   }
 
   provisioner "local-exec" {
-    command = "echo '[dcos_slaves_public]\n${join("\n",openstack_compute_floatingip_v2.floatip-dcos-slave-public.*.address)}\n' >> ansible_dcos_hosts"
+    command = "echo '[dcos_slaves_public]\n${join("\n",openstack_compute_floatingip_v2.floatip-dcos-slave-public.*.address)}\n' >> ${var.ansible_inventory_home}/hosts"
   }
 
  provisioner "local-exec" {
@@ -35,34 +35,36 @@ resource "null_resource" "provision" {
   #   command = "ANSIBLE_CONFIG=../playbooks/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile} -i ansible_dcos_hosts ../playbooks/util-helion-collect_ip.yml -u hos"
   # }
 
-
-
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=../playbooks/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile} -i ansible_dcos_hosts ../playbooks/step1-deploy-preconditions.yml -u hos"
-  }
-  
-  provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=../playbooks/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile} -i ansible_dcos_hosts ../playbooks/step2-deploy-docker.yml -u hos "
-  }
-  
-  provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=../playbooks/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile} -i ansible_dcos_hosts ../playbooks/step3-build-bootfiles.yml -u hos "
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile}  ../ansible/playbooks/util-helion-chores.yml"
   }
 
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=../playbooks/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile} -i ansible_dcos_hosts ../playbooks/step4-deploy-cluster.yml -u hos "
+    command = "ANSIBLE_CONFIG=.${var.ansible_inventory_home}/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile}  ../ansible/playbooks/step1-deploy-preconditions.yml"
   }
   
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=../playbooks/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile} -i ansible_dcos_hosts ../playbooks/pkg-install-cli.yml -u hos "
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile}  ../ansible/playbooks/step2-deploy-docker.yml"
   }
   
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=../playbooks/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile} -i ansible_dcos_hosts ../playbooks/pkg-install-docker-registry.yml -u hos "
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile}  ../ansible/playbooks/step3-build-bootfiles.yml"
+  }
+
+  provisioner "local-exec" {
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile}  ../ansible/playbooks/step4-deploy-cluster.yml"
   }
   
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=../playbooks/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile} -i ansible_dcos_hosts ../playbooks/pkg-install-monitoring.yml -u hos "
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile} ../ansible/playbooks/pkg-install-cli.yml"
+  }
+  
+  provisioner "local-exec" {
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile} ../ansible/playbooks/pkg-install-docker-registry.yml"
+  }
+  
+  provisioner "local-exec" {
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile}  ../ansible/playbooks/pkg-install-monitoring.yml"
   }
 
 
