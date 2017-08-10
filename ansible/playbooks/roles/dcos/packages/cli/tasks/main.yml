@@ -43,7 +43,7 @@
     url: "{{ dcos_cluster_url }}/ca/dcos-ca.crt"
     dest: "{{ dcos_bootstrap_root_path }}/dcos-ca.crt"
     validate_certs: no
-    mode: 0751
+    mode: 0755
   when: dcos_is_enterprise
 
 
