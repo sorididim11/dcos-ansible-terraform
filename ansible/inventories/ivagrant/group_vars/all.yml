@@ -35,12 +35,8 @@ dcos_is_use_proxy: false
 
 proxy_env:
   dummy: dummy
-  # http_proxy: http://web-proxy.corp.hp.com:8080
-  # https_proxy: http://web-proxy.corp.hp.com:8080
-  # no_proxy: ".mesos,.thisdcos.directory,.dcos.directory,.zk,127.0.0.1,localhost,{{ groups['all'] | map('extract', hostvars, ['ansible_' + dcos_nic_name, 'ipv4', 'address']) | join(',') }}"
 
-#dcos_resolver1: "16.110.135.51"
-#dcos_resolver2: "16.110.135.52"
+
 dcos_resolver1: 8.8.8.8
 dcos_resolver2: 8.8.4.4
 

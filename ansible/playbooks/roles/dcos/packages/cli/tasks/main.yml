@@ -29,7 +29,7 @@
     url: "https://downloads.dcos.io/binaries/cli/linux/x86-64/dcos-{{dcos_version}}/dcos"
     dest: /usr/local/bin/dcos
     validate_certs: no
-    mode: 0751
+    mode: 0755
     force: yes
   environment: "{{proxy_env}}" 
 
