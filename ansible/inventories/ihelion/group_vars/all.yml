@@ -1,0 +1,56 @@
+# The global variable file DDC installation
+
+
+dcos_version: 1.9
+
+# enterprise
+edcos_license: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          64333262363736646666326563336333393964303662316361373433306436376238633564663435
+          3162333133623436343934643461346331633435343431390a326538663336323336643838653463
+          35383934666463316335626561356236336131626661343964326563343336626666633965643864
+          6463663339383834650a303837636533656663373238376461636162626231353636343239366135
+          33313639326638373034373237396136303036663034303964633363613232653630393064363430
+          3662323162663964323836633831383431666133653937643239
+
+
+edcos_superuser: root          # dcos amdin permission 
+edcos_superuser_pwd: root      # dcos amdin permission 
+edcos_security_mode: permissive  # security type  disabed, permissive, strict 
+
+#bootstrap 
+dcos_is_enterprise: True  #Truee or False
+dcos_cluster_name: dcos
+dcos_bootstrap_root_path: /dcos # root dir for boostraping 
+dcos_bootstrap_port: 9000         # home dir for installation
+dcos_nic_name: eth0 # for ip-detect - name of network interface card for ip detection  of all nodes
+dcos_nic_pub_name: eth0 # for ip-detect-public
+
+
+dcos_first_master_internal_ip: "{{hostvars[groups['dcos_masters'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}"
+dcos_cluster_url: "{{ (edcos_security_mode == 'disabled') | ternary('http', 'https')}}://{{dcos_first_master_internal_ip}}"
+  
+#networking
+dcos_is_use_proxy: false
+
+proxy_env:
+  dummy: dummy
+  http_proxy: http://web-proxy.corp.hp.com:8080
+  https_proxy: http://web-proxy.corp.hp.com:8080
+  no_proxy: ".mesos,.thisdcos.directory,.dcos.directory,.zk,127.0.0.1,localhost,{{ groups['all'] | map('extract', hostvars, ['ansible_' + dcos_nic_name, 'ipv4', 'address']) | join(',') }}"
+
+#dcos_resolver1: "16.110.135.51"
+#dcos_resolver2: "16.110.135.52"
+dcos_resolver1: 8.8.8.8
+dcos_resolver2: 8.8.4.4
+
+
+# precondition 
+selinux_mode: permissive
+
+
+# docker 
+docker_volume_fs: overlay
+docker_version: 1.13.1
+dcos_is_insecure_registry: False
+dcos_host_volume_registry: '/tmp'  # docker registry volume path
