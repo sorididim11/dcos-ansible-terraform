@@ -29,8 +29,8 @@
     url: "https://downloads.dcos.io/binaries/cli/linux/x86-64/dcos-{{dcos_version}}/dcos"
     dest: /usr/local/bin/dcos
     validate_certs: no
-    mode: 0755
-    force: no
+    mode: 0751
+    force: yes
   environment: "{{proxy_env}}" 
 
 
@@ -43,7 +43,7 @@
     url: "{{ dcos_cluster_url }}/ca/dcos-ca.crt"
     dest: "{{ dcos_bootstrap_root_path }}/dcos-ca.crt"
     validate_certs: no
-    mode: 0440
+    mode: 0751
   when: dcos_is_enterprise
 
 
