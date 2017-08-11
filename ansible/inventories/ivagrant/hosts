@@ -8,8 +8,11 @@
 
 [dcos_slaves]
 10.0.15.30
+10.0.15.31
+10.0.15.32
 
 [dcos_slaves_public]
+10.0.15.33
 
 [dcos_cli]
 10.0.15.10 ansible_connection=local
