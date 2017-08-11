@@ -34,11 +34,6 @@ resource "null_resource" "provision" {
 
 
   //run ansible
-
-  # provisioner "local-exec" {
-  #   command = "ANSIBLE_CONFIG=../playbooks/ansible.cfg ansible-playbook --private-key=${var.hos_keyfile} -i ansible_dcos_hosts ../playbooks/util-helion-collect_ip.yml -u hos"
-  # }
-
   provisioner "local-exec" {
     command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook -i ${var.ansible_inventory_home}/hosts --private-key=${var.hos_keyfile}  ../ansible/playbooks/util-helion-chores.yml --vault-password-file=../password"
   }
