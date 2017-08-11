@@ -29,7 +29,7 @@
   shell: |
             mkdir -p /etc/docker/certs.d/registry.marathon.l4lb.thisdcos.directory:5000 
             curl -o /etc/docker/certs.d/registry.marathon.l4lb.thisdcos.directory:5000/ca.crt http://{{groups['dcos_bootstrap'][0]}}:{{dcos_bootstrap_port}}/domain.crt 
-            sudo systemctl restart docker.service
+            systemctl restart docker.service
   delegate_to: "{{item}}"
   when: dcos_is_insecure_registry == False 
   with_items: "{{ groups['dcos_nodes'] }}"

@@ -47,10 +47,15 @@ Vagrant.configure('2') do |config|
       end
 
       if name == 'bootstrap'
-        node.vm.provision "shell" do |s|
-          ssh_insecure_key = File.readlines("#{Dir.home}/.vagrant.d/insecure_private_key")
+        node.vm.provision 'shell' do |s|
           s.inline = <<-SHELL
-            echo #{ssh_insecure_key} >> /home/vagrant/.ssh/id_rsa
+            rm -rf /home/vagrant/.ssh/id_rsa
+          SHELL
+        end
+
+        node.vm.provision 'file', source: "#{Dir.home}/.vagrant.d/insecure_private_key", destination: '/home/vagrant/.ssh/id_rsa'        
+        node.vm.provision 'shell' do |s|
+          s.inline = <<-SHELL
             chown vagrant /home/vagrant/.ssh/id_rsa
             chmod 400 /home/vagrant/.ssh/id_rsa
           SHELL
