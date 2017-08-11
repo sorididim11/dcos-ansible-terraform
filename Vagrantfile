@@ -49,18 +49,18 @@ Vagrant.configure('2') do |config|
         vb.cpus = resource['cpus']
         vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
         #vb.customize ['modifyvm', :id, '--cpuexecutioncap', resource['cpu']] # 20% 씩 사용 
-        vb.customize [ 'guestproperty', 'set', :id, '/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold', 1000 ] # for dcos ntptime
+        vb.customize ['guestproperty', 'set', :id, '/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold', 1000 ] # for dcos ntptime
       end
 
       if name == 'bootstrap'
-        node.vm.provision 'shell', inline: 'sudo rm -rf /home/vagrant/.ssh/id_rsa'
-        node.vm.provision 'file', source: "#{Dir.home}/.vagrant.d/insecure_private_key", destination: '/home/vagrant/.ssh/id_rsa'
+        ssh_prv_key = File.read("#{Dir.home}/.vagrant.d/insecure_private_key")
         node.vm.provision 'shell' do |sh|
           sh.inline = <<-SHELL
-            sudo mkdir /dcos &&  sudo chown vagrant:vagrant /dcos
-            cp /vagrant/dcos_generate_config.ee.sh /dcos
-            chown vagrant /home/vagrant/.ssh/id_rsa
-            chmod 400 /home/vagrant/.ssh/id_rsa
+            [ !  -d /dcos ] && sudo mkdir /dcos && chown vagrant:vagrant /dcos
+            [ ! -e /dcos/dcos_generate_config.ee.sh ] && cp /vagrant/dcos_generate_config.ee.sh /dcos
+            echo Provisioning private ssh key...
+            [ ! -e /home/vagrant/.ssh/id_rsa ] &&   touch /home/vagrant/.ssh/id_rsa && chown vagrant:vagrant /home/vagrant/.ssh/id_rsa && chmod 600 /home/vagrant/.ssh/id_rsa  &&  echo "#{ssh_prv_key}" >> /home/vagrant/.ssh/id_rsa
+            echo Provisioning of ssh keys completed [Success].
           SHELL
         end
 
