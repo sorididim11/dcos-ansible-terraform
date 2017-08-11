@@ -31,12 +31,14 @@ Vagrant.configure('2') do |config|
     # Virtualbox natsystem을 vagrant에서 아직 사용 불가능 따라서 nat + host-oly(vboxnet4 을 현재 사용) 해야함. 
     # nat은  vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']  추가 하면 사용. 
     # vagrant가 설정 host-only virtualbox에서 선택 dhcp 는 disable 시켜야함 
-    'slave_public_1' => { 'ip' => '10.0.15.33', 'cpus' => 1, 'mem' => 500 },
-    'slave3' => { 'ip' => '10.0.15.32', 'cpus' => 3, 'mem' => 500 },
-    'slave2' => { 'ip' => '10.0.15.31', 'cpus' => 3, 'mem' => 500 },
-    'slave1' => { 'ip' => '10.0.15.30', 'cpus' => 3, 'mem' => 500 },
-    'master' => { 'ip' => '10.0.15.20', 'cpus' => 2, 'mem' => 1000 },
-    'bootstrap' => { 'ip' => '10.0.15.10', 'cpus' => 2, 'mem' => 300 }
+    'slavepublic1' => { 'ip' => '10.0.15.41', 'cpus' => 2, 'mem' => 2000 },
+    'slave3' => { 'ip' => '10.0.15.33', 'cpus' => 3, 'mem' => 2000 },
+    'slave2' => { 'ip' => '10.0.15.32', 'cpus' => 3, 'mem' => 2000 },
+    'slave1' => { 'ip' => '10.0.15.31', 'cpus' => 3, 'mem' => 2000 },
+    'master3' => { 'ip' => '10.0.15.23', 'cpus' => 2, 'mem' => 1000 },
+    'master2' => { 'ip' => '10.0.15.22', 'cpus' => 2, 'mem' => 1000 },
+    'master1' => { 'ip' => '10.0.15.21', 'cpus' => 2, 'mem' => 1000 },
+    'bootstrap' => { 'ip' => '10.0.15.11', 'cpus' => 2, 'mem' => 300 }
   }.each do |name, resource|
     config.vm.define name do |node|
       node.vm.hostname = name
