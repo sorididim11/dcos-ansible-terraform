@@ -31,14 +31,14 @@ Vagrant.configure('2') do |config|
     # Virtualbox natsystem을 vagrant에서 아직 사용 불가능 따라서 nat + host-oly(vboxnet4 을 현재 사용) 해야함. 
     # nat은  vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']  추가 하면 사용. 
     # vagrant가 설정 host-only virtualbox에서 선택 dhcp 는 disable 시켜야함 
-    'slavepublic1' => { 'ip' => '10.0.15.41', 'cpus' => 2, 'mem' => 2000 },
-    'slave3' => { 'ip' => '10.0.15.33', 'cpus' => 3, 'mem' => 2000 },
-    'slave2' => { 'ip' => '10.0.15.32', 'cpus' => 3, 'mem' => 2000 },
-    'slave1' => { 'ip' => '10.0.15.31', 'cpus' => 3, 'mem' => 2000 },
-    'master3' => { 'ip' => '10.0.15.23', 'cpus' => 2, 'mem' => 1000 },
-    'master2' => { 'ip' => '10.0.15.22', 'cpus' => 2, 'mem' => 1000 },
-    'master1' => { 'ip' => '10.0.15.21', 'cpus' => 2, 'mem' => 1000 },
-    'bootstrap' => { 'ip' => '10.0.15.11', 'cpus' => 2, 'mem' => 300 }
+    'slavepublic1' => { 'ip' => '10.0.15.41', 'cpus' => 3, 'mem' => 2000 },
+    'slave3' => { 'ip' => '10.0.15.33', 'cpus' => 4, 'mem' => 3000 },
+    'slave2' => { 'ip' => '10.0.15.32', 'cpus' => 4, 'mem' => 3000 },
+    'slave1' => { 'ip' => '10.0.15.31', 'cpus' => 4, 'mem' => 3000 },
+    'master3' => { 'ip' => '10.0.15.23', 'cpus' => 1, 'mem' => 1000 },
+    'master2' => { 'ip' => '10.0.15.22', 'cpus' => 1, 'mem' => 1000 },
+    'master1' => { 'ip' => '10.0.15.21', 'cpus' => 2, 'mem' => 2000 },
+    'bootstrap' => { 'ip' => '10.0.15.11', 'cpus' => 2, 'mem' => 1000 }
   }.each do |name, resource|
     config.vm.define name do |node|
       node.vm.hostname = name
@@ -58,7 +58,6 @@ Vagrant.configure('2') do |config|
           sh.inline = <<-SHELL
             [ !  -d /dcos ] && sudo mkdir /dcos && chown vagrant:vagrant /dcos
             [ ! -e /dcos/dcos_generate_config.ee.sh ] && cp /vagrant/dcos_generate_config.ee.sh /dcos && chown vagrant:vagrant /dcos/dcos_generate_config.ee.sh
-            echo Provisioning private ssh key...
             [ ! -e /home/vagrant/.ssh/id_rsa ] && echo "#{ssh_prv_key}" > /home/vagrant/.ssh/id_rsa && chown vagrant:vagrant /home/vagrant/.ssh/id_rsa && chmod 600 /home/vagrant/.ssh/id_rsa
             echo Provisioning of ssh keys completed [Success].
           SHELL
