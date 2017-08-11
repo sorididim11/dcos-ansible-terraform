@@ -50,9 +50,11 @@ Vagrant.configure('2') do |config|
         node.vm.provision 'shell' do |s|
           s.inline = <<-SHELL
             rm -rf /home/vagrant/.ssh/id_rsa
+            mkdir -p /dcos
           SHELL
         end
 
+        node.vm.provision 'file', source: './dcos_generate_config.ee.sh', destination: '/dcos/vagrant/dcos_generate_config.ee.sh'                
         node.vm.provision 'file', source: "#{Dir.home}/.vagrant.d/insecure_private_key", destination: '/home/vagrant/.ssh/id_rsa'        
         node.vm.provision 'shell' do |s|
           s.inline = <<-SHELL
