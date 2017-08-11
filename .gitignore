@@ -1,9 +1,0 @@
-.vagrant
-*.retry
-.DS_Store
-.pem
-.osrc
-ansible_dcos_hosts
-ihos.osrc
-terraform.tfstate*
-password

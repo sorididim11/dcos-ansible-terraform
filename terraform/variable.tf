@@ -15,7 +15,7 @@ variable "bootstrap_flavor" { default = "Compute1.small" }
 variable "master_flavor" { default = "Compute1.medium" }
 variable "agent_flavor" { default = "General1.large" }
 
-variable "ansible_inventory_home" { default = "../ansible/inventories/ihelion" }
+variable "ansible_inventory_home" { default = "../ansible/inventories/helion" }
 #image
 variable "host_image" { 
 	default = "ITIO CentOS-7" 

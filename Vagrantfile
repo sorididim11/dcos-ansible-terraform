@@ -57,9 +57,9 @@ Vagrant.configure('2') do |config|
         node.vm.provision 'shell' do |sh|
           sh.inline = <<-SHELL
             [ !  -d /dcos ] && sudo mkdir /dcos && chown vagrant:vagrant /dcos
-            [ ! -e /dcos/dcos_generate_config.ee.sh ] && cp /vagrant/dcos_generate_config.ee.sh /dcos
+            [ ! -e /dcos/dcos_generate_config.ee.sh ] && cp /vagrant/dcos_generate_config.ee.sh /dcos && chown vagrant:vagrant /dcos/dcos_generate_config.ee.sh
             echo Provisioning private ssh key...
-            [ ! -e /home/vagrant/.ssh/id_rsa ] &&   touch /home/vagrant/.ssh/id_rsa && chown vagrant:vagrant /home/vagrant/.ssh/id_rsa && chmod 600 /home/vagrant/.ssh/id_rsa  &&  echo "#{ssh_prv_key}" >> /home/vagrant/.ssh/id_rsa
+            [ ! -e /home/vagrant/.ssh/id_rsa ] && echo "#{ssh_prv_key}" > /home/vagrant/.ssh/id_rsa && chown vagrant:vagrant /home/vagrant/.ssh/id_rsa && chmod 600 /home/vagrant/.ssh/id_rsa
             echo Provisioning of ssh keys completed [Success].
           SHELL
         end
