@@ -5,10 +5,11 @@
   hosts: dcos_bootstrap
   roles:
     - { role: dcos/node/boot_web,  when: dcos_is_insecure_registry == False }
-
+  environment: "{{ proxy_env }}"
 
 - name: "Install docker private registry"
   gather_facts: False
   hosts: dcos_cli[0]
   roles:
     - { role: dcos/packages/docker-registry } 
+  environment: "{{ proxy_env }}"

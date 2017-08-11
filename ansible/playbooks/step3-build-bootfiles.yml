@@ -5,3 +5,4 @@
   hosts: dcos_bootstrap
   roles:
     - role: dcos/bootstrap 
+  environment: "{{ proxy_env }}"
