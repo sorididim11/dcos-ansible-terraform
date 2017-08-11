@@ -17,7 +17,7 @@ Vagrant.configure('2') do |config|
   end
 
   if Vagrant.has_plugin?('vagrant-vbguest')
-     # config.vbguest.auto_update = false
+     #config.vbguest.auto_update = false
   end
 
   # if Vagrant.has_plugin?('vagrant-proxyconf')
@@ -53,15 +53,10 @@ Vagrant.configure('2') do |config|
       end
 
       if name == 'bootstrap'
-        node.vm.provision 'shell' do |s|
-          s.inline = <<-SHELL
-            sudo rm -rf /home/vagrant/.ssh/id_rsa
-          SHELL
-        end
-
-        node.vm.provision 'file', source: "#{Dir.home}/.vagrant.d/insecure_private_key", destination: '/home/vagrant/.ssh/id_rsa'        
-        node.vm.provision 'shell' do |s|
-          s.inline = <<-SHELL
+        node.vm.provision 'shell', inline: 'sudo rm -rf /home/vagrant/.ssh/id_rsa'
+        node.vm.provision 'file', source: "#{Dir.home}/.vagrant.d/insecure_private_key", destination: '/home/vagrant/.ssh/id_rsa'
+        node.vm.provision 'shell' do |sh|
+          sh.inline = <<-SHELL
             sudo mkdir /dcos &&  sudo chown vagrant:vagrant /dcos
             cp /vagrant/dcos_generate_config.ee.sh /dcos
             chown vagrant /home/vagrant/.ssh/id_rsa
@@ -74,7 +69,7 @@ Vagrant.configure('2') do |config|
           ansible.version = '2.3.1'
           ansible.config_file = 'ansible/ansible.cfg'
           ansible.inventory_path = 'ansible/inventories/dev/hosts'
-         # ansible.playbook = 'ansible/playbooks/util-config-ohmyzsh.yml'
+          #ansible.playbook = 'ansible/playbooks/util-config-ohmyzsh.yml'
           ansible.playbook = 'ansible/site.yml'
           ansible.limit = 'all'
           ansible.verbose = 'true'
