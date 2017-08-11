@@ -55,7 +55,7 @@ Vagrant.configure('2') do |config|
       if name == 'bootstrap'
         node.vm.provision 'shell' do |s|
           s.inline = <<-SHELL
-            rm -rf /home/vagrant/.ssh/id_rsa
+            sudo rm -rf /home/vagrant/.ssh/id_rsa
           SHELL
         end
 
@@ -73,12 +73,12 @@ Vagrant.configure('2') do |config|
           ansible.install_mode = :pip # or default( by os package manager)
           ansible.version = '2.3.1'
           ansible.config_file = 'ansible/ansible.cfg'
-          ansible.inventory_path = 'ansible/inventories/ivagrant/hosts'
+          ansible.inventory_path = 'ansible/inventories/dev/hosts'
          # ansible.playbook = 'ansible/playbooks/util-config-ohmyzsh.yml'
           ansible.playbook = 'ansible/site.yml'
           ansible.limit = 'all'
           ansible.verbose = 'true'
-          ansible.vault_password_file = 'ansible/password'
+          ansible.vault_password_file = 'password'
         end
       end
     end
