@@ -2,24 +2,16 @@
 Vagrant.configure('2') do |config|
   config.vm.box = 'centos/7'
   config.vm.synced_folder '.', '/vagrant', type: 'virtualbox'
-  config.ssh.insert_key = false # 머쉰들이 공통으로 ~/vagrant.d/insecure-key 를 사용 즉 ansible-contoller에 private 키만 옴기면 됨.   if true key pairs are generated for each machine
-  # config.ssh.private_key_path = '~/.vagrant.d/insecure_private_key'
-
+  config.ssh.insert_key = false
 
   if Vagrant.has_plugin?('vagrant-hostmanager')
     config.hostmanager.manage_guest = true
     config.hostmanager.ignore_private_ip = false
     config.hostmanager.include_offline = true
   end
-
-  if Vagrant.has_plugin?('vagrant-cachier')
-    config.cache.scope = :box
-  end
-
-  if Vagrant.has_plugin?('vagrant-vbguest')
-     #config.vbguest.auto_update = false
-  end
-
+  # for one line if based onruby guideline
+  Vagrant.has_plugin?('vagrant-cachier') && config.cache.scope = :box
+  Vagrant.has_plugin?('vagrant-vbguest') && config.vbguest.auto_update = true
   # if Vagrant.has_plugin?('vagrant-proxyconf')
   #   config.proxy.http = 'http://web-proxy.corp.hp.com:8080'
   #   config.proxy.https = 'http://web-proxy.corp.hp.com:8080'
@@ -27,10 +19,6 @@ Vagrant.configure('2') do |config|
   # end
 
   {
-    # vboxnet4 10.0.15.1 with no dhcp
-    # Virtualbox natsystem을 vagrant에서 아직 사용 불가능 따라서 nat + host-oly(vboxnet4 을 현재 사용) 해야함. 
-    # nat은  vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']  추가 하면 사용. 
-    # vagrant가 설정 host-only virtualbox에서 선택 dhcp 는 disable 시켜야함 
     'slavepublic1' => { 'ip' => '10.0.15.41', 'cpus' => 3, 'mem' => 2000 },
     'slave3' => { 'ip' => '10.0.15.33', 'cpus' => 4, 'mem' => 3000 },
     'slave2' => { 'ip' => '10.0.15.32', 'cpus' => 4, 'mem' => 3000 },
@@ -48,8 +36,8 @@ Vagrant.configure('2') do |config|
         vb.memory = resource['mem']
         vb.cpus = resource['cpus']
         vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
-        #vb.customize ['modifyvm', :id, '--cpuexecutioncap', resource['cpu']] # 20% 씩 사용 
-        vb.customize ['guestproperty', 'set', :id, '/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold', 1000 ] # for dcos ntptime
+        # for dcos ntptime
+        vb.customize ['guestproperty', 'set', :id, '/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold', 1000]
       end
 
       if name == 'bootstrap'
@@ -68,7 +56,7 @@ Vagrant.configure('2') do |config|
           ansible.version = '2.3.1'
           ansible.config_file = 'ansible/ansible.cfg'
           ansible.inventory_path = 'ansible/inventories/dev/hosts'
-          #ansible.playbook = 'ansible/playbooks/util-config-ohmyzsh.yml'
+          # ansible.playbook = 'ansible/playbooks/util-config-ohmyzsh.yml'
           ansible.playbook = 'ansible/site.yml'
           ansible.limit = 'all'
           ansible.verbose = 'true'
