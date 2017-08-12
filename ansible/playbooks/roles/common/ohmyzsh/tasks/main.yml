@@ -1,8 +1,4 @@
 ---
-  - name: debug home dir 
-    debug: 
-      msg: "{{ ansible_user }} : {{ ansible_user_dir }}"
-  
 
   - name: Install zsh 
     become: yes
