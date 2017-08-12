@@ -7,6 +7,7 @@
                 {
                     "name": "dev",
                     "cpus": 0.5,
+                    "gpus": 0,
                     "mem": 100,
                     "disks": 1000,
                     "begin_port": 1025,
@@ -15,6 +16,7 @@
                 {
                     "name": "svc",
                     "cpus": 0.2,
+                    "gpus": 0,
                     "mem": 100,
                     "disks": 1000,
                     "begin_port": 2182,
