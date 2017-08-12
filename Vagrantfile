@@ -1,3 +1,21 @@
+require 'yaml'
+
+settings = YAML.load_file 'vagrant.yml'
+
+inventory_file = 'ansible/inventories/dev/hosts'
+
+File.open(inventory_file, 'w') do |f|
+  %w(dcos_masters dcos_slaves dcos_slaves_public dcos_cli dcos_bootstrap).each do |section|
+    f.puts("[#{section}]")
+    section = 'dcos_bootstrap' if section == 'dcos_cli'
+
+    settings.each do |name, machine_info|
+      f.puts(machine_info['ip']) if machine_info['type'] == section
+    end
+    f.puts('')
+  end
+end
+
 
 Vagrant.configure('2') do |config|
   config.vm.box = 'centos/7'
@@ -18,29 +36,22 @@ Vagrant.configure('2') do |config|
   #   config.proxy.no_proxy = 'localhost, 127.0.0.1'
   # end
 
-  {
-    'slavepublic1' => { 'ip' => '10.0.15.41', 'cpus' => 3, 'mem' => 2000 },
-    'slave3' => { 'ip' => '10.0.15.33', 'cpus' => 4, 'mem' => 3000 },
-    'slave2' => { 'ip' => '10.0.15.32', 'cpus' => 4, 'mem' => 3000 },
-    'slave1' => { 'ip' => '10.0.15.31', 'cpus' => 4, 'mem' => 3000 },
-    'master3' => { 'ip' => '10.0.15.23', 'cpus' => 1, 'mem' => 1000 },
-    'master2' => { 'ip' => '10.0.15.22', 'cpus' => 1, 'mem' => 1000 },
-    'master1' => { 'ip' => '10.0.15.21', 'cpus' => 2, 'mem' => 2000 },
-    'bootstrap' => { 'ip' => '10.0.15.11', 'cpus' => 2, 'mem' => 1000 }
-  }.each do |name, resource|
+
+
+  settings.each do |name, machine_info|
     config.vm.define name do |node|
-      node.vm.hostname = name
-      node.vm.network :private_network, ip: resource['ip']
+      node.vm.hostname = machine_info['name']
+      node.vm.network :private_network, ip: machine_info['ip']
       node.vm.provider 'virtualbox' do |vb|
         vb.linked_clone = true
-        vb.memory = resource['mem']
-        vb.cpus = resource['cpus']
+        vb.cpus = machine_info['cpus']
+        vb.memory = machine_info['mem']
         vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
         # for dcos ntptime
         vb.customize ['guestproperty', 'set', :id, '/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold', 1000]
       end
 
-      if name == 'bootstrap'
+      if machine_info['name'] == 'bootstrap'
         ssh_prv_key = File.read("#{Dir.home}/.vagrant.d/insecure_private_key")
         node.vm.provision 'shell' do |sh|
           sh.inline = <<-SHELL
@@ -55,7 +66,7 @@ Vagrant.configure('2') do |config|
           ansible.install_mode = :pip # or default( by os package manager)
           ansible.version = '2.3.1'
           ansible.config_file = 'ansible/ansible.cfg'
-          ansible.inventory_path = 'ansible/inventories/dev/hosts'
+          ansible.inventory_path = inventory_file
           # ansible.playbook = 'ansible/playbooks/util-config-ohmyzsh.yml'
           ansible.playbook = 'ansible/site.yml'
           ansible.limit = 'all'
