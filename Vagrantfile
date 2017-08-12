@@ -1,9 +1,8 @@
 require 'yaml'
 
+# dynamic inventory based on vagrant config file(vagrant.yml)
 settings = YAML.load_file 'vagrant.yml'
-
 inventory_file = 'ansible/inventories/dev/hosts'
-
 File.open(inventory_file, 'w') do |f|
   %w(dcos_masters dcos_slaves dcos_slaves_public dcos_cli dcos_bootstrap).each do |section|
     f.puts("[#{section}]")
@@ -22,21 +21,22 @@ Vagrant.configure('2') do |config|
   config.vm.synced_folder '.', '/vagrant', type: 'virtualbox'
   config.ssh.insert_key = false
 
-  if Vagrant.has_plugin?('vagrant-hostmanager')
-    config.hostmanager.manage_guest = true
-    config.hostmanager.ignore_private_ip = false
-    config.hostmanager.include_offline = true
+  required_plugins = %w( vagrant-hostmanager vagrant-cachier vagrant-vbguest )
+  required_plugins.each do |plugin|
+    exec "vagrant plugin install #{plugin};vagrant #{ARGV.join(' ')}" unless Vagrant.has_plugin?(plugin) || ARGV[0] == 'plugin'
   end
-  # for one line if based onruby guideline
-  Vagrant.has_plugin?('vagrant-cachier') && config.cache.scope = :box
-  Vagrant.has_plugin?('vagrant-vbguest') && config.vbguest.auto_update = true
-  # if Vagrant.has_plugin?('vagrant-proxyconf')
-  #   config.proxy.http = 'http://web-proxy.corp.hp.com:8080'
-  #   config.proxy.https = 'http://web-proxy.corp.hp.com:8080'
-  #   config.proxy.no_proxy = 'localhost, 127.0.0.1'
-  # end
 
+  config.hostmanager.manage_guest = true
+  config.hostmanager.ignore_private_ip = false
+  config.hostmanager.include_offline = true
+  config.cache.scope = :box
+  config.vbguest.auto_update = true
 
+  if Vagrant.has_plugin?('vagrant-proxyconf')
+    config.proxy.http = 'http://web-proxy.corp.hp.com:8080'
+    config.proxy.https = 'http://web-proxy.corp.hp.com:8080'
+    config.proxy.no_proxy = 'localhost, 127.0.0.1'
+  end
 
   settings.each do |name, machine_info|
     config.vm.define name do |node|

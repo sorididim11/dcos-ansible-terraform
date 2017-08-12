@@ -50,7 +50,7 @@ sp1:
    type: dcos_slaves_public
 
 # bootstrap shoulbe at the bottom of this file because of provisioning order
-b:
+boot:
    name: bootstrap
    ip: 10.0.15.11
    cpus: 3
