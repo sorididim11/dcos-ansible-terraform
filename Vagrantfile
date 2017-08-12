@@ -1,14 +1,14 @@
 require 'yaml'
 
 # dynamic inventory based on vagrant config file(vagrant.yml)
-settings = YAML.load_file 'vagrant.yml'
+settings = YAML.load_file 'vagrantConf.yml'
 inventory_file = 'ansible/inventories/dev/hosts'
 File.open(inventory_file, 'w') do |f|
   %w(dcos_masters dcos_slaves dcos_slaves_public dcos_cli dcos_bootstrap).each do |section|
     f.puts("[#{section}]")
     section = 'dcos_bootstrap' if section == 'dcos_cli'
 
-    settings.each do |name, machine_info|
+    settings.each do |_, machine_info|
       f.puts(machine_info['ip']) if machine_info['type'] == section
     end
     f.puts('')
@@ -70,7 +70,7 @@ Vagrant.configure('2') do |config|
           ansible.config_file = 'ansible/ansible.cfg'
           ansible.inventory_path = inventory_file
           # ansible.playbook = 'ansible/playbooks/util-config-ohmyzsh.yml'
-          ansible.playbook = 'ansible/site.yml'
+          ansible.playbook = 'ansible/vagrantSite.yml'
           ansible.limit = 'all'
           ansible.verbose = 'true'
           ansible.vault_password_file = 'password'

@@ -15,3 +15,19 @@
 ## provider
 
 * vb.customize ['modifyvm', :id, '--cpuexecutioncap', resource['cpu']] # 20% 씩 사용
+
+
+# Ruby grammar 
+
+## String 
+ 
+ ### String arary 
+you dno't need to put '' in string
+%w(dcos_masters dcos_slaves dcos_slaves_public dcos_cli dcos_bootstrap)
+
+## Interpolation
+when referncing variable - "[#{variable}]" in string 
+
+"" <---  it allows intepoation including excape character "\n"
+'' <---  it allows no inteplation including excape character like '\n' not working 
+"[dcos_nodes:children]\ndcos_masters\ndcos_slaves\ndcos_slaves_public"

@@ -62,3 +62,27 @@ To escape special characters within a regex, use the “regex_escape” filter:
 
 * convert "foobar" to "bar"
     {{ 'foobar' | regex_replace('^f.*o(.*)$', '\\1') }}
+
+
+### Block operators
+
+* The > is a folding block operator. That is, it joins multiple lines together by spaces.
+key: >
+  This text
+  has multiple
+  lines
+Would assign the value This text has multiple lines\n to key
+
+* The | character is a literal block operator. This is probably what you want for multi-line shell scipts
+
+key: |
+  This text
+  has multiple
+  lines
+Would assign the value This text\nhas multiple\nlines\n to key
+
+ex) - name: iterate user groups
+      shell: |
+        ls -l
+        systemctl restart ntpd
+        cp files /etc
