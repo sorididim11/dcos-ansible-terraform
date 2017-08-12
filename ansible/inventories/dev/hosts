@@ -17,7 +17,7 @@
 [dcos_bootstrap]
 10.0.15.11
 
-[dcos_nodes:children]]
+[dcos_nodes:children]
 dcos_masters
 dcos_slaves
 dcos_slaves_public
