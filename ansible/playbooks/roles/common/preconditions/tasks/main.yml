@@ -25,6 +25,12 @@
     group: name=nogroup state=present
 
 
+  # - name: Clean yum packages, metadata, dbcache, all and make new cache.   
+  #   command: yum clean packages metadata dbcache all & yum makecache
+  #   args:
+  #     warn: no
+
+
   - name: Install required utils 
     yum: name={{item}} state=present update_cache=yes
     with_items:
