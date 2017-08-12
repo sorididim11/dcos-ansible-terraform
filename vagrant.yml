@@ -3,21 +3,21 @@
 m1:
    name: masters1
    ip: 10.0.15.21
-   cpus: 3
+   cpus: 2
    mem: 2000
    type: dcos_masters
 
 m2:
    name: masters2
    ip: 10.0.15.22
-   cpus: 3
+   cpus: 2
    mem: 2000
    type: dcos_masters
 
 m3:
    name: masters3
    ip: 10.0.15.23
-   cpus: 3
+   cpus: 2
    mem: 2000
    type: dcos_masters
 
@@ -32,28 +32,28 @@ s2:
    name: slave2
    ip: 10.0.15.32
    cpus: 3
-   mem: 2000
+   mem: 3000
    type: dcos_slaves
 
 s3:
    name: slave3
    ip: 10.0.15.33
    cpus: 3
-   mem: 2000
+   mem: 3000
    type: dcos_slaves
 
 sp1:
    name: slavepublic1
    ip: 10.0.15.41
    cpus: 3
-   mem: 2000
+   mem: 4000
    type: dcos_slaves_public
 
 # bootstrap shoulbe at the bottom of this file because of provisioning order
 boot:
    name: bootstrap
    ip: 10.0.15.11
-   cpus: 3
+   cpus: 2
    mem: 2000
    type: dcos_bootstrap
 
