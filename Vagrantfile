@@ -13,6 +13,8 @@ File.open(inventory_file, 'w') do |f|
     end
     f.puts('')
   end
+
+  f.write("[dcos_nodes:children]]\ndcos_masters\ndcos_slaves\ndcos_slaves_public")
 end
 
 
