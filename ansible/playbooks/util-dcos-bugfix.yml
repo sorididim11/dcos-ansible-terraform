@@ -12,5 +12,5 @@
 
   - name: Restat dcos-mesos-master
     systemd: name=dcos-mesos-master state=restarted  
-    schanged_when: false
+    changed_when: false
 
