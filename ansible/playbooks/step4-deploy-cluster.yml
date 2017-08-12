@@ -1,13 +1,14 @@
 ---
-
-
-
 - name: "Deploy DC/OS masters"
   gather_facts: False
   hosts: dcos_masters
   roles:
     - { role: dcos/node/add-node, node_type: master, service_name: dcos-mesos-master } 
   environment: "{{ proxy_env }}"
+
+
+- include: util-dcos-bugfix.yml
+  when: edcos_security_mode == "strict" and dcos_version == "1.9"
 
 
 - name: "Deploy DC/OS slaves"
