@@ -24,10 +24,10 @@ variable "host_image" {
 #user unique settings
 variable "dcos-master_hostname_base" { default = "dcos-master-" }
 variable "dcos-node_hostname_base" { default = "dcos-agent-" }
-variable "dcos-sec_group_base" { default = "dcos-secgroup2" }
+variable "dcos-sec_group_base" { default = "dcos-secgroup-" }
 
 # Number of linux instances to create
-variable "num_slaves" { default = "1" }
+variable "num_slaves" { default = "2" }
 variable "num_slaves_public" { default = "1" }
 variable "num_masters" { default = "1" }
 
