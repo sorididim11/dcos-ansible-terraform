@@ -77,19 +77,19 @@
   with_items: "{{req_body_list.results}}"
 
 
-- name: Generates marathon config for each role
-  template:
-    src: marathon-config.json.j2
-    dest: "{{dcos_bootstrap_root_path}}/packages/marathon-opt-{{item.1.name}}.json"
-  with_subelements:
-    - "{{reservation.agents}}"
-    - "roles"
-  when: op_type == "reserve_resources"
+# - name: Generates marathon config for each role
+#   template:
+#     src: marathon-config.json.j2
+#     dest: "{{dcos_bootstrap_root_path}}/packages/marathon-opt-{{item.1.name}}.json"
+#   with_subelements:
+#     - "{{reservation.agents}}"
+#     - "roles"
+#   when: op_type == "reserve_resources"
 
 
-- name: Launch custom marathon with each role
-  command: "dcos package install --options={{dcos_bootstrap_root_path}}/packages/marathon-opt-{{item.1.name}}.json marathon --yes" 
-  with_subelements:
-    - "{{reservation.agents}}"
-    - "roles"
-  when: op_type == "reserve_resources"
+# - name: Launch custom marathon with each role
+#   command: "dcos package install --options={{dcos_bootstrap_root_path}}/packages/marathon-opt-{{item.1.name}}.json marathon --yes" 
+#   with_subelements:
+#     - "{{reservation.agents}}"
+#     - "roles"
+#   when: op_type == "reserve_resources"
