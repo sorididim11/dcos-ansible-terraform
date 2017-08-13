@@ -7,8 +7,8 @@
   environment: "{{ proxy_env }}"
 
 
-- include: util-dcos-bugfix.yml
-  when: edcos_security_mode == "strict" and dcos_version == "1.9"
+# - include: util-dcos-bugfix.yml
+#   when: edcos_security_mode == "strict" and dcos_version == "1.9"
 
 
 - name: "Deploy DC/OS slaves"
