@@ -1,7 +1,4 @@
 ---
-
-# not workgin :     http[s]://<cluster-url>/dcos-metadata/bootstrap-config.json.
-
 - name: "Discovery security mode of the cluster"
   gather_facts: False
   hosts: dcos_bootstrap
