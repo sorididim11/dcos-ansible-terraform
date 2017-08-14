@@ -1,0 +1,70 @@
+--- 
+- name: Read security mode of the cluster
+  get_url:
+    url: "{{dcos_cluster_url}}/dcos-metadata/bootstrap-config.json"
+    dest: "{{ dcos_bootstrap_root_path }}/bootstrap-config.json"
+    validate_certs: no
+
+
+- shell: "cat {{ dcos_bootstrap_root_path }}/bootstrap-config.json"
+  register: bootconf_json
+
+
+- name: Extract security mode from bootconf
+  set_fact: 
+    edcos_security_mode: "{{ bootconf_json.stdout | from_json | json_query('security') }}"
+
+
+- assert: { that: "edcos_security_mode != 'strict'" }
+
+- debug: 
+    msg: "Current security mode: {{edcos_security_mode}}"
+
+
+- name: Update fact, edcos_security_mode  
+  set_fact: 
+    edcos_security_mode: "{{ (edcos_security_mode == 'permissive') | ternary('strict', 'permissive')  }}"
+
+
+- debug: 
+    msg: "Upgrade Security to {{edcos_security_mode}}"
+
+
+- name: Read DC/OS version of the cluster
+  get_url:
+    url: "{{dcos_cluster_url}}/dcos-metadata/dcos-version.json"
+    dest: "{{ dcos_bootstrap_root_path }}/dcos-version.json"
+    validate_certs: no
+  
+
+- name: print 
+  shell: "cat {{ dcos_bootstrap_root_path }}/dcos-version.json"
+  register: dcos_version_json
+
+# set_fact has the second higher precedence. So vars set by set_fact should be able to override group vars
+- name: Extract DC/OS version 
+  set_fact: 
+    dcos_version: "{{ dcos_version_json.stdout | from_json | json_query('security') }}"
+
+
+- name: Download DC/OS installer
+  get_url:
+    url: "{{ dcos_installer_download_url }}"
+    dest: "{{ dcos_bootstrap_root_path }}/{{ dcos_installer_name }}"
+    force: no
+    validate_certs: no
+  environment: "{{proxy_env}}"
+
+
+- name: Reenerate DC/OS config file
+  template:
+    src: config.yaml.j2
+    dest: "{{ dcos_bootstrap_root_path }}/genconf/config.yaml"
+
+
+- name: Generate a upgrade script file
+  become: yes
+  command: bash {{ dcos_installer_name }} --generate-node-upgrade-script {{edcos_security_mode}}
+  args:
+    chdir: "{{ dcos_bootstrap_root_path }}"
+  register: upgrade_script_url

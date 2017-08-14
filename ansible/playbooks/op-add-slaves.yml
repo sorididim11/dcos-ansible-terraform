@@ -5,7 +5,7 @@
   hosts: "dcos_bootstrap"
   become: yes
   roles:
-    - { role: dcos/node/bootstrap } 
+    - dcos/bootstrap/boot_web 
   environment: "{{ proxy_env }}"
 
 

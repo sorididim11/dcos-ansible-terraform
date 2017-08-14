@@ -4,7 +4,7 @@
   gather_facts: False
   hosts: dcos_bootstrap
   roles:
-    - { role: dcos/node/boot_web,  when: dcos_is_insecure_registry == False }
+    - { role: dcos/bootstrap/boot_web,  when: dcos_is_insecure_registry == False }
   environment: "{{ proxy_env }}"
 
 

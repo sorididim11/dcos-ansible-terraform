@@ -4,5 +4,5 @@
   gather_facts: False
   hosts: dcos_bootstrap
   roles:
-    - role: dcos/bootstrap 
+    - role: dcos/bootstrap/install 
   environment: "{{ proxy_env }}"
