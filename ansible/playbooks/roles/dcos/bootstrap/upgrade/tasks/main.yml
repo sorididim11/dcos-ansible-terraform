@@ -19,8 +19,6 @@
     - bootstrap-config.json
     - dcos-version.json
 
-- debug:  msg="{{dcos_metadata_jsons}}"
-
 
 - name: Extract security mode and version from dcos metadata
   set_fact: 
