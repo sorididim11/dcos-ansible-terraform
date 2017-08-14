@@ -46,6 +46,7 @@
   until: result.stdout.find("running") != -1
   retries: 5
   delay: 10
+  when: node_type == "master" 
   
 
 - name: Move /usr/bin/docker  
