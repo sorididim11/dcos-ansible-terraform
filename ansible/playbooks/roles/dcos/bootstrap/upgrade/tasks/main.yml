@@ -82,4 +82,4 @@
     upgrade_url: "{{ upgrade_script_url.stdout.split(' ')[1] }}"
 
 
-- debug:  msg="Upgrade script url, {{upgrade_url}}"
+- debug:  msg="Upgrade script url, {{upgrade_script_url}} , {{upgrade_url}}"
