@@ -24,11 +24,10 @@
     edcos_security_mode: "{{ bootconf_json.stdout | from_json | json_query('security') }}"
 
 
+- assert: { that: "edcos_security_mode == 'strict'" }
+
 - debug: 
     msg: "Current security mode: {{edcos_security_mode}}"
-
-
-- assert: { that: "edcos_security_mode == 'strict'" }
 
 
 - name: Update fact, edcos_security_mode  
@@ -66,7 +65,7 @@
   environment: "{{proxy_env}}"
 
 
-- name: Reenerate DC/OS config file
+- name: Regenerate DC/OS config file with security mode, {{edcos_security_mode}}
   template:
     src: config.yaml.j2
     dest: "{{ dcos_bootstrap_root_path }}/genconf/config.yaml"
