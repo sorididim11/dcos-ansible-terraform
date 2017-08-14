@@ -1,4 +1,6 @@
 --- 
+- name: Install 
+  yum: name=
 - name: Aquire Auth token 
   shell: dcos config show core.dcos_acs_token
   register: auth_token
@@ -6,54 +8,41 @@
 
 - name: Read security mode of the cluster
   uri:
-    url: "https://{{dcos_first_master_internal_ip}}/dcos-metadata/bootstrap-config.json"
-    dest: "{{ dcos_bootstrap_root_path }}/bootstrap-config.json"
+    url: "https://{{dcos_first_master_internal_ip}}/dcos-metadata/{{item}}"
+    dest: "{{ dcos_bootstrap_root_path }}/{{item}}"
     method: GET
     validate_certs: False
     headers: 
       Authorization: "token={{auth_token.stdout}}"
-      Accept: "application/json" 
+      Accept: "application/json"
+  with_items:
+    - bootstrap-config.json
+    - dcos-version.json
 
 
 - shell: "cat {{ dcos_bootstrap_root_path }}/bootstrap-config.json"
   register: bootconf_json
 
 
-- name: Extract security mode from bootconf
+- shell: "cat {{ dcos_bootstrap_root_path }}/dcos-version.json"
+  register: dcos_version_json
+
+
+- name: Extract security mode and version from dcos metadata
   set_fact: 
+    dcos_version: "{{ dcos_version_json.stdout | from_json | json_query('security') }}"
     edcos_security_mode: "{{ bootconf_json.stdout | from_json | json_query('security') }}"
 
 
-- assert: { that: "edcos_security_mode == 'strict'" }
-
-- debug: 
-    msg: "Current security mode: {{edcos_security_mode}}"
+- assert: { that: "edcos_security_mode == 'strict'", msg: "What??? you are already in strict mode!! "}
+- debug:  msg:="Current security mode, {{edcos_security_mode}}"
 
 
 - name: Update fact, edcos_security_mode  
   set_fact: 
     edcos_security_mode: "{{ (edcos_security_mode == 'permissive') | ternary('strict', 'permissive')  }}"
 
-
-- debug: 
-    msg: "Upgrade Security to {{edcos_security_mode}}"
-
-
-- name: Read DC/OS version of the cluster
-  get_url:
-    url: "{{dcos_cluster_url}}/dcos-metadata/dcos-version.json"
-    dest: "{{ dcos_bootstrap_root_path }}/dcos-version.json"
-    validate_certs: no
-  
-
-- name: print 
-  shell: "cat {{ dcos_bootstrap_root_path }}/dcos-version.json"
-  register: dcos_version_json
-
-# set_fact has the second higher precedence. So vars set by set_fact should be able to override group vars
-- name: Extract DC/OS version 
-  set_fact: 
-    dcos_version: "{{ dcos_version_json.stdout | from_json | json_query('security') }}"
+- debug:  msg="Upgrade Security to {{edcos_security_mode}}. DC/OS {{dcos_version}}"
 
 
 - name: Download DC/OS installer
@@ -65,15 +54,27 @@
   environment: "{{proxy_env}}"
 
 
+- name: Check if config file exists
+  stat: path="{{ dcos_bootstrap_root_path }}/genconf/config.yaml"
+  register: is_config_file
+
+
 - name: Regenerate DC/OS config file with security mode, {{edcos_security_mode}}
   template:
     src: config.yaml.j2
     dest: "{{ dcos_bootstrap_root_path }}/genconf/config.yaml"
+  when: is_config_file.stat.exists == False
+
+
+- name: Modify config.yml file with new security mode 
+  lineinfile:    
+    regexp: "^security:"
+    line: "security: {{edcos_security_mode}}"
+  when: is_config_file.stat.exists == True
 
 
 - name: Generate a upgrade script file
   become: yes
-  command: bash {{ dcos_installer_name }} --generate-node-upgrade-script {{edcos_security_mode}}
+  command: "bash {{ dcos_installer_name }} --generate-node-upgrade-script {{dcos_version}}"
   args:
     chdir: "{{ dcos_bootstrap_root_path }}"
-  register: upgrade_script_url
