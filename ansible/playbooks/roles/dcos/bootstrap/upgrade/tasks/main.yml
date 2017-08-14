@@ -29,7 +29,7 @@
     
 
 
-- assert: { that: "edcos_security_mode == 'strict'", msg: "What??? you are already in strict mode!! "}
+- assert: { that: "edcos_security_mode != 'strict'", msg: "What??? you are already in strict mode!! "}
 - debug:  msg="Current security mode, {{edcos_security_mode}}"
 
 
