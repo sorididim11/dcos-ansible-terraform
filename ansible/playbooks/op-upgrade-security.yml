@@ -1,4 +1,3 @@
----
 - name: "Discovery security mode of the cluster"
   gather_facts: False
   hosts: dcos_bootstrap
