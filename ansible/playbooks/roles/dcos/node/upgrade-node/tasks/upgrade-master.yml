@@ -1,0 +1,23 @@
+--- 
+
+- name: Download the DC/OS installer from the NGINX Docker container
+  get_url:
+    url: "{{hostvars[groups['dcos_bootstrap'][0]]['upgrade_url']}}"
+    dest: /tmp/dcos/dcos_node_upgrade.sh
+    force: no #if yes, if it keeps downloading
+
+
+- name: Upgrade master node 
+  become: yes
+  command: "bash dcos_node_upgrade.sh"
+  args:
+    chdir: /tmp/dcos
+
+
+- name: Wait for dcos-mesos-{{node_type}} running
+  become: yes
+  shell: "systemctl status dcos-mesos-{{node_type}}"
+  register: result
+  until: result.stdout.find("running") != -1
+  retries: 10
+  delay: 100

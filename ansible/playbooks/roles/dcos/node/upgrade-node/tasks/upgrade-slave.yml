@@ -1,0 +1,41 @@
+--- 
+- name: Copy /usr/bin/docker 
+  become: yes
+  shell: |
+       cp -p /usr/bin/docker /usr/bin/docker-orig
+       cp -p /usr/bin/docker /tmp/docker-wrapper
+
+
+- name: Update /usr/bin/docker  
+  become: yes
+  shell:
+    cmd: |
+        tee /tmp/docker-wrapper >/dev/null <<"EOF"
+         #!/usr/bin/env sh
+         unset LD_LIBRARY_PATH
+         /usr/bin/docker-orig "$@"
+        EOF
+
+
+- name: Move /usr/bin/docker  
+  become: yes
+  shell: sudo mv -f /tmp/docker-wrapper /usr/bin/docker
+
+
+- name: Download the DC/OS installer from the NGINX Docker container
+  get_url:
+    url: "{{hostvars[groups['dcos_bootstrap'][0]]['upgrade_url']}}"
+    dest: /tmp/dcos/dcos_node_upgrade.sh
+    force: no #if yes, if it keeps downloading
+
+
+- name: Upgrade slave
+  become: yes
+  command: "bash dcos_node_upgrade.sh"
+  args:
+    chdir: /tmp/dcos
+
+
+- name: Move /usr/bin/docker  
+  become: yes
+  shell: sudo mv -f /usr/bin/docker-orig /usr/bin/docker

@@ -3,8 +3,8 @@
   hosts: dcos_bootstrap
   gather_facts: False
   roles:
-    - { role: dcos/bootstrap/upgrade }
-    - { role: dcos/bootstrap/boot_web }  
+    - dcos/bootstrap/upgrade 
+    - dcos/bootstrap/boot_web 
   environment: "{{ proxy_env }}"
 
 
