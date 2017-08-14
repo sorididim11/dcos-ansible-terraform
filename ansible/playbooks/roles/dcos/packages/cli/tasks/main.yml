@@ -9,8 +9,8 @@
   file: 
     path: "{{ dcos_bootstrap_root_path }}/{{item}}"
     state: directory
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
   with_items:
     - packages
     - quota
