@@ -79,7 +79,7 @@
 
 - name: Extract only URL 
   set_fact: 
-    upgrade_url: upgrade_script_url.stdout.split(' ')[1]
+    upgrade_url: "{{ upgrade_script_url.stdout.split(' ')[1] }}"
 
 
 - debug:  msg="Upgrade script url, {{upgrade_url}}"
