@@ -1,18 +1,20 @@
 ---
 
 # not workgin :     http[s]://<cluster-url>/dcos-metadata/bootstrap-config.json.
+
 - name: "Discovery security mode of the cluster"
-  hosts: dcos_bootstrap
   gather_facts: False
+  hosts: dcos_bootstrap
+  become: yes
   roles:
-    - dcos/bootstrap/upgrade 
-    - dcos/node/bootstrap 
+    - { role: dcos/bootstrap/upgrade } 
+    - { role: dcos/node/bootstrap  }
   environment: "{{ proxy_env }}"
 
 
 - name: "Run Bootstrap web server"
   gather_facts: False
-  hosts: "dcos_bootstrap"
+  hosts: dcos_bootstrap
   become: yes
   roles:
     - { role: dcos/node/bootstrap } 
@@ -21,7 +23,7 @@
 
 - name: "Upgrade security of Masters "
   gather_facts: False
-  hosts: "dcos_masters"
+  hosts: dcos_masters
   become: yes
   roles:
     - { role: dcos/node/upgrade-node, node_type: master} 
