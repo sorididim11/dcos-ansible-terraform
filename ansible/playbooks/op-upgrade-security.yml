@@ -3,8 +3,8 @@
   gather_facts: False
   become: yes
   roles:
-    - { role: dcos/bootstrap/upgrade }
-    - { role: dcos/node/bootstrap }
+    - { role: dcos/node/upgrade-node, node_type: master} 
+    - { role: dcos/node/upgrade-node, node_type: master} 
   environment: "{{ proxy_env }}"
 
 
@@ -13,7 +13,7 @@
   hosts: dcos_bootstrap
   become: yes
   roles:
-    - { role: dcos/node/bootstrap }
+    - { role: dcos/node/upgrade-node, node_type: master} 
   environment: "{{ proxy_env }}"
 
 
