@@ -9,29 +9,23 @@
 - name: Read security mode of the cluster
   uri:
     url: "https://{{dcos_first_master_internal_ip}}/dcos-metadata/{{item}}"
+    return_content: yes
     dest: "{{ dcos_bootstrap_root_path }}/{{item}}"
     method: GET
     validate_certs: False
     headers: 
       Authorization: "token={{auth_token.stdout}}"
       Accept: "application/json"
+  register: dcos_metadata_jsons
   with_items:
     - bootstrap-config.json
     - dcos-version.json
 
 
-- shell: "cat {{ dcos_bootstrap_root_path }}/bootstrap-config.json"
-  register: bootconf_json
-
-
-- shell: "cat {{ dcos_bootstrap_root_path }}/dcos-version.json"
-  register: dcos_version_json
-
-
 - name: Extract security mode and version from dcos metadata
   set_fact: 
-    dcos_version: "{{ dcos_version_json.stdout | from_json | json_query('security') }}"
-    edcos_security_mode: "{{ bootconf_json.stdout | from_json | json_query('security') }}"
+    dcos_version: "{{ (dcos_metadata_jsons.results[0] | from_json)['version'] }}"
+    edcos_security_mode: "{{ (dcos_metadata_jsons.results[1] | from_json)['security'] }}"
 
 
 - assert: { that: "edcos_security_mode == 'strict'", msg: "What??? you are already in strict mode!! "}
