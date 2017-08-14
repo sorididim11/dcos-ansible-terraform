@@ -77,6 +77,6 @@
 
 - name: Extract only URL 
   set_fact: 
-    upgrade_url: "{{ upgrade_script_url.stdout | regex_replace('^.*(?P<host>https?:[^\\s]+dcos_node_upgrade.sh)', '\\g<host>') }}"
+    upgrade_url: "{{ upgrade_script_url.stdout | regex_replace('(?P<host>https?:[^\\s]+dcos_node_upgrade.sh)', '\\g<host>') }}"
    
 - debug:  msg="Upgrade script url, {{upgrade_url}}"
