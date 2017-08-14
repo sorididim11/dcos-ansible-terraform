@@ -1,19 +1,18 @@
 ---
+- name: Generate Upgrade file for security
+  hosts: dcos_bootstrap
+  gather_facts: False
+  roles:
+    - { role: dcos/bootstrap/boot_web } 
+    - { role: dcos/bootstrap/upgrade } 
+  environment: "{{ proxy_env }}"
+
 
 - name: "Upgrade security of Masters"
   gather_facts: False
   hosts: dcos_masters
   roles:
     - { role: dcos/node/upgrade-node, node_type: master} 
-  environment: "{{ proxy_env }}"
-
-
-- name: Generate Upgrade file for security
-  hosts: dcos_bootstrap
-  gather_facts: False
-  roles:
-    - { role: dcos/bootstrap/upgrade } 
-    - { role: dcos/bootstrap/boot_web } 
   environment: "{{ proxy_env }}"
 
 
