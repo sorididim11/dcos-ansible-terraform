@@ -1,28 +1,24 @@
+# internal & external port
+# ext.cnf 
+# bootstrap download
 {
   "service": {
-    "name": "registry"
+    "name": "{{dcos_registry_name}}"
   },
+dcos_cluster_url: "{{ (edcos_security_mode == 'disabled') | ternary('http', 'https')}}://{{dcos_first_master_internal_ip}}"
 
   "security": {
-    "enable": true,
+    "enable": {{ dcos_is_insecure_registry | ternary('true', 'false') }},
+    {% if dcos_is_insecure_registry == False %}
     "http_tls_download_ip": "{{groups['dcos_bootstrap'][0]}}",
     "http_tls_download_port": "{{ dcos_bootstrap_port }}",
     "http_tls_certificate_filename": "domain.crt",
     "http_tls_key_filename": "domain.key"
+    {% endif %}
   },
 
   "storage": {
     "storage_path": "/var/lib/registry",
-    "host_volume_registry": "{{ dcos_host_volume_registry }}",
-    "persistence": {
-      "enable": false,
-      "volume_size_registry": 1024,
-      "external": {
-        "enable": false,
-        "volume_name_registry": "registry",
-        "provider": "dvdi",
-        "driver": "rexray"
-      }
-    }
+    "host_volume_registry": "{{ dcos_host_volume_registry }}"
   }
 }

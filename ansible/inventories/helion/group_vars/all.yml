@@ -1,7 +1,7 @@
 # The global variable file DDC installation
 
 
-dcos_version: 1.9
+dcos_version: "1.9"
 
 # enterprise
 edcos_license: !vault |
@@ -50,5 +50,3 @@ selinux_mode: permissive
 # docker 
 docker_volume_fs: overlay
 docker_version: 1.13.1
-dcos_is_insecure_registry: False
-dcos_host_volume_registry: '/tmp'  # docker registry volume path
