@@ -1,4 +1,9 @@
 --- 
+- name: Aquire Auth token 
+  shell: dcos config show core.dcos_acs_token
+  register: auth_token
+
+
 - name: Read security mode of the cluster
   uri:
     url: "https://{{dcos_first_master_internal_ip}}/dcos-metadata/bootstrap-config.json"
