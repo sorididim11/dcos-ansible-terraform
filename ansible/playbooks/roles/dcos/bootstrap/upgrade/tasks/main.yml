@@ -9,7 +9,6 @@
   uri:
     url: "https://{{dcos_first_master_internal_ip}}/dcos-metadata/{{item}}"
     return_content: yes
-    dest: "{{ dcos_bootstrap_root_path }}/{{item}}"
     method: GET
     validate_certs: False
     headers: 
