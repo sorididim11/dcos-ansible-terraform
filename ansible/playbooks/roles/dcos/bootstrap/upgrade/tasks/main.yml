@@ -63,6 +63,7 @@
 
 - name: Modify config.yml file with new security mode 
   lineinfile:    
+    paht: "{{ dcos_bootstrap_root_path }}/genconf/config.yaml"
     regexp: "^security:"
     line: "security: {{edcos_security_mode}}"
   when: is_config_file.stat.exists == True
