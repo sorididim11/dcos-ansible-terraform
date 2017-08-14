@@ -1,6 +1,6 @@
 ---
 
-- name: "Deploy DC/OS bootstreap"
+- name: "Build DC/OS bootstreap files"
   gather_facts: False
   hosts: dcos_bootstrap
   roles:

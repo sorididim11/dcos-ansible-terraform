@@ -3,7 +3,8 @@
 
 - include: util-update-fact-cache.yml
 
-- hosts: dcos_nodes:dcos_bootstrap
+- name: Install & Configure prerequisites for DC/OS
+  hosts: dcos_nodes:dcos_bootstrap
   gather_facts: False
   become: yes
   roles:

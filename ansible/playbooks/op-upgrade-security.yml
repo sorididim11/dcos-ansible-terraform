@@ -1,6 +1,6 @@
-- name: "Discovery security mode of the cluster"
+---
+- hosts: dcos_bootstrap
   gather_facts: False
-  hosts: dcos_bootstrap
   become: yes
   roles:
     - { role: dcos/bootstrap/upgrade }
@@ -17,7 +17,7 @@
   environment: "{{ proxy_env }}"
 
 
-- name: "Upgrade security of Masters "
+- name: "Upgrade security of Masters"
   gather_facts: False
   hosts: dcos_masters
   become: yes
@@ -27,7 +27,7 @@
 
 
 
-- name: "Upgrade security of Slaves/public "
+- name: "Upgrade security of Slaves/Slaves public"
   gather_facts: False
   hosts: dcos_slaves:dcos_slaves_public
   become: yes
