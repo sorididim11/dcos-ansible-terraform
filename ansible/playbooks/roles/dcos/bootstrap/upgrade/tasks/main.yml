@@ -1,6 +1,5 @@
 --- 
-- name: Install 
-  yum: name=
+
 - name: Aquire Auth token 
   shell: dcos config show core.dcos_acs_token
   register: auth_token
