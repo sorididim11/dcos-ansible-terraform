@@ -16,7 +16,7 @@
 
 - name: Download the DC/OS installer from the NGINX Docker container
   get_url:
-    url: "{{upgrade_url}}"
+    url: "{{hostvars[groups['dcos_bootstrap'][0]]['upgrade_url']}}"
     dest: /tmp/dcos/dcos_node_upgrade.sh
     force: no #if yes, if it keeps downloading
 
