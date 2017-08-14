@@ -1,9 +1,13 @@
 --- 
 - name: Read security mode of the cluster
-  get_url:
-    url: "{{dcos_cluster_url}}/dcos-metadata/bootstrap-config.json"
+  uri:
+    url: "https://{{dcos_first_master_internal_ip}}/dcos-metadata/bootstrap-config.json"
     dest: "{{ dcos_bootstrap_root_path }}/bootstrap-config.json"
-    validate_certs: no
+    method: GET
+    validate_certs: False
+    headers: 
+      Authorization: "token={{auth_token.stdout}}"
+      Accept: "application/json" 
 
 
 - shell: "cat {{ dcos_bootstrap_root_path }}/bootstrap-config.json"
