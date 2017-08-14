@@ -7,8 +7,8 @@
   hosts: dcos_bootstrap
   become: yes
   roles:
-    - { role: dcos/bootstrap/upgrade } 
-    - { role: dcos/node/bootstrap  }
+    - dcos/bootstrap/upgrade
+    - dcos/node/bootstrap
   environment: "{{ proxy_env }}"
 
 
@@ -17,7 +17,7 @@
   hosts: dcos_bootstrap
   become: yes
   roles:
-    - { role: dcos/node/bootstrap } 
+    - role: dcos/node/bootstrap
   environment: "{{ proxy_env }}"
 
 
