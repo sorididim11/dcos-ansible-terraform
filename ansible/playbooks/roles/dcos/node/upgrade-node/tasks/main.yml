@@ -38,3 +38,17 @@
   args:
     chdir: /tmp/dcos
 
+
+- name: Wait for dcos-mesos-{{node_type}} running
+  become: yes
+  shell: "systemctl status dcos-mesos-{{node_type}}"
+  register: result
+  until: result.stdout.find("running") != -1
+  retries: 5
+  delay: 10
+  
+
+- name: Move /usr/bin/docker  
+  become: yes
+  shell: sudo mv -f /usr/bin/docker-orig /usr/bin/docker
+  when: node_type != "master"
