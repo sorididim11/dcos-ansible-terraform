@@ -1,16 +1,27 @@
+--- 
+- name: Copy /usr/bin/docker 
+  become: yes
+  shell: |
+       cp -p /usr/bin/docker /usr/bin/docker-orig
+       cp -p /usr/bin/docker /tmp/docker-wrapper
+  when: node_type != "master"
+
 
 - name: Update /usr/bin/docker  
   become: yes
   shell:
     cmd: |
-       sudo cp -p /usr/bin/docker /usr/bin/docker-orig
-       sudo cp -p /usr/bin/docker /tmp/docker-wrapper
-       sudo tee /tmp/docker-wrapper >/dev/null <<"EOF"
+        tee /tmp/docker-wrapper >/dev/null <<"EOF"
          #!/usr/bin/env sh
          unset LD_LIBRARY_PATH
          /usr/bin/docker-orig "$@"
         EOF
-        sudo mv -f /tmp/docker-wrapper /usr/bin/docker
+  when: node_type != "master"
+
+
+- name: Move /usr/bin/docker  
+  become: yes
+  shell: sudo mv -f /tmp/docker-wrapper /usr/bin/docker
   when: node_type != "master"
 
 
