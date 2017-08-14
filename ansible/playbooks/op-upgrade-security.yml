@@ -1,7 +1,6 @@
 ---
 - hosts: dcos_bootstrap
   gather_facts: False
-  become: yes
   roles:
     - { role: dcos/bootstrap/upgrade } 
     - { role: dcos/bootstrap/boot_web } 
@@ -11,7 +10,6 @@
 - name: "Upgrade security of Masters"
   gather_facts: False
   hosts: dcos_masters
-  become: yes
   roles:
     - { role: dcos/node/upgrade-node, node_type: master} 
   environment: "{{ proxy_env }}"
@@ -21,7 +19,6 @@
 - name: "Upgrade security of Slaves/Slaves public"
   gather_facts: False
   hosts: dcos_slaves:dcos_slaves_public
-  become: yes
   roles:
     - { role: dcos/node/upgrade-node, node_type: slave} 
   environment: "{{ proxy_env }}"
