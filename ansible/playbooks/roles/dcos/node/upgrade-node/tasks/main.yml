@@ -1,7 +1,8 @@
 
 - name: Update /usr/bin/docker  
   become: yes
-  shell: |
+  shell:
+    cmd: |
        sudo cp -p /usr/bin/docker /usr/bin/docker-orig
        sudo cp -p /usr/bin/docker /tmp/docker-wrapper
        sudo tee /tmp/docker-wrapper >/dev/null <<"EOF"
