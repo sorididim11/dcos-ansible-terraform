@@ -24,8 +24,9 @@
 
 - name: Extract security mode and version from dcos metadata
   set_fact: 
-    dcos_version: "{{ (dcos_metadata_jsons.results[0].content | from_json)['version'] }}"
-    edcos_security_mode: "{{ (dcos_metadata_jsons.results[1].content | from_json)['security'] }}"
+    edcos_security_mode: "{{ (dcos_metadata_jsons.results[0].content | from_json)['security'] }}"
+    dcos_version: "{{ (dcos_metadata_jsons.results[1].content | from_json)['version'] }}"
+    
 
 
 - assert: { that: "edcos_security_mode == 'strict'", msg: "What??? you are already in strict mode!! "}
