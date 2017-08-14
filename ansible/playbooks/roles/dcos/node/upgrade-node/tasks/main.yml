@@ -44,8 +44,8 @@
   shell: "systemctl status dcos-mesos-{{node_type}}"
   register: result
   until: result.stdout.find("running") != -1
-  retries: 5
-  delay: 10
+  retries: 10
+  delay: 50
   when: node_type == "master" 
   
 

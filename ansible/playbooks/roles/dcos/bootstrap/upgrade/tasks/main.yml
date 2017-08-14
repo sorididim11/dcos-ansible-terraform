@@ -27,7 +27,7 @@
     
 
 
-- assert: { that: "edcos_security_mode != 'strict'", msg: "What??? you are already in strict mode!! "}
+# - assert: { that: "edcos_security_mode != 'strict'", msg: "What??? you are already in strict mode!! "}
 - debug:  msg="Current security mode, {{edcos_security_mode}}"
 
 
@@ -56,7 +56,7 @@
   template:
     src: config.yaml.j2
     dest: "{{ dcos_bootstrap_root_path }}/genconf/config.yaml"
-  when: is_config_file.stat.exists == False
+  when: is_config_file.stat.exists == False 
 
 
 - name: Modify config.yml file with new security mode 
@@ -64,7 +64,7 @@
     dest: "{{ dcos_bootstrap_root_path }}/genconf/config.yaml"
     regexp: "^security:"
     line: "security: {{edcos_security_mode}}"
-  when: is_config_file.stat.exists == True
+  when: is_config_file.stat.exists == True and edcos_security_mode != "strict"
 
 
 - name: Generate a upgrade script file
@@ -73,6 +73,7 @@
   register: upgrade_script_url
   args:
     chdir: "{{ dcos_bootstrap_root_path }}"
+  when: edcos_security_mode != "strict"
 
 
 - name: Extract only URL 
