@@ -45,11 +45,14 @@
     headers: 
       Authorization: "token={{hostvars[groups['dcos_bootstrap'][0]]['auth_token']}}"
       Accept: "application/json"   
-  register: is_recovered
-  until: (is_recovered.content | from_json)['slave/registered'] == 1.0
+  register: is_registered
+  until: (is_registered.content | from_json)['slave/registered'] == 1.0
   retries: 1000
   delay: 30
   changed_when: no
+
+
+- debug: msg="{{is_registered.content}}"
 
 
 - name: Move /usr/bin/docker  

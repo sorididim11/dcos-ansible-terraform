@@ -42,5 +42,5 @@
   changed_when: no
 
 
-- debug: msg="{{is_recovered}}"
+- debug: msg="{{is_recovered.content}}"
   
