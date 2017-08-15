@@ -29,13 +29,13 @@
     force: no #if yes, if it keeps downloading
 
 
-# - name: Upgrade slave
-#   become: yes
-#   command: "bash dcos_node_upgrade.sh"
-#   args:
-#     chdir: /tmp/dcos
+- name: Upgrade slave
+  become: yes
+  command: "bash dcos_node_upgrade.sh"
+  args:
+    chdir: /tmp/dcos
 
 
-# - name: Move /usr/bin/docker  
-#   become: yes
-#   shell: sudo mv -f /usr/bin/docker-orig /usr/bin/docker
+- name: Move /usr/bin/docker  
+  become: yes
+  shell: sudo mv -f /usr/bin/docker-orig /usr/bin/docker
