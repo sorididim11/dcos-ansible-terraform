@@ -30,10 +30,10 @@
     method: GET
     return_content: yes
     validate_certs: False
-    headers: 
-      Authorization: "token={{hostvars[groups['dcos_bootstrap'][0]]['auth_token']}}"
-      Accept: "application/json"
   register: is_recovered
+  until: is_recovered.find("\"recovered\":1.0") != -1
+  retries: 1000
+  delay: 100
 
 - debug: msg="{{is_recovered}}"
   
