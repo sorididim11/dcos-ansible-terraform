@@ -2,11 +2,11 @@
 
 - name: Aquire Auth token 
   shell: dcos config show core.dcos_acs_token
-  register: auth_token
+  register: auth_token_ret
 
 - name: Set fact, auth_token
   set_fact: 
-    auth_token: "{{auth_token.stdout}}"
+    auth_token: "{{auth_token_ret.stdout}}"
 
 
 - name: Aquire DC/OS metadata
@@ -16,7 +16,7 @@
     return_content: yes
     validate_certs: False
     headers: 
-      Authorization: "token={{auth_token.stdout}}"
+      Authorization: "token={{auth_token}}"
       Accept: "application/json"
   register: dcos_metadata_jsons
   with_items:
