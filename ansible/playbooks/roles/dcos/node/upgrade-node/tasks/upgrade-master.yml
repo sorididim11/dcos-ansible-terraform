@@ -5,6 +5,7 @@
     url: "{{hostvars[groups['dcos_bootstrap'][0]]['upgrade_url']}}"
     dest: /tmp/dcos/dcos_node_upgrade.sh
     force: no #if yes, if it keeps downloading
+  tags: upgrade-mesos-wait
 
 
 - name: Upgrade master node 
@@ -12,6 +13,7 @@
   command: "bash dcos_node_upgrade.sh"
   args:
     chdir: /tmp/dcos
+  tags: upgrade-mesos-wait
 
 
 - name: Wait for mesos master running
