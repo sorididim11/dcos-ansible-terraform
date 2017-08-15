@@ -3,12 +3,12 @@
 - name: Aquire Auth token 
   shell: dcos config show core.dcos_acs_token
   register: auth_token_ret
-  tags: upgrade-master-wait
+  tags: upgrade-mesos-wait
 
 - name: Set fact, auth_token
   set_fact: 
     auth_token: "{{auth_token_ret.stdout}}"
-  tags: upgrade-master-wait
+  tags: upgrade-mesos-wait
 
 - name: Aquire DC/OS metadata
   uri:
