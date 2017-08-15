@@ -30,6 +30,8 @@
     method: GET
     return_content: yes
     validate_certs: False
+    headers: 
+      Accept: "application/json"
   register: is_recovered
   until: (is_recovered.content | from_json)['recovered'] != 1.0
   retries: 1000
