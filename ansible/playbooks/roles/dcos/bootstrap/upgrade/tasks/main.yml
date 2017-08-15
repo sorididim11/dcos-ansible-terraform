@@ -8,7 +8,7 @@
 - name: Set fact, auth_token
   set_fact: 
     auth_token: "{{auth_token_ret.stdout}}"
-
+  tags: upgrade-master-wait
 
 - name: Aquire DC/OS metadata
   uri:
