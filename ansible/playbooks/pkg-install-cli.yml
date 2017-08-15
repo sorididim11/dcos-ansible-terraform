@@ -2,6 +2,7 @@
 
 - name: "Install CLI and Enterprise CLI"
   hosts: dcos_cli
+  tags: ['pkg']
   gather_facts: False
   roles:
     - { role: dcos/packages/cli } 

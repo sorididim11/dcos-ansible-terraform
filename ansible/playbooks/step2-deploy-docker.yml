@@ -4,7 +4,8 @@
 - name: "Install docker engine"
   gather_facts: False
   hosts: dcos_nodes:dcos_bootstrap
+  tags: ['pre-steps', 'install'] 
   become: yes
   roles:
-    - role: common/docker
+    - { role: common/docker, tags: ['pre-steps'] }
   environment: "{{ proxy_env }}"

@@ -3,6 +3,7 @@
 - name: "Install Monitoring platform"
   gather_facts: False
   hosts: dcos_cli[0]
+  tags: ['pkg']
   roles:
     - { role: dcos/packages/monitoring } 
   environment: "{{ proxy_env }}"

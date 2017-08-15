@@ -3,6 +3,8 @@
 - name: "Build DC/OS bootstreap files"
   gather_facts: False
   hosts: dcos_bootstrap
+  tags: ['install'] 
+
   roles:
     - role: dcos/bootstrap/install 
   environment: "{{ proxy_env }}"

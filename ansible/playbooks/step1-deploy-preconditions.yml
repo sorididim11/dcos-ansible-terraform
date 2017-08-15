@@ -4,10 +4,11 @@
 - include: util-update-fact-cache.yml
 
 - name: Install & Configure prerequisites for DC/OS
+  tags: ['pre-steps', 'install'] 
   hosts: dcos_nodes:dcos_bootstrap
   gather_facts: False
   become: yes
   roles:
-    - role: common/preconditions
+    - common/preconditions 
   environment: "{{ proxy_env }}"
   
