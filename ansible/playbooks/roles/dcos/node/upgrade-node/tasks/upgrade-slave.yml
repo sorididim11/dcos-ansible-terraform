@@ -37,4 +37,4 @@
 
 - name: Move /usr/bin/docker  
   become: yes
-  shell: sudo mv -f /usr/bin/docker-orig /usr/bin/docker
+  shell: mv -f /usr/bin/docker-orig /usr/bin/docker

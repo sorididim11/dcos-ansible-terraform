@@ -9,7 +9,7 @@
 
 
 # - include: util-dcos-bugfix.yml
-#   when: edcos_security_mode == "strict" and dcos_version == "1.9"
+#   when: edcos_security_mode == "strict" and dcos_version | version_compare("1.10", '<')
 
 
 - name: "Deploy DC/OS slaves"
