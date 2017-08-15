@@ -32,12 +32,14 @@
     return_content: yes
     validate_certs: False
     headers: 
-      Accept: "application/json"
+      Authorization: "token={{auth_token}}"
+      Accept: "application/json"   
   register: is_recovered
   until: (is_recovered.result.content | from_json)['recovered'] != 1.0
   retries: 1000
   delay: 100
   tags: upgrade-mesos-wait
+
 
 - debug: msg="{{is_recovered}}"
   
