@@ -5,5 +5,5 @@
   hosts: dcos_cli[0]
   tags: ['pkg']
   roles:
-    - { role: dcos/packages/monitoring } 
+    - dcos/packages/monitoring
   environment: "{{ proxy_env }}"

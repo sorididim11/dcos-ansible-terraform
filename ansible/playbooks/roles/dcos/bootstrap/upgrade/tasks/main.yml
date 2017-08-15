@@ -5,10 +5,12 @@
   register: auth_token_ret
   tags: upgrade-mesos-wait
 
+
 - name: Set fact, auth_token
   set_fact: 
     auth_token: "{{auth_token_ret.stdout}}"
   tags: upgrade-mesos-wait
+
 
 - name: Aquire DC/OS metadata
   uri:
@@ -31,7 +33,6 @@
     dcos_version: "{{ (dcos_metadata_jsons.results[1].content | from_json)['version'] }}"
     
 
-
 - assert: { that: "edcos_security_mode != 'strict'", msg: "What??? you are already in strict mode!! "}
 - debug:  msg="Current security mode, {{edcos_security_mode}}"
 
@@ -39,6 +40,7 @@
 - name: Update fact, edcos_security_mode  
   set_fact: 
     edcos_security_mode: "{{ (edcos_security_mode == 'permissive') | ternary('strict', 'permissive')  }}"
+
 
 - debug:  msg="Upgrade Security to {{edcos_security_mode}}. DC/OS {{dcos_version}}"
 

@@ -3,5 +3,5 @@
 - hosts: dcos_bootstrap
   gather_facts: no
   roles:
-    - role: common/ohmyzsh
+    - common/ohmyzsh
   environment: "{{ proxy_env }}"

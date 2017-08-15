@@ -13,5 +13,5 @@
   gather_facts: False
   hosts: dcos_cli[0]
   roles:
-    - { role: dcos/packages/docker-registry } 
+    - dcos/packages/docker-registry
   environment: "{{ proxy_env }}"

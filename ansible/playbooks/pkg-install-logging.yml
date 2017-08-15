@@ -5,5 +5,5 @@
   gather_facts: False
   become: yes
   roles:
-    - { role: dcos/packages/logging } 
+    - dcos/packages/logging
   environment: "{{ proxy_env }}"

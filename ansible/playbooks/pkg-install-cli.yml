@@ -5,5 +5,5 @@
   tags: ['pkg']
   gather_facts: False
   roles:
-    - { role: dcos/packages/cli } 
+    - dcos/packages/cli
   environment: "{{ proxy_env }}"
