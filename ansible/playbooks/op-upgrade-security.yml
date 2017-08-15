@@ -4,7 +4,7 @@
   gather_facts: False
   roles:
     - dcos/bootstrap/upgrade 
-    - dcos/bootstrap/boot_web 
+    - { role: dcos/bootstrap/boot_web, tags: [ 'upgrade-mesos-wait' ] }
   environment: "{{ proxy_env }}"
 
 
