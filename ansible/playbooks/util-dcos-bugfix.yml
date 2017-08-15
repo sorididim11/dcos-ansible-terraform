@@ -6,7 +6,7 @@
   - name: Remove mesos HTTP endpoint, /api/v1 from master firewalll 
     lineinfile:
       dest: /opt/mesosphere/etc/mesos/master_firewall.json
-      regexp: "^'/api/v1,'"
+      regexp: "^\"/api/v1,$\""
       state: absent
 
 
