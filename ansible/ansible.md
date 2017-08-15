@@ -86,3 +86,10 @@ ex) - name: iterate user groups
         ls -l
         systemctl restart ntpd
         cp files /etc
+
+## loop
+### show all the hosts matching the pattern, ie all but the group www
+- debug:
+    msg: "{{ item }}"
+  with_inventory_hostnames:
+    - all:!www

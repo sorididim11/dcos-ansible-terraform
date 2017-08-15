@@ -22,6 +22,10 @@
   retries: 1000
   delay: 100 # unit, second
 
+- name: Aquire Auth token 
+  shell: dcos config show core.dcos_acs_token
+  register: auth_token
+
 
 # registrar/log/recovered with a value of 1
 - name: Verify mertrict snapshot of mesos master
