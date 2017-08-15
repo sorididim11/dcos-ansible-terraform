@@ -25,10 +25,9 @@
   changed_when: no
 
 
-# registrar/log/recovered with a value of 1
 - name: Verify mertrict snapshot of mesos master
   uri:
-    url: "https://{{dcos_first_master_internal_ip}}:5050/metrics/snapshot"
+    url: "https://{{inventory_hostname}}:5050/metrics/snapshot"
     method: GET
     return_content: yes
     validate_certs: False

@@ -36,6 +36,22 @@
     chdir: /tmp/dcos
 
 
+- name: Verify mertrict snapshot of mesos slave
+  uri:
+    url: "http://{{inventory_hostname}}:5051/metrics/snapshot"
+    method: GET
+    return_content: yes
+    validate_certs: False
+    headers: 
+      Authorization: "token={{hostvars[groups['dcos_bootstrap'][0]]['auth_token']}}"
+      Accept: "application/json"   
+  register: is_recovered
+  until: (is_recovered.content | from_json)['slave/registered'] == 1.0
+  retries: 1000
+  delay: 30
+  changed_when: no
+
+
 - name: Move /usr/bin/docker  
   become: yes
   shell: mv -f /usr/bin/docker-orig /usr/bin/docker
