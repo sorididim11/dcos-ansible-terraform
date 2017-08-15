@@ -16,7 +16,7 @@
 
 - name: Wait for mesos master running
   become: yes
-  shell: "systemctl status dcos-mesos-{{node_type}}"
+  shell: "systemctl status dcos-mesos-master"
   register: result
   until: result.stdout.find("running") != -1
   retries: 1000
