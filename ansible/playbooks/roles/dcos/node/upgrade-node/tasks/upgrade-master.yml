@@ -20,7 +20,7 @@
   register: result
   until: result.stdout.find("running") != -1
   retries: 1000
-  delay: 100 # unit, second
+  delay: 50 # unit, second
 
 
 # registrar/log/recovered with a value of 1
