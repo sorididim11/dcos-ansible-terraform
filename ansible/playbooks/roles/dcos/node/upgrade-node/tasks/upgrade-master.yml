@@ -32,7 +32,7 @@
     return_content: yes
     validate_certs: False
     headers: 
-      Authorization: "token={{auth_token}}"
+      Authorization: "token={{hostvars[groups['dcos_bootstrap'][0]]['auth_token']}}"
       Accept: "application/json"   
   register: is_recovered
   until: (is_recovered.result.content | from_json)['recovered'] != 1.0
