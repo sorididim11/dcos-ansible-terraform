@@ -39,9 +39,5 @@
 
 # from ansible version 2.2
 - name: Reload systemd and restat docker service
-  systemd:
-    name: docker
-    state: restarted
-    enabled: yes
-    daemon_reload: yes
+  systemd: name=docker state=restarted enabled=yes daemon_reload=yes
   changed_when: false

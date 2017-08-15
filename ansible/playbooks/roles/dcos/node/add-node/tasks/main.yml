@@ -44,9 +44,7 @@
 
 - name: Restat dcos-cosmos
   become: yes
-  systemd:
-    name: dcos-cosmos
-    state: restarted
+  systemd: name=dcos-cosmos state=restarted
   when: dcos_is_use_proxy == False and node_type == "master" and proxy_env.http_proxy is defined 
   changed_when: false
   
