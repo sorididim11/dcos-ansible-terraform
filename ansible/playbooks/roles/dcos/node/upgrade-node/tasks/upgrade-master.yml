@@ -21,6 +21,7 @@
   until: result.stdout.find("running") != -1
   retries: 1000
   delay: 50 # unit, second
+  tags: upgrade-mesos-wait
 
 
 # registrar/log/recovered with a value of 1
@@ -36,6 +37,7 @@
   until: (is_recovered.result.content | from_json)['recovered'] != 1.0
   retries: 1000
   delay: 100
+  tags: upgrade-mesos-wait
 
 - debug: msg="{{is_recovered}}"
   
