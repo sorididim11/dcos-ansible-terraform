@@ -8,7 +8,6 @@
 
 
 - name: Upgrade master node 
-  become: yes
   command: "bash dcos_node_upgrade.sh"
   args:
     chdir: /tmp/dcos
@@ -22,6 +21,7 @@
   retries: 1000
   delay: 30 # unit, second
   tags: upgrade-mesos-wait
+  changed_when: no
 
 
 # registrar/log/recovered with a value of 1
@@ -39,6 +39,7 @@
   retries: 1000
   delay: 30
   tags: upgrade-mesos-wait
+  changed_when: no
 
 
 - debug: msg="{{is_recovered}}"
