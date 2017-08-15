@@ -20,7 +20,7 @@
   register: result
   until: result.stdout.find("running") != -1
   retries: 1000
-  delay: 50 # unit, second
+  delay: 30 # unit, second
   tags: upgrade-mesos-wait
 
 
@@ -37,7 +37,7 @@
   register: is_recovered
   until: (is_recovered.content | from_json)['registrar/log/recovered'] == 1.0
   retries: 1000
-  delay: 100
+  delay: 30
   tags: upgrade-mesos-wait
 
 
