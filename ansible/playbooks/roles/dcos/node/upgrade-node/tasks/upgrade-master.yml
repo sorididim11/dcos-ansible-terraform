@@ -35,7 +35,7 @@
       Authorization: "token={{hostvars[groups['dcos_bootstrap'][0]]['auth_token']}}"
       Accept: "application/json"   
   register: is_recovered
-  until: (is_recovered.content | from_json)['registrar/log/recovered'] != 1.0
+  until: (is_recovered.content | from_json)['registrar/log/recovered'] == 1.0
   retries: 1000
   delay: 100
   tags: upgrade-mesos-wait
