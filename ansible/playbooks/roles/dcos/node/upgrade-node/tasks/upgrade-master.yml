@@ -24,7 +24,7 @@
 
 
 # registrar/log/recovered with a value of 1
-- name: Aquire DC/OS metadata
+- name: Verify mertrict snapshot of mesos master
   uri:
     url: "https://{{dcos_first_master_internal_ip}}:5050/metrics/snapshot"
     method: GET
