@@ -30,6 +30,7 @@
 
 
 - name: Upgrade slave
+  become: yes
   command: "bash dcos_node_upgrade.sh"
   args:
     chdir: /tmp/dcos
