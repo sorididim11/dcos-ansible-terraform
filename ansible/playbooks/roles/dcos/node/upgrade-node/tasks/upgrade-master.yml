@@ -31,7 +31,7 @@
     return_content: yes
     validate_certs: False
   register: is_recovered
-  until: is_recovered.find("\"recovered\":1.0") != -1
+  until: (is_recovered.content | from_json)['recovered'] != 1.0
   retries: 1000
   delay: 100
 
