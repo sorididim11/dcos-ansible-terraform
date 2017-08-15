@@ -30,7 +30,7 @@
     dest: /usr/local/bin/dcos
     validate_certs: no
     mode: 0755
-    force: yes
+    force: no
   environment: "{{proxy_env}}" 
 
 
