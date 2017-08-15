@@ -3,6 +3,7 @@
 - name: Aquire Auth token 
   shell: dcos config show core.dcos_acs_token
   register: auth_token_ret
+  tags: upgrade-master-wait
 
 - name: Set fact, auth_token
   set_fact: 
