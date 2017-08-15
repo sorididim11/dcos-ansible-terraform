@@ -14,10 +14,23 @@
     chdir: /tmp/dcos
 
 
-- name: Wait for dcos-mesos-{{node_type}} running
+- name: Wait for mesos master running
   become: yes
   shell: "systemctl status dcos-mesos-{{node_type}}"
   register: result
   until: result.stdout.find("running") != -1
-  retries: 10
-  delay: 100
+  retries: 20
+  delay: 200 # unit, second
+
+
+# registrar/log/recovered with a value of 1
+- name: Aquire DC/OS metadata
+  uri:
+    url: "https://{{dcos_first_master_internal_ip}}:5050/metrics/snapshot"
+    method: GET
+    return_content: yes
+    validate_certs: False
+    headers: 
+      Authorization: "token={{auth_token.stdout}}"
+      Accept: "application/json"
+  register: is_recovered

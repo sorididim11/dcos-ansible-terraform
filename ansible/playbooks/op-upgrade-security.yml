@@ -1,5 +1,5 @@
 ---
-- name: Generate Upgrade file for security
+- name: Generate DC/OS upgrade scripts for security
   hosts: dcos_bootstrap
   gather_facts: False
   roles:

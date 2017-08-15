@@ -5,11 +5,11 @@
   register: auth_token
 
 
-- name: Read security mode of the cluster
+- name: Aquire DC/OS metadata
   uri:
     url: "https://{{dcos_first_master_internal_ip}}/dcos-metadata/{{item}}"
-    return_content: yes
     method: GET
+    return_content: yes
     validate_certs: False
     headers: 
       Authorization: "token={{auth_token.stdout}}"
@@ -20,7 +20,7 @@
     - dcos-version.json
 
 
-- name: Extract security mode and version from dcos metadata
+- name: Update facts with security mode and version of DC/OS metadata
   set_fact: 
     edcos_security_mode: "{{ (dcos_metadata_jsons.results[0].content | from_json)['security'] }}"
     dcos_version: "{{ (dcos_metadata_jsons.results[1].content | from_json)['version'] }}"
@@ -52,14 +52,14 @@
   register: is_config_file
 
 
-- name: Regenerate DC/OS config file with security mode, {{edcos_security_mode}}
+- name: Generate DC/OS config file with for security mode, {{edcos_security_mode}}
   template:
     src: config.yaml.j2
     dest: "{{ dcos_bootstrap_root_path }}/genconf/config.yaml"
   when: is_config_file.stat.exists == False 
 
 
-- name: Modify config.yml file with new security mode 
+- name: Update config.yml file with new security mode , {{edcos_security_mode}}
   lineinfile:    
     dest: "{{ dcos_bootstrap_root_path }}/genconf/config.yaml"
     regexp: "^security:"
@@ -67,16 +67,15 @@
   when: is_config_file.stat.exists == True
 
 
-- name: Generate a upgrade script file
-  become: yes
+- name: Generate upgrade scripts
   command: "bash {{ dcos_installer_name }} --generate-node-upgrade-script {{dcos_version}}"
   register: upgrade_script_url
   args:
     chdir: "{{ dcos_bootstrap_root_path }}"
 
 
-- name: Extract only URL 
+- name: Aquire upgrade script URL of Bootstrap web server
   set_fact: 
     upgrade_url: "{{ upgrade_script_url.stdout | regex_search('https?:[^\\s]+dcos_node_upgrade.sh') }}"
    
-- debug:  msg="Upgrade script url, {{upgrade_url}}"
+- debug:  msg="Upgrade script URL, {{upgrade_url}}"
