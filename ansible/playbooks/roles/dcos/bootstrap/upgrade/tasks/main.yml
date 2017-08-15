@@ -4,6 +4,10 @@
   shell: dcos config show core.dcos_acs_token
   register: auth_token
 
+- name: Set fact, auth_token
+  set_fact: 
+    auth_token: "{{auth_token.stdout}}"
+
 
 - name: Aquire DC/OS metadata
   uri:

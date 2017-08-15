@@ -22,10 +22,6 @@
   retries: 1000
   delay: 100 # unit, second
 
-- name: Aquire Auth token 
-  shell: dcos config show core.dcos_acs_token
-  register: auth_token
-
 
 # registrar/log/recovered with a value of 1
 - name: Verify mertrict snapshot of mesos master
@@ -35,7 +31,7 @@
     return_content: yes
     validate_certs: False
     headers: 
-      Authorization: "token={{auth_token.stdout}}"
+      Authorization: "token={{hostvars[groups['dcos_bootstrap'][0]]['auth_token']}}"
       Accept: "application/json"
   register: is_recovered
 
