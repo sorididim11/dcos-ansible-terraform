@@ -38,3 +38,6 @@
       Authorization: "token={{auth_token.stdout}}"
       Accept: "application/json"
   register: is_recovered
+
+- debug: msg="{{is_recovered}}"
+  
