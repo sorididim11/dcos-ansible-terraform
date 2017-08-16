@@ -71,9 +71,8 @@ Vagrant.configure('2') do |config|
           ansible.inventory_path = inventory_file
           # ansible.playbook = 'ansible/playbooks/util-config-ohmyzsh.yml'
           ansible.playbook = 'ansible/vagrantSite.yml'
-          ansible.limit = 'all'
           ansible.verbose = 'true'
-          ansible.ask_vault_pass = true
+          ansible.vault_password_file = 'password'
         end
       end
     end
