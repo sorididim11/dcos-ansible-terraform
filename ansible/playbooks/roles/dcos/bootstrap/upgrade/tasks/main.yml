@@ -75,6 +75,7 @@
 
 
 - name: Generate upgrade scripts
+  become: yes
   command: "bash {{ dcos_installer_name }} --generate-node-upgrade-script {{dcos_version}}"
   register: upgrade_script_url
   args:
