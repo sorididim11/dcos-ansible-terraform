@@ -29,16 +29,27 @@
     force: no #if yes, if it keeps downloading
 
 
-- name: Upgrade slave
+- name: Upgrade {{node_typ}}
   become: yes
   command: "bash dcos_node_upgrade.sh"
   args:
     chdir: /tmp/dcos
 
 
+- name: Wait for mesos master running
+  become: yes
+  shell: "systemctl status dcos-mesos-{{node_typ}}"
+  register: result
+  until: result.stdout.find("running") != -1
+  retries: 1000
+  delay: 30 # unit, second
+  tags: upgrade-slave
+  changed_when: no
+
+
 - name: Verify mertrict snapshot of mesos slave
   uri:
-    url: "http://{{inventory_hostname}}:5051/metrics/snapshot"
+    url: "https://{{inventory_hostname}}:5051/metrics/snapshot"
     method: GET
     return_content: yes
     validate_certs: False

@@ -73,7 +73,7 @@ Vagrant.configure('2') do |config|
           ansible.playbook = 'ansible/vagrantSite.yml'
           ansible.limit = 'all'
           ansible.verbose = 'true'
-          ansible.vault_password_file = 'password'
+          ansible.ask_vault_pass = true
         end
       end
     end

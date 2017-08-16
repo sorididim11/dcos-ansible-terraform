@@ -19,12 +19,21 @@
   environment: "{{ proxy_env }}"
 
 
-- name: "Upgrade security of Slaves/Slaves public"
+- name: "Upgrade security of Slaves"
   gather_facts: False
-  hosts: dcos_slaves:dcos_slaves_public
+  hosts: dcos_slaves
   tags: ['upgrade-security']
   serial: 1
   roles:
-    - { role: dcos/node/upgrade-node, node_type: slave} 
+    - { role: dcos/node/upgrade-node, node_type: slave } 
   environment: "{{ proxy_env }}"
 
+
+- name: "Upgrade security of Slaves public"
+  gather_facts: False
+  hosts: dcos_slaves_public
+  tags: ['upgrade-security']
+  serial: 1
+  roles:
+    - { role: dcos/node/upgrade-node, node_type: slave-public} 
+  environment: "{{ proxy_env }}"
