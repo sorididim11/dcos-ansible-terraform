@@ -12,6 +12,22 @@
   tags: upgrade-mesos-wait
 
 
+
+- name: Verify mertrict snapshot of mesos slave
+  uri:
+    url: "http://10.0.15.31:5051/metrics/snapshot"
+    method: GET
+    return_content: yes
+    validate_certs: False
+    headers: 
+      Authorization: "token={{hostvars[groups['dcos_bootstrap'][0]]['auth_token']}}"
+      Accept: "application/json"   
+  register: is_registered
+
+
+- debug: msg="{{is_registered}}"
+
+
 - name: Aquire DC/OS metadata
   uri:
     url: "https://{{dcos_first_master_internal_ip}}/dcos-metadata/{{item}}"
