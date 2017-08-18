@@ -2,6 +2,7 @@ require 'yaml'
 require 'vagrant/ui'
 
 # dynamic inventory based on vagrant config file(vagrant.yml)
+guest_home_dir = '/home/vagrant'
 dcos_config = YAML.load_file('ansible/inventories/dev/group_vars/all.yml')
 settings = YAML.load_file 'vagrantConf.yml'
 
@@ -78,7 +79,7 @@ Vagrant.configure('2') do |config|
         ssh_prv_key = File.read("#{Dir.home}/.vagrant.d/insecure_private_key")
 
         # ansible vault password 
-        node.vm.provision 'shell', inline: "echo #{password} > /home/vagrant/password" if defined?(password) != nil
+        node.vm.provision 'shell', inline: "echo #{password} > #{guest_home_dir}/password" if defined?(password) != nil
 
         node.vm.provision 'shell' do |sh|
           sh.inline = <<-SHELL
@@ -94,10 +95,11 @@ Vagrant.configure('2') do |config|
           ansible.version = '2.3.1'
           ansible.config_file = 'ansible/ansible.cfg'
           ansible.inventory_path = inventory_file
+          ansible.limit = 'all'
           # ansible.playbook = 'ansible/playbooks/util-config-ohmyzsh.yml'
           ansible.playbook = 'ansible/vagrantSite.yml'
           ansible.verbose = 'true'
-          ansible.vault_password_file = '/home/vagrant/password' if dcos_config['dcos_is_enterprise'] 
+          ansible.vault_password_file = guest_home_dir + '/password' if dcos_config['dcos_is_enterprise'] 
         end
       end
     end
