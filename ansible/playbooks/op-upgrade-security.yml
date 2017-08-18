@@ -25,7 +25,7 @@
   tags: ['upgrade-security-slave']
   serial: 1
   roles:
-    - { role: dcos/node/upgrade-node, node_type: slave } 
+    - { role: dcos/node/upgrade-node, node_type: slave, svc_name: dcos-mesos-slave  } 
   environment: "{{ proxy_env }}"
 
 
@@ -35,5 +35,5 @@
   tags: ['upgrade-security']
   serial: 1
   roles:
-    - { role: dcos/node/upgrade-node, node_type: slave-public } 
+    - { role: dcos/node/upgrade-node, node_type: slave, svc_name: dcos-mesos-slave-public } 
   environment: "{{ proxy_env }}"

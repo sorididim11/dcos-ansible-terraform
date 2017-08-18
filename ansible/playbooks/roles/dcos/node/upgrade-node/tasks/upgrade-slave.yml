@@ -36,9 +36,9 @@
     chdir: /tmp/dcos
 
 
-- name: Wait for mesos master running
+- name: Wait for mesos {{svc_name}} running
   become: yes
-  shell: "systemctl status dcos-mesos-{{node_type}}"
+  shell: "systemctl status {{svc_name}}"
   register: result
   until: result.stdout.find("running") != -1
   retries: 1000
