@@ -14,7 +14,7 @@ services:
     package: marathon
     linux_acc: nobody
     role:
-      - hostname=10.0.15.31 name=dev cpus=1.0 mem=500 disks=1000 begin_port=1025 end_port=2180
+      - principal=root hostname=10.0.15.31 name=dev cpus=1.0 mem=500 disks=1000 begin_port=1025 end_port=2180
     service_account: 
       - perm=dcos:mesos:master:reservation:principal:{{ name }} 
       - perm=dcos:mesos:master:volume:principal:{{ name }} 
