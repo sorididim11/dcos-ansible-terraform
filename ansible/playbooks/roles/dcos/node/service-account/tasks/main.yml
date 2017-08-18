@@ -27,8 +27,8 @@
     headers: 
       Authorization: "token={{auth_token.stdout}}"
       Content-Type: "application/json"   
-    body: '{"description":"Controls the ability of <service-account-id> to access volumes"}'
-    status_code: 409, 200
+    body: '{"description": "{{item.1.desc}}"}'
+    status_code: 409, 201 #201 means created
   with_subelements:
     - "{{services}}"
     - permissions
@@ -41,9 +41,8 @@
     method: PUT
     validate_certs: False
     headers: 
-      Authorization: "token={{auth_token.stdout}}"
-      Content-Type: "application/json"   
-    status_code: 409, 200
+      Authorization: "token={{auth_token.stdout}}"  
+    status_code: 409, 204 # 204 means no content(success)
   with_subelements:
     - "{{services}}"
     - permissions
