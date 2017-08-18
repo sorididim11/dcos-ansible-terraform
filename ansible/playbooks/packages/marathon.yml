@@ -1,0 +1,20 @@
+
+services:
+  - name: marathon-dev
+    package: marathon
+    linux_acc: nobody
+    role:
+      - hostname=10.0.15.31 name=dev cpus=1.0 mem=500 disks=1000 begin_port=1025 end_port=2180
+    service_account: 
+      - perm=dcos:mesos:master:reservation:principal:{{ name }} 
+      - perm=dcos:mesos:master:volume:principal:{{ name }} 
+      - perm=dcos:mesos:master:task:user:{{linux_acc}} action=create desc="Allows Linux user {{linux_acc}} to execute tasks"
+      - perm=dcos:mesos:master:task:app_id:/
+      - perm="dcos:mesos:master:framework:role:{{ role['name'] }} action="create desc=the ability of {{ role['name'] }} to register as a framework" 
+      - perm=dcos:mesos:master:reservation:role:{{ role['name'] }} action=create
+      - perm=dcos:mesos:master:volume:role:{{ role['name'] }} action=create
+
+      
+
+        
+
