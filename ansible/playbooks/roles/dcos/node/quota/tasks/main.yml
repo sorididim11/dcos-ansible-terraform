@@ -21,7 +21,6 @@
     validate_certs: False
     headers: 
       Authorization: "token={{auth_token.stdout}}"
-      Content-Type: "application/json"
       Accept: "application/json" 
     body_format: json
     body: "{{ lookup('template', 'reserve-request.json.j2'}}"
