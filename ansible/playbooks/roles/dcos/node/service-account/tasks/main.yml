@@ -26,6 +26,7 @@
     validate_certs: False
     headers: 
       Authorization: "token={{auth_token.stdout}}"
+      Content-Type: "application/json"   
   with_subelements:
     - "{{services}}"
     - permissions
@@ -36,7 +37,6 @@
   uri:
     url: "https://{{dcos_cluster_url}}/acs/api/v1/acls/{{item.1.perm}}/users/{{item.0.name}}-id/{{item.1.action}}"
     method: POST
-    return_content: yes
     validate_certs: False
     headers: 
       Authorization: "token={{auth_token.stdout}}"
