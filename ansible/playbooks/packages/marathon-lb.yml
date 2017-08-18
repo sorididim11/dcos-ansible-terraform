@@ -4,8 +4,8 @@ services:
     package: marathon-lb
     linux_acc: nobody
     permissions:
-      - { perm: "dcos:service:marathon:marathon:services%252F", action: read, dest: "{'description':'Allows Linux user nobody to execute tasks'}" }
-      - { perm: "dcos:service:marathon:marathon:admin:events",  action: read, dest: "{'description':'Allows Linux user nobody to execute tasks'}" }
-      - { perm: "dcos:mesos:master:task:user:nobody", action: create, dest: "{'description':'Allows Linux user nobody to execute tasks'}" }
+      - { perm: "dcos:service:marathon:marathon:services%252F", action: read, desc: "{'description':'Allows Linux user nobody to execute tasks'}" }
+      - { perm: "dcos:service:marathon:marathon:admin:events",  action: read, desc: "{'description':'Allows Linux user nobody to execute tasks'}" }
+      - { perm: "dcos:mesos:master:task:user:nobody", action: create, desc: "{'description':'Allows Linux user nobody to execute tasks'}" }
     options:
       - op1
