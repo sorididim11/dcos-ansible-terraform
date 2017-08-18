@@ -1,6 +1,6 @@
 ---
 - name: Create Key pair 
-  command: "dcos security org service-accounts keypair {{item['name']}}.pem {{item['name']}}-pub.pem"
+  command: "dcos security org service-accounts keypair {{item['name']}}.pem {{item['name']}}-pub.pem created={{item['name']}}-pub.pem"
   with_items: "{{services}}"
 
 
