@@ -35,5 +35,5 @@
   tags: ['upgrade-security']
   serial: 1
   roles:
-    - { role: dcos/node/upgrade-node, node_type: slave-public} 
+    - { role: dcos/node/upgrade-node, node_type: slave-public } 
   environment: "{{ proxy_env }}"
