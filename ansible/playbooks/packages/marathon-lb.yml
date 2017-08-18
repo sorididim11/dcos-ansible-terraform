@@ -1,8 +1,8 @@
 ---
 services:
-  - name: dev-marathon-lb
+  - name: marathon-lb-dev
     package: marathon-lb
-    linux_acc: nobody
+    user: nobody
     permissions:
       - { perm: "dcos:service:marathon:marathon:services%252F", action: read, desc: "Allows Linux user nobody to execute tasks" }
       - { perm: "dcos:service:marathon:marathon:admin:events",  action: read, desc: "Allows Linux user nobody to execute tasks" }
