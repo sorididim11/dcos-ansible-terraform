@@ -29,7 +29,7 @@
     force: no #if yes, if it keeps downloading
 
 
-- name: Upgrade {{node_typ}}
+- name: Upgrade "{{node_typ}}"
   become: yes
   command: "bash dcos_node_upgrade.sh"
   args:
@@ -38,7 +38,7 @@
 
 - name: Wait for mesos master running
   become: yes
-  shell: "systemctl status dcos-mesos-{{node_typ}}"
+  shell: "systemctl status dcos-mesos-{{node_type}}"
   register: result
   until: result.stdout.find("running") != -1
   retries: 1000

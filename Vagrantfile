@@ -1,6 +1,8 @@
 require 'yaml'
 require 'vagrant/ui'
 
+UI = Vagrant::UI::Colored.new
+
 # dynamic inventory based on vagrant config file(vagrant.yml)
 guest_home_dir = '/home/vagrant'
 dcos_config = YAML.load_file('ansible/inventories/dev/group_vars/all.yml')
@@ -8,12 +10,13 @@ settings = YAML.load_file 'vagrantConf.yml'
 
 # Check if vagrant confile is in valid order. dcos_bootstrap should be at the bottom of config file
 if settings[settings.keys.last]['type'] != 'dcos_bootstrap'
-  print 'Please locate machine info, dcos_bootstrap at the bottom of configurations because of order of provisioning'
+  UI.error 'Please put dcos_bootstrap at the bottom of vagrantConf.yml because of provisioning order ', bold: true
   exit(-1)
 end
 
 # Check ansible vault password
 if dcos_config['dcos_is_enterprise']
+  UI.info 'Install DC/OS enterprise version? yes', bold: true
   if !File.exist?('password')
     print 'Ansible vault password: '
     password = STDIN.gets.chomp
@@ -25,6 +28,7 @@ end
 
 
 # create dynamic inventory file. ansible provisioner 's dynamic inventory got some bugs
+UI.info 'Create ansible dynamic inventory...', bold: true
 inventory_file = 'ansible/inventories/dev/hosts'
 File.open(inventory_file, 'w') do |f|
   %w(dcos_masters dcos_slaves dcos_slaves_public dcos_cli dcos_bootstrap).each do |section|
@@ -81,6 +85,7 @@ Vagrant.configure('2') do |config|
         # ansible vault password 
         node.vm.provision 'shell', inline: "echo #{password} > #{guest_home_dir}/password" if defined?(password) != nil
 
+        UI.info 'Insert vagrant insecure key to bootstreap node...', bold: true
         node.vm.provision 'shell' do |sh|
           sh.inline = <<-SHELL
             [ !  -d /dcos ] && sudo mkdir /dcos && chown vagrant:vagrant /dcos

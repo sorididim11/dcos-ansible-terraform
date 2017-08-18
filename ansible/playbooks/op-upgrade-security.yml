@@ -22,7 +22,7 @@
 - name: "Upgrade security of Slaves"
   gather_facts: False
   hosts: dcos_slaves
-  tags: ['upgrade-security']
+  tags: ['upgrade-security-slave']
   serial: 1
   roles:
     - { role: dcos/node/upgrade-node, node_type: slave } 
