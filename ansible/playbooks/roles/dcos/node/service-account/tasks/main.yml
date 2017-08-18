@@ -1,35 +1,48 @@
 ---
 - name: Create Key pair 
-  command: "dcos security org service-accounts keypair {{service_name}}.pem {{service_name}}-pub.pem"
+  command: "dcos security org service-accounts keypair {{item['name']}}.pem {{item['name']}}-pub.pem"
+  with_items: "{{services}}"
 
 
 - name: Create service account as ID
-  command: "dcos security org service-accounts create -p {{service_name}}-pub.pem -d {{service_name}}' service account' {{service_name}}-id"
+  command: "dcos security org service-accounts create -p {{item['name']}}-pub.pem -d {{item['name']}}' service account' {{item['name']}}-id"
+  with_items: "{{services}}"
 
 
 - name: Create service secret as Password
-  command: dcos security secrets create-sa-secret {% if edcos_security_mode == 'strict'%} --strict {% endif %} {{service_name}}.pem {{service_name}}-id {{service_name}}/password
+  command: dcos security secrets create-sa-secret {% if edcos_security_mode == 'strict'%} --strict {% endif %} {{item['name']}}.pem {{item['name']}}-id {{item['name']}}/password
+  with_items: "{{services}}"
+
+
+- name: Aquire Auth token 
+  shell: dcos config show core.dcos_acs_token
+  register: auth_token
 
 
 - name: Create permissions for {{service_name}}
   uri:
-    url: "https://{{dcos_cluster_url}}/acs/api/v1/acls/{{item}}"
+    url: "https://{{dcos_cluster_url}}/acs/api/v1/acls/{{item.1.perm}}"
     method: POST
     return_content: yes
     validate_certs: False
     headers: 
-      Authorization: "token={{hostvars[groups['dcos_bootstrap'][0]]['auth_token']}}"
+      Authorization: "token={{auth_token.stdout}}"
       Content-Type: "application/json"   
-  with_items: "{{permissioins}}"
+  with_subelements:
+    - "{{services}}"
+    - "{{permissions}}"
+
 
 
 - name: Assign the permissions to {{service_name}}
   uri:
-    url: "https://{{dcos_cluster_url}}/acs/api/v1/acls/{{item}}/users/{{service_name}}/{{action}}"
+    url: "https://{{dcos_cluster_url}}/acs/api/v1/acls/{{item.1.perm}}/users/{{item.0.name}}-id/{{item.1.action}}"
     method: POST
     return_content: yes
     validate_certs: False
     headers: 
-      Authorization: "token={{hostvars[groups['dcos_bootstrap'][0]]['auth_token']}}"
+      Authorization: "token={{auth_token.stdout}}"
       Content-Type: "application/json"   
-  with_items: "{{permissioins}}"
+  with_subelements:
+    - "{{services}}"
+    - "{{permissions}}"
