@@ -28,6 +28,7 @@
       Authorization: "token={{auth_token.stdout}}"
       Content-Type: "application/json"   
     body: "{{item.1.desc}}"
+    status_code: 409, 200
   with_subelements:
     - "{{services}}"
     - permissions
@@ -42,6 +43,7 @@
     headers: 
       Authorization: "token={{auth_token.stdout}}"
       Content-Type: "application/json"   
+    status_code: 409, 200
   with_subelements:
     - "{{services}}"
     - permissions
