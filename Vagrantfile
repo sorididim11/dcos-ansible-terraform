@@ -1,7 +1,24 @@
 require 'yaml'
+require 'vagrant/ui'
 
 # dynamic inventory based on vagrant config file(vagrant.yml)
+dcos_config = YAML.load_file('ansible/inventories/dev/group_vars/all.yml')
 settings = YAML.load_file 'vagrantConf.yml'
+
+# Check if vagrant confile is in valid order. dcos_bootstrap should be at the bottom of config file
+if settings[settings.keys.last]['type'] != 'dcos_bootstrap'
+  print 'Please locate machine info, dcos_bootstrap at the bottom of configurations because of order of provisioning'
+  exit(-1)
+end
+
+# Check ansible vault password
+if !File.exist?('password') && dcos_config['dcos_is_enterprise']
+  print 'Ansible vault password: '
+  password = STDIN.gets.chomp
+end
+
+
+# create dynamic inventory file. ansible provisioner 's dynamic inventory got some bugs
 inventory_file = 'ansible/inventories/dev/hosts'
 File.open(inventory_file, 'w') do |f|
   %w(dcos_masters dcos_slaves dcos_slaves_public dcos_cli dcos_bootstrap).each do |section|
@@ -13,14 +30,12 @@ File.open(inventory_file, 'w') do |f|
     end
     f.puts('')
   end
-
   f.write("[dcos_nodes:children]\ndcos_masters\ndcos_slaves\ndcos_slaves_public")
 end
 
 
 Vagrant.configure('2') do |config|
   config.vm.box = 'centos/7'
-  config.vm.synced_folder '.', '/vagrant', type: 'virtualbox'
   config.ssh.insert_key = false
 
   required_plugins = %w( vagrant-hostmanager vagrant-cachier vagrant-vbguest )
@@ -54,7 +69,12 @@ Vagrant.configure('2') do |config|
       end
 
       if machine_info['name'] == 'bootstrap'
+        node.vm.synced_folder '.', '/vagrant', type: 'virtualbox'
         ssh_prv_key = File.read("#{Dir.home}/.vagrant.d/insecure_private_key")
+
+        # ansible vault password 
+        node.vm.provision 'shell', inline: "echo #{password} > /home/vagrant/password" if defined?(password) != nil
+
         node.vm.provision 'shell' do |sh|
           sh.inline = <<-SHELL
             [ !  -d /dcos ] && sudo mkdir /dcos && chown vagrant:vagrant /dcos
@@ -72,7 +92,7 @@ Vagrant.configure('2') do |config|
           # ansible.playbook = 'ansible/playbooks/util-config-ohmyzsh.yml'
           ansible.playbook = 'ansible/vagrantSite.yml'
           ansible.verbose = 'true'
-          ansible.vault_password_file = 'password'
+          ansible.vault_password_file = '/home/vagrant/password' if dcos_config['dcos_is_enterprise'] 
         end
       end
     end
