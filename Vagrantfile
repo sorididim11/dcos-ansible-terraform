@@ -47,6 +47,8 @@ end
 Vagrant.configure('2') do |config|
   config.vm.box = 'centos/7'
   config.ssh.insert_key = false
+  config.vm.synced_folder '.', '/vagrant', type: 'virtualbox'
+  
 
   required_plugins = %w( vagrant-hostmanager vagrant-cachier vagrant-vbguest )
   required_plugins.each do |plugin|
@@ -79,7 +81,6 @@ Vagrant.configure('2') do |config|
       end
 
       if machine_info['name'] == 'bootstrap'
-        node.vm.synced_folder '.', '/vagrant', type: 'virtualbox'
         ssh_prv_key = File.read("#{Dir.home}/.vagrant.d/insecure_private_key")
 
         # ansible vault password 
