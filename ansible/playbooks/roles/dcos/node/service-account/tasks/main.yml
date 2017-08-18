@@ -27,7 +27,7 @@
     headers: 
       Authorization: "token={{auth_token.stdout}}"
       Content-Type: "application/json"   
-    body: '{"description":"Controls the ability of <service-account-id> to access volumes"}''
+    body: '{"description":"Controls the ability of <service-account-id> to access volumes"}'
     status_code: 409, 200
   with_subelements:
     - "{{services}}"
