@@ -12,9 +12,14 @@ if settings[settings.keys.last]['type'] != 'dcos_bootstrap'
 end
 
 # Check ansible vault password
-if !File.exist?('password') && dcos_config['dcos_is_enterprise']
-  print 'Ansible vault password: '
-  password = STDIN.gets.chomp
+if dcos_config['dcos_is_enterprise']
+  if !File.exist?('password')
+    print 'Ansible vault password: '
+    password = STDIN.gets.chomp
+    File.open('password').write(pasword)
+  else
+    password = File.read('password')
+  end
 end
 
 
