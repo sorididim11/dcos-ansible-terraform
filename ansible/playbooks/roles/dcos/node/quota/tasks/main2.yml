@@ -1,0 +1,78 @@
+---
+
+# - name: Copy qutoa definition file to dcos cli node
+#   copy: 
+#     src: "{{item}}"
+#     dest: "{{dcos_bootstrap_root_path}}/quota/{{item}}"
+#   with_items: 
+#     - reserve_resources.json
+#     - unreserve_resources.json
+
+
+# - name: Load qutoa definition file 
+#   shell: "cat {{dcos_bootstrap_root_path}}/quota/{{op_type}}.json"
+#   register: reservation_json
+
+
+- name: Aquire Auth token 
+  shell: dcos config show core.dcos_acs_token
+  register: auth_token
+
+
+- name: Get states of dcos nodes 
+  command: dcos node --json 
+  register: nodes_json
+
+
+- name: Convert node states to variable
+  set_fact: 
+    nodes: "{{nodes_json.stdout | from_json }}"
+    # reservation: "{{ reservation_json.stdout | from_json }}"
+
+
+
+
+# - name: Check if possible to reserve request
+#   set_fact:
+#     reservation: "{{ reservation | default({}) + {
+#      'name': 'item.1.hostname', 
+#      'cpus': (item.2 | map(attribute='cpus') | sum(start=0) , 
+#      'mem':  (item.2 | map(attribute='mem') | sum(start=0)), 
+#      'gpus':  (item.2 | map(attribute='gpus') | sum(start=0)),
+#      'disks: (item.2 | map(attribute='disks') | sum(start=0)) 
+#        }
+#     }}"
+#   with_subelements:
+#     - "{{reservation.agents}}"
+#     - "roles"
+
+- name: Generates {{op_type}}-request.json for each role
+  template:
+    src: reserve-request.json.j2
+    dest: "{{dcos_bootstrap_root_path}}/quota/{{op_type}}-request-{{item.1.hostname}}.json"
+  with_subelements:
+    - "{{services}}"
+    - role
+
+
+- name: Load {{op_type}}-{{item.hostname}}.json
+  shell: cat {{dcos_bootstrap_root_path}}/quota/{{op_type}}-request-{{item.1.hostname}}.json
+  register: req_body_list
+  with_subelements:
+    - "{{services}}"
+    - role
+ 
+
+- name: Do operation, {{op_type}} 
+  uri:
+    url: "https://{{dcos_first_master_internal_ip}}/mesos/api/v1"
+    method: POST
+    validate_certs: False
+    headers: 
+      Authorization: "token={{auth_token.stdout}}"
+      Content-Type: "application/json"
+      Accept: "application/json" 
+    body_format: json
+    body: "{{ item.stdout }}"
+    status_code: 202
+  with_items: "{{req_body_list.results}}"

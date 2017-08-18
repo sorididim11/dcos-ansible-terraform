@@ -3,7 +3,7 @@
 - name: Install Marathon-lb
   hosts: dcos_cli[0]
   vars_files: 
-    - packages/marathon-lb.yml
+    - pkg-desc/marathon-lb.yml
   roles:
     - { role: dcos/node/service-account, when: edcos_security_mode == 'strict' } 
     - { role: dcos/packages/installer }
