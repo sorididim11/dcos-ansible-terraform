@@ -1,17 +1,17 @@
 ---
 
-- name: Copy qutoa definition file to dcos cli node
-  copy: 
-    src: "{{item}}"
-    dest: "{{dcos_bootstrap_root_path}}/quota/{{item}}"
-  with_items: 
-    - reserve_resources.json
-    - unreserve_resources.json
+# - name: Copy qutoa definition file to dcos cli node
+#   copy: 
+#     src: "{{item}}"
+#     dest: "{{dcos_bootstrap_root_path}}/quota/{{item}}"
+#   with_items: 
+#     - reserve_resources.json
+#     - unreserve_resources.json
 
 
-- name: Load qutoa definition file 
-  shell: "cat {{dcos_bootstrap_root_path}}/quota/{{op_type}}.json"
-  register: reservation_json
+# - name: Load qutoa definition file 
+#   shell: "cat {{dcos_bootstrap_root_path}}/quota/{{op_type}}.json"
+#   register: reservation_json
 
 
 - name: Aquire Auth token 
@@ -27,7 +27,7 @@
 - name: Convert node states to variable
   set_fact: 
     nodes: "{{nodes_json.stdout | from_json }}"
-    reservation: "{{ reservation_json.stdout | from_json }}"
+    # reservation: "{{ reservation_json.stdout | from_json }}"
 
 
 - debug:
