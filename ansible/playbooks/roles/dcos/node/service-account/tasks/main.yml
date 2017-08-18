@@ -23,11 +23,9 @@
   uri:
     url: "{{dcos_cluster_url}}/acs/api/v1/acls/{{item.1.perm}}"
     method: POST
-    return_content: yes
     validate_certs: False
     headers: 
       Authorization: "token={{auth_token.stdout}}"
-      Content-Type: "application/json"   
   with_subelements:
     - "{{services}}"
     - permissions
