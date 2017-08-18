@@ -16,7 +16,7 @@ if dcos_config['dcos_is_enterprise']
   if !File.exist?('password')
     print 'Ansible vault password: '
     password = STDIN.gets.chomp
-    File.open('password').write(pasword)
+    File.open('password', 'w').write(password)
   else
     password = File.read('password')
   end
