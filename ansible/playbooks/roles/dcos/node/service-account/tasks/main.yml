@@ -21,7 +21,7 @@
 
 - name: Create permissions for {{service_name}}
   uri:
-    url: "https://{{dcos_cluster_url}}/acs/api/v1/acls/{{item.1.perm}}"
+    url: "{{dcos_cluster_url}}/acs/api/v1/acls/{{item.1.perm}}"
     method: POST
     return_content: yes
     validate_certs: False
