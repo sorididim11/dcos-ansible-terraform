@@ -23,7 +23,7 @@
       Authorization: "token={{auth_token.stdout}}"
       Accept: "application/json" 
     body_format: json
-    body: "{{ lookup('template', 'reserve-request.json.j2'}}"
+    body: "{{ lookup('template', 'reserve-request.json.j2') }}"
     status_code: 202
     with_subelements:
     - "{{services}}"
