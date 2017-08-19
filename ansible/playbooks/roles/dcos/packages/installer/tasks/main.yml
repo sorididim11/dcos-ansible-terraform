@@ -1,12 +1,12 @@
 
 ---
-- name: Generates marathon config for each role
+- name: Generates config for each role
   template:
     src: "{{item.0.name}}-config.json.j2"
     dest: "{{dcos_bootstrap_root_path}}/packages/{{item.0.name}}-config.json"
   with_subelements:
     - "{{services}}"
-    - "role"
+    - "{{ (services[0].role is defined) | ternary('role', 'permissions') }}"
 
 
 - name: Launch  with each role
