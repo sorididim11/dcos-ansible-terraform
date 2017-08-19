@@ -9,7 +9,7 @@
 
 
 - name: Launch  with each role
-  command: "dcos package install --options={{dcos_bootstrap_root_path}}/packages/{{item.0.name}}-config.json {{item.0.package_name}} --yes" 
+  command: "dcos package install --options={{dcos_bootstrap_root_path}}/packages/{{item.0.name}}-config.json {{item.0.package}} --yes" 
   with_subelements:
     - "{{services}}"
     - role

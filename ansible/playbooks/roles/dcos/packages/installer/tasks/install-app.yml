@@ -2,10 +2,10 @@
 - name: Generates config for each role
   template:
     src: marathon-lb-config.json.j2
-    dest: "{{dcos_bootstrap_root_path}}/packages/{{item.0.name}}-config.json"
+    dest: "{{dcos_bootstrap_root_path}}/packages/{{item.name}}-config.json"
   with_items: "{{services}}"
 
 
 - name: Launch  with each role
-  command: "dcos package install --options={{dcos_bootstrap_root_path}}/packages/{{item.0.name}}-config.json {{item.0.package_name}} --yes" 
+  command: "dcos package install --options={{dcos_bootstrap_root_path}}/packages/{{item.name}}-config.json {{item.package}} --yes" 
   with_items: "{{services}}"
