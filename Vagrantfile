@@ -14,6 +14,35 @@ if settings[settings.keys.last]['type'] != 'dcos_bootstrap'
   exit(-1)
 end
 
+# Check ansible vault password
+if dcos_config['dcos_is_enterprise']
+  UI.info 'Install DC/OS enterprise version? yes', bold: true
+  if !File.exist?('password')
+    print 'Ansible vault password: '
+    password = STDIN.gets.chomp
+    File.open('password', 'w').write(password)
+  else
+    password = File.read('password')
+  end
+end
+
+
+# create dynamic inventory file. ansible provisioner 's dynamic inventory got some bugs
+UI.info 'Create ansible dynamic inventory...', bold: true
+inventory_file = 'ansible/inventories/dev/hosts'
+File.open(inventory_file, 'w') do |f|
+  %w(dcos_masters dcos_slaves dcos_slaves_public dcos_cli dcos_bootstrap).each do |section|
+    f.puts("[#{section}]")
+    section = 'dcos_bootstrap' if section == 'dcos_cli'
+
+    settings.each do |_, machine_info|
+      f.puts(machine_info['ip']) if machine_info['type'] == section
+    end
+    f.puts('')
+  end
+  f.write("[dcos_nodes:children]\ndcos_masters\ndcos_slaves\ndcos_slaves_public")
+end
+
 
 Vagrant.configure('2') do |config|
   config.vm.box = 'centos/7'
