@@ -2,6 +2,6 @@
   "service": {
     "name": "marathon-lb-{{item.0.name}}",
     "principal": "{{item.0.name}}-id",
-    "secret_name": "{{item.0.name}}/password"
+    "secret_name": "{{item.0.package}}/{{item.0.name}}"
   }
 }
