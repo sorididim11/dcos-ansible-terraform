@@ -6,12 +6,11 @@
     dest: "{{dcos_bootstrap_root_path}}/packages/{{item.0.name}}-config.json"
   with_subelements:
     - "{{services}}"
-    - "{{ (services[0].role is defined) | ternary('role', 'permissions') }}"
+    - "{{ (services[0].role is defined) | ternary('role', 'package') }}"
 
 
 - name: Launch  with each role
   command: "dcos package install --options={{dcos_bootstrap_root_path}}/packages/{{item.0.name}}-config.json {{item.0.package_name}} --yes" 
   with_subelements:
     - "{{services}}"
-    - "role"
-    
+    - "{{ (services[0].role is defined) | ternary('role', 'package') }}"
