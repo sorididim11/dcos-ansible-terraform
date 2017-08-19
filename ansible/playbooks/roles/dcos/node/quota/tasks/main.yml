@@ -25,6 +25,6 @@
     body_format: json
     body: "{{ lookup('template', 'reserve-request.json.j2') }}"
     status_code: 202
-    with_subelements:
-      - "{{services}}"
-      - role
+  with_subelements:
+    - "{{services}}"
+    - role
