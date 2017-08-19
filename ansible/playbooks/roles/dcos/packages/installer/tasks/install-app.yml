@@ -1,7 +1,7 @@
 ---
 - name: Generates config for each role
   template:
-    src: marathon-lb-config.json.j2
+    src: "{{item.package}}-config.json.j2"
     dest: "{{dcos_bootstrap_root_path}}/packages/{{item.name}}-config.json"
   with_items: "{{services}}"
 
