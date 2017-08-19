@@ -1,2 +1,2 @@
 ---
-- include: install-"{{service_type}}".yml
+- include: install-{{service_type}}.yml
