@@ -9,7 +9,7 @@ services:
       - { perm: "dcos:mesos:master:reservation:principal:{{ name }}", action: create, desc: "" } 
       - { perm: "dcos:mesos:master:volume:principal:{{ name }}", action: create, desc: "" }
       - { perm: "dcos:mesos:master:task:user:nobody", action: create, desc: "Allows Linux user nobody to execute tasks" }
-      - { perm: dcos:mesos:master:task:app_id:/, action: create, desc: "" }
+      - { perm: "dcos:mesos:master:task:app_id:/", action: create, desc: "" }
       - { perm: "dcos:mesos:master:framework:role:{{ role['name'] }}", action: create, desc: "" } 
       - { perm: "dcos:mesos:master:reservation:role:{{ role['name'] }}", action: create, desc: "" }
       - { perm: "dcos:mesos:master:volume:role:{{ role['name'] }}", action: create, desc: "" }
