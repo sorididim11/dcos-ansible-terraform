@@ -6,6 +6,6 @@
     - pkg-desc/marathon-lb.yml
   roles:
     - { role: dcos/node/service-account, when: edcos_security_mode == 'strict' } 
-    - { role: dcos/packages/installer }
+    - { role: dcos/packages/installer, service_type: app }
   environment: "{{ proxy_env }}"
 

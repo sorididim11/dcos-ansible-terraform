@@ -7,6 +7,6 @@
   roles:
     - { role: dcos/node/quota, when: edcos_security_mode != 'disabled' } 
     - { role: dcos/node/service-account, when: edcos_security_mode == 'strict' } 
-    - { role: dcos/packages/installer }
+    - { role: dcos/packages/installer, service_type: framework }
   environment: "{{ proxy_env }}"
 
