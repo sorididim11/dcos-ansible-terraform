@@ -14,7 +14,7 @@
     nodes: "{{nodes_json.stdout | from_json }}"
 
 
-- name: Do operation, {{op_type}} 
+- name: Do operation
   uri:
     url: "https://{{dcos_first_master_internal_ip}}/mesos/api/v1"
     method: POST
@@ -26,5 +26,5 @@
     body: "{{ lookup('template', 'reserve-request.json.j2') }}"
     status_code: 202
     with_subelements:
-    - "{{services}}"
-    - role
+      - "{{services}}"
+      - role
