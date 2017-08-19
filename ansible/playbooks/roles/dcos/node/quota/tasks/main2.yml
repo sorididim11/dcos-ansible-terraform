@@ -74,5 +74,5 @@
       Accept: "application/json" 
     body_format: json
     body: "{{ item.stdout }}"
-    status_code: 202
+    status_code: 202, 409
   with_items: "{{req_body_list.results}}"
