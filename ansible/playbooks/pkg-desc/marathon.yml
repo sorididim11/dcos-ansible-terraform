@@ -3,8 +3,7 @@ services:
   - name: marathon-dev
     package: marathon
     user: nobody
-    role:
-      - { principal: root, hostname: 10.0.15.31,  name: dev,  cpus: 1.0, mem: 500, disks: 1000, begin_port: 1025,  end_port: 2180 }
+    role: { principal: root, hostname: 10.0.15.31,  name: dev,  cpus: 1.0, mem: 500, disks: 1000, begin_port: 1025,  end_port: 2180 }
     permissions: 
       - { perm: "dcos:mesos:master:reservation:principal:marathon-dev-id", action: delete, desc: " " } 
       - { perm: "dcos:mesos:master:volume:principal:marathon-dev-id", action: delete, desc: " " }

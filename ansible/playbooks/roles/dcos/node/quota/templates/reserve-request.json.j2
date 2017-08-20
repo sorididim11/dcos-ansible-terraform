@@ -1,5 +1,5 @@
 {% for target in nodes %}
-{% if item.1.hostname == target.hostname %} 
+{% if item.hostname == target.hostname %} 
 {
   "type": "{{op_type | upper}}",
   "{{op_type | lower }}": {
@@ -11,22 +11,22 @@
         "type": "SCALAR",
         "name": "cpus",
         "reservation": {
-          "principal": "{{item.1.principal}}"
+          "principal": "{{item.role.principal}}"
         },
-        "role": "{{item.1.name}}",
+        "role": "{{item.role.name}}",
         "scalar": {
-          "value": {{ item.1.cpus | default(0.0) }}
+          "value": {{ item.role.cpus | default(0.0) }}
         }
       },
       {
         "type": "SCALAR",
         "name": "gpus",
         "reservation": {
-          "principal": "{{item.1.principal}}"
+          "principal": "{{item.role.principal}}"
         },
-        "role": "{{item.1.name}}",
+        "role": "{{item.role.name}}",
         "scalar": {
-          "value": {{ item.1.gpus | default(0.0) }}
+          "value": {{ item.role.gpus | default(0.0) }}
         }
       },
   {% if item.1.begin_port is defined %}
@@ -34,14 +34,14 @@
         "type": "RANGES",
         "name": "ports",
         "reservation": {
-          "principal": "{{item.1.principal}}"
+          "principal": "{{item.role.principal}}"
         },
-        "role": "{{item.1.name}}",
+        "role": "{{item.role.name}}",
         "ranges": {
           "range": [
             {
-              "begin": {{ item.1.begin_port }},
-              "end": {{ item.1.end_port }}
+              "begin": {{ item.role.begin_port }},
+              "end": {{ item.role.end_port }}
             }
           ]
         }
@@ -51,11 +51,11 @@
         "type": "SCALAR",
         "name": "mem",
         "reservation": {
-          "principal": "{{item.1.principal}}"
+          "principal": "{{item.role.principal}}"
         },
-        "role": "{{item.1.name}}",
+        "role": "{{item.role.name}}",
         "scalar": {
-          "value": {{ item.1.mem | default(0) }}
+          "value": {{ item.role.mem | default(0) }}
         }
       }
     ]

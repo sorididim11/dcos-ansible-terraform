@@ -1,0 +1,13 @@
+---
+- include: util-dcos-bugfix.yml
+
+- name: Install spark
+  hosts: dcos_cli[0]
+  vars_files: 
+    - pkg-desc/spark.yml   
+  roles:
+    - { role: dcos/node/quota, op_type: reserve_resources , when: edcos_security_mode != 'disabled' } 
+    - { role: dcos/packages/service-account, when: edcos_security_mode == 'strict' } 
+    - { role: dcos/packages/installer }
+  environment: "{{ proxy_env }}"
+
