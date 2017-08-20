@@ -1,7 +1,7 @@
 # Todo
 
 1) config.yml template - handling no_proxy tokens - spliting string to array
-
+2) local ansible fact - dcos vesion, security mode
 
 ## Ansible version
 
