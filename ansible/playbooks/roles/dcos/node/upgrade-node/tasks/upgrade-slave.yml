@@ -63,7 +63,7 @@
   changed_when: no
 
 
-- debug: msg="{{ 'registered:' (is_registered.content | from_json)['slave/registered'] }}"
+- debug: msg="{{(is_registered.content | from_json)['slave/registered'] }}"
 
 
 - name: Move /usr/bin/docker  
