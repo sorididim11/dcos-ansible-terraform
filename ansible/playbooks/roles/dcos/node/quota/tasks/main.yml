@@ -2,11 +2,13 @@
 - name: Aquire Auth token 
   shell: dcos config show core.dcos_acs_token
   register: auth_token
+  changed_when: False
 
 
 - name: Get states of dcos nodes 
   command: dcos node --json 
   register: nodes_json
+  changed_when: False
 
 
 - name: Convert node states to variable

@@ -93,3 +93,17 @@ ex) - name: iterate user groups
     msg: "{{ item }}"
   with_inventory_hostnames:
     - all:!www
+
+
+## error handling
+### failed_when: 
+when you wanna use multiple condition with "or". we should use like this 
+
+command: dododo
+register: result 
+failed_when: 
+  - result.rc != 0
+  - result.rc != 2 
+
+it means if result is not 0 or not 2 then failed.
+ 
