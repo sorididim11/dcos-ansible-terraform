@@ -1,16 +1,16 @@
 ---
 - name: Create Key pair 
-  command: "dcos security org service-accounts keypair {{item['name']}}.pem {{item['name']}}-pub.pem"
+  command: "dcos security org service-accounts keypair {{item.name}}.pem {{item.name}}-pub.pem"
   with_items: "{{services}}"
 
 
 - name: Create service account as ID
-  command: "dcos security org service-accounts create -p {{item['name']}}-pub.pem -d '{{item['name']}} service account' {{item['name']}}"
+  command: "dcos security org service-accounts create -p {{item.name}}-pub.pem -d '{{item.name}} service account' {{item.name}}"
   with_items: "{{services}}"
 
 
 - name: Create service secret as Password
-  command: "dcos security secrets create-sa-secret {% if edcos_security_mode == 'strict'%} --strict {% endif %} {{item['name']}}.pem {{item['name']}} {{item['name']}}"
+  command: "dcos security secrets create-sa-secret {% if edcos_security_mode == 'strict'%} --strict {% endif %} {{item.name}}.pem {{item.name}} {{item.package}}/{{item.name}}"
   with_items: "{{services}}"
 
 
