@@ -5,18 +5,10 @@
   changed_when: False
 
 
-
 - name: Create Key pair 
   command: "dcos security org service-accounts keypair {{item.name}}.pem {{item.name}}-pub.pem"
   with_items: "{{services}}"
 
-- name: Remove the key files 
-  file:
-    path: "{{item}}"
-    state: absent
-  with_fileglob: 
-    - "{{item.name}}*.pem"
-    
 
 - name: Create service account as ID
   command: "dcos security org service-accounts create -p {{item.name}}-pub.pem -d '{{item.name}} service account' {{item.name}}"
@@ -26,8 +18,6 @@
 - name: Create service secret as Password
   command: "dcos security secrets create-sa-secret {% if edcos_security_mode == 'strict'%} --strict {% endif %} {{item.name}}.pem {{item.name}} {{item.name}}"
   with_items: "{{services}}"
-
-
 
 
 - name: Create permissions for {{service_name}}
