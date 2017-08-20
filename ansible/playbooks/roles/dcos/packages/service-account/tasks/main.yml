@@ -11,7 +11,7 @@
 
 
 - name: Create service account as ID
-  command: "dcos security org service-accounts create -p {{item.name}}-pub.pem -d '{{item.name}} service account'  {{ item.account_id | default(item.name) }} ) "
+  command: "dcos security org service-accounts create -p {{item.name}}-pub.pem -d '{{item.name}} service account'  {{ item.account_id | default(item.name) }}"
   with_items: "{{services}}"
 
 
