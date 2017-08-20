@@ -12,6 +12,8 @@
 - name: Create service account as ID
   command: "dcos security org service-accounts create -p {{item.name}}-pub.pem -d '{{item.name}} service account' {{item.name}}"
   with_items: "{{services}}"
+  register: is_success
+  failed_when: is_success.rc != 0 or is_success.rc != 2 # 2 means already
 
 
 - name: Create service secret as Password
