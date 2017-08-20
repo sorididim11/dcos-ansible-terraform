@@ -1,4 +1,9 @@
 ---
+- name: Aquire Auth token 
+  shell: dcos config show core.dcos_acs_token
+  register: auth_token
+
+
 - name: Create Key pair 
   command: "dcos security org service-accounts keypair {{item.name}}.pem {{item.name}}-pub.pem"
   with_items: "{{services}}"
@@ -20,7 +25,7 @@
     method: PUT
     validate_certs: False
     headers: 
-      Authorization: "token={{auth_token}}"
+      Authorization: "token={{auth_token.stdout}}"
     body_format: json
     body: ' { "description": "{{item.1.desc}}" } '
     status_code: 409, 201 #201 means created
@@ -35,7 +40,7 @@
     method: PUT
     validate_certs: False
     headers: 
-      Authorization: "token={{auth_token}}"  
+      Authorization: "token={{auth_token.stdout}}"  
     status_code: 409, 204 # 204 means no content(success)
   with_subelements:
     - "{{services}}"

@@ -1,4 +1,9 @@
 ---
+- name: Aquire Auth token 
+  shell: dcos config show core.dcos_acs_token
+  register: auth_token
+
+
 - name: Get states of dcos nodes 
   command: dcos node --json 
   register: nodes_json
@@ -15,7 +20,7 @@
     method: POST
     validate_certs: False
     headers: 
-      Authorization: "token={{auth_token}}"
+      Authorization: "token={{auth_token.stdout}}"
       Accept: "application/json" 
     body_format: json
     body: "{{ lookup('template', 'reserve-request.json.j2') }}"
