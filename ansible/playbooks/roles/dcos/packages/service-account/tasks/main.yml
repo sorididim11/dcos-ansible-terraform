@@ -37,7 +37,7 @@
 
 - name: Assign the permissions to {{service_name}}
   uri:
-    url: "{{dcos_cluster_url}}/acs/api/v1/acls/{{item.1.perm}}/users/{{ item.account_id | default(item.0.name) }}/{{item.1.action}}"
+    url: "{{dcos_cluster_url}}/acs/api/v1/acls/{{item.1.perm}}/users/{{ item.0.account_id | default(item.0.name) }}/{{item.1.action}}"
     method: PUT
     validate_certs: False
     headers: 
