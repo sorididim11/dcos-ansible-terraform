@@ -20,7 +20,7 @@
     method: PUT
     validate_certs: False
     headers: 
-      Authorization: "token={{auth_token.stdout}}"
+      Authorization: "token={{auth_token}}"
     body_format: json
     body: ' { "description": "{{item.1.desc}}" } '
     status_code: 409, 201 #201 means created
@@ -35,7 +35,7 @@
     method: PUT
     validate_certs: False
     headers: 
-      Authorization: "token={{auth_token.stdout}}"  
+      Authorization: "token={{auth_token}}"  
     status_code: 409, 204 # 204 means no content(success)
   with_subelements:
     - "{{services}}"
