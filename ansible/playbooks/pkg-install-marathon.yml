@@ -5,6 +5,10 @@
   hosts: dcos_cli[0]
   vars_files: 
     - pkg-desc/marathon.yml
+  pre_tasks:
+    - name: Aquire Auth token 
+      shell: dcos config show core.dcos_acs_token
+      register: auth_token
   roles:
     - { role: dcos/node/quota, op_type: reserve_resources , when: edcos_security_mode != 'disabled' } 
     - { role: dcos/packages/service-account, when: edcos_security_mode == 'strict' } 

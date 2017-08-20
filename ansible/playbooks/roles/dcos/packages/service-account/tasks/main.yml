@@ -14,11 +14,6 @@
   with_items: "{{services}}"
 
 
-- name: Aquire Auth token 
-  shell: dcos config show core.dcos_acs_token
-  register: auth_token
-
-
 - name: Create permissions for {{service_name}}
   uri:
     url: "{{dcos_cluster_url}}/acs/api/v1/acls/{{item.1.perm}}"
@@ -32,7 +27,6 @@
   with_subelements:
     - "{{services}}"
     - permissions
-
 
 
 - name: Assign the permissions to {{service_name}}
