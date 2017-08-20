@@ -27,4 +27,5 @@
     body_format: json
     body: "{{ lookup('template', 'reserve-request.json.j2') }}"
     status_code: 202, 409
+  when: item.role != '*'
   with_items: "{{services}}"
