@@ -11,12 +11,12 @@
 
 
 - name: Create service account as ID
-  command: "dcos security org service-accounts create -p {{item.name}}-pub.pem -d '{{item.name}} service account' {{item.name}}"
+  command: "dcos security org service-accounts create -p {{item.name}}-pub.pem -d '{{item.name}} service account'  {{ item.account_id | default(item.name) }} ) "
   with_items: "{{services}}"
 
 
 - name: Create service secret as Password
-  command: "dcos security secrets create-sa-secret {% if edcos_security_mode == 'strict'%} --strict {% endif %} {{item.name}}.pem {{item.name}} {{item.name}}/secret"
+  command: "dcos security secrets create-sa-secret {% if edcos_security_mode == 'strict'%} --strict {% endif %} {{item.name}}.pem {{ item.account_id | default(item.name) }} {{ item.account_sec | default(item.name + '/secret') }}"
   with_items: "{{services}}"
 
 
@@ -37,7 +37,7 @@
 
 - name: Assign the permissions to {{service_name}}
   uri:
-    url: "{{dcos_cluster_url}}/acs/api/v1/acls/{{item.1.perm}}/users/{{item.0.name}}/{{item.1.action}}"
+    url: "{{dcos_cluster_url}}/acs/api/v1/acls/{{item.1.perm}}/users/{{ item.account_id | default(item.0.name) }}/{{item.1.action}}"
     method: PUT
     validate_certs: False
     headers: 

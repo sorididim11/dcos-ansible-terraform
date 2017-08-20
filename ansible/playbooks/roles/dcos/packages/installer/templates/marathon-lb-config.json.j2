@@ -1,8 +1,8 @@
 {
   "marathon-lb": {
     "name": "{{item.name}}",
-    "principal": "{{item.name}}",
-    "secret_name": "{{item.name}}/secret",
+    "principal": "{{ item.account_id | default(item.name) }}",
+    "secret_name": "{{ item.account_sec | default(item.name + '/secret') }}",
     "marathon-uri": "https://marathon.mesos:8443"
   }
 }
