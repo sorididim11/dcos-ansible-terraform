@@ -7,7 +7,7 @@
      "default-accepted-resource-roles": "{{item.role.name}}",
      "mesos-authentication": true,
      "mesos-authentication-principal": "{{item.name}}",
-     "mesos-authentication-secret": "{{item.name}}/{{item.secrete_name | default('secret')",
+     "mesos-authentication-secret": "{{item.name}}/{{item.secrete_name | default('secret')}}",
      "mesos-role": "{{item.role.name}}",
      "mesos-user": "{{item.user}}"
      }
