@@ -1,11 +1,10 @@
 ---
 services:
   - name: marathon-lb-dev
+    secrete_name: kin-secret
     package: marathon-lb
     user: nobody
     role: { name: '*'}
-    account_id: marathon-lb-dev-id
-    # account_sec: marathon-lb-id/sec
     permissions:
       - { perm: "dcos:service:marathon:marathon:services%252F", action: read, desc: "Allows Linux user nobody to execute tasks" }
       - { perm: "dcos:service:marathon:marathon:admin:events",  action: read, desc: "Allows Linux user nobody to execute tasks" }

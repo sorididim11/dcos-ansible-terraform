@@ -1,8 +1,8 @@
 {  
    "service":{  
-      "name":"{{item.name}}",
-      "principal":"{{ item.account_id | default(item.name) }}",
-      "secret":"{{ item.account_sec | default(item.name + '/secret') }}",
+      "name": "{{item.name}}",
+      "principal": "{{item.name}}",
+      "secret": "{{item.name}}/{{item.secrete_name | default('secret')",
       {% edcos_security_mode == 'strict' %}"user": "{{item.user}}", {% endif %}
       "role": "{{item.role.name}}"
    }
