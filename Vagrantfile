@@ -3,29 +3,17 @@ require 'vagrant/ui'
 
 UI = Vagrant::UI::Colored.new
 
-# dynamic inventory based on vagrant config file(vagrant.yml)
+
 guest_home_dir = '/home/vagrant'
 dcos_config = YAML.load_file('ansible/inventories/dev/group_vars/all.yml')
 settings = YAML.load_file 'vagrantConf.yml'
 
 # Check if vagrant confile is in valid order. dcos_bootstrap should be at the bottom of config file
+UI.info 'Checking if the location of dcos_boostrap of vagrantConf.xml is valid...', bold: true
 if settings[settings.keys.last]['type'] != 'dcos_bootstrap'
   UI.error 'Please put dcos_bootstrap at the bottom of vagrantConf.yml because of provisioning order ', bold: true
   exit(-1)
 end
-
-# Check ansible vault password
-if dcos_config['dcos_is_enterprise']
-  UI.info 'Install DC/OS enterprise version? yes', bold: true
-  if !File.exist?('password')
-    print 'Ansible vault password: '
-    password = STDIN.gets.chomp
-    File.open('password', 'w').write(password)
-  else
-    password = File.read('password')
-  end
-end
-
 
 # create dynamic inventory file. ansible provisioner 's dynamic inventory got some bugs
 UI.info 'Create ansible dynamic inventory...', bold: true
@@ -82,10 +70,6 @@ Vagrant.configure('2') do |config|
 
       if machine_info['name'] == 'bootstrap'
         ssh_prv_key = File.read("#{Dir.home}/.vagrant.d/insecure_private_key")
-
-        # ansible vault password 
-        node.vm.provision 'shell', inline: "echo #{password} > #{guest_home_dir}/password" if defined?(password) != nil
-
         UI.info 'Insert vagrant insecure key to bootstreap node...', bold: true
         node.vm.provision 'shell' do |sh|
           sh.inline = <<-SHELL
@@ -95,6 +79,21 @@ Vagrant.configure('2') do |config|
             echo Provisioning of ssh keys completed [Success].
           SHELL
         end
+
+        # Check ansible vault password
+        if dcos_config['dcos_is_enterprise']
+          UI.info 'Install DC/OS enterprise version? yes', bold: true
+          if !File.exist?('password')
+            print 'Ansible vault password: '
+            password = STDIN.gets.chomp
+            File.open('password', 'w').write(password)
+          else
+            password = File.read('password')
+          end
+        end
+
+        node.vm.provision 'shell', inline: "echo #{password} > #{guest_home_dir}/password" if defined?(password) != nil
+
 
         node.vm.provision :ansible_local do |ansible|
           ansible.install_mode = :pip # or default( by os package manager)
