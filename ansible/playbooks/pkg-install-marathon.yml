@@ -8,7 +8,9 @@
   pre_tasks:
     - name: Aquire Auth token 
       shell: dcos config show core.dcos_acs_token
-      register: auth_token
+      register: auth_token_data
+    - set_fact:
+        auth_token: auth_token_data
   roles:
     - { role: dcos/node/quota, op_type: reserve_resources , when: edcos_security_mode != 'disabled' } 
     - { role: dcos/packages/service-account, when: edcos_security_mode == 'strict' } 
