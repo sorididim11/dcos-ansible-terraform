@@ -29,7 +29,7 @@
           "value": {{ item.role.gpus | default(0.0) }}
         }
       },
-  {% if item.1.begin_port is defined %}
+  {% if item.role.begin_port is defined %}
       {
         "type": "RANGES",
         "name": "ports",
