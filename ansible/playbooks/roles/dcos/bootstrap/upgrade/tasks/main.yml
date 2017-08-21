@@ -1,7 +1,7 @@
 --- 
 
-- assert: { that: "ansible_local.bootstrap-config.security != 'strict'", msg: "What??? you are already in strict mode!! "}
-- debug:  msg="Current security mode, {{ansible_local.bootstrap-config.security}}"
+- assert: { that: "ansible_local['bootstrap-config'].security != 'strict'", msg: "What??? you are already in strict mode!! "}
+- debug:  msg="Current security mode, {{ansible_local['bootstrap-config'].security}}"
 
 
 - name: Update fact, edcos_security_mode  
