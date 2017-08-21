@@ -6,7 +6,7 @@ services:
     role: { name: '*'}
     options: {
       is_insecure_registry: False,
-      is_registry_external: false,
+      make_external: false,
       internal_port: 5000,
       external_port: 15000,
       host_volume_path: '/tmp'  # docker registry volume path
