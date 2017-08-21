@@ -7,11 +7,6 @@
     - pkg-desc/registry.yml
   tags: ['pkg']
   pre_tasks:
-    - name: Generate subjectAltName for public access to docker registry 
-      template:
-        src: extfile.cnf.j2
-        dest: "{{ dcos_bootstrap_root_path }}/extfile.cnf"
-
     - name: Generate self-signed certificate for registry
       command: >
           openssl req -newkey rsa:4096 -nodes -sha256 
