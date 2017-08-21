@@ -1,0 +1,13 @@
+
+- include: facts-create.yml
+
+- name: Update config.yml file with new security mode , {{edcos_security_mode}}
+  lineinfile: 
+    dest: "{{inventory_dir}}/group_vars/all.yml"
+    regexp: "{{item.regex}}"
+    line: "{{item.replace_with}}"
+  with_items:
+    - regex: '^edcos_security_mode:'
+      replace_with: "edcos_security_mode: {{ansible_local.security}}"
+    - regex: '^dcos_version:'
+      replace_with: "dcos_version: {{ansible_local.version}}"

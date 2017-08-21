@@ -32,4 +32,4 @@
   tags: ['install', 'dcos-fact']
   environment: "{{ proxy_env }}"
   roles: 
-    - dcos/bootstrap/local-facts
+    - { role: dcos/bootstrap/local-facts, op_type: create }

@@ -43,15 +43,6 @@
   hosts: dcos_bootstrap
   gather_facts: False
   tags: ['upgrade-security']
-  tasks:
-    - name: Update config.yml file with new security mode , {{edcos_security_mode}}
-      lineinfile: 
-        dest: "{{inventory_dir}}/group_vars/all.yml"
-        regexp: "{{item.regex}}"
-        line: "{{item.replace_with}}"
-      with_items:
-        - regex: '^edcos_security_mode:'
-          replace_with: "edcos_security_mode: {{edcos_security_mode}}"
-        - regex: '^dcos_version:'
-          replace_with: "dcos_version: {{dcos_version}}"
-      environment: "{{ proxy_env }}"
+  roles:
+    - { role: dcos/bootstrap/local-fact, op_ytpe: update }
+  environment: "{{ proxy_env }}"
