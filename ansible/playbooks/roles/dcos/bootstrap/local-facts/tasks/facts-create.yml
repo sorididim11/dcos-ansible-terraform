@@ -6,7 +6,7 @@
 
 - name: Aquire Auth token 
   shell: dcos config show core.dcos_acs_token
-  register: auth_token_ret
+  register: auth_token
   changed_when: False
 
 
