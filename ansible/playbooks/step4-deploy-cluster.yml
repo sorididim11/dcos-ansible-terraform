@@ -8,10 +8,6 @@
   environment: "{{ proxy_env }}"
 
 
-# - include: util-dcos-bugfix.yml
-#   when: edcos_security_mode == "strict" and dcos_version | version_compare("1.10", '<')
-
-
 - name: "Deploy DC/OS slaves"
   gather_facts: False
   hosts: dcos_slaves
@@ -28,3 +24,36 @@
   roles:
     - { role: dcos/node/add-node, node_type: slave_public, service_name: dcos-mesos-slave-public } 
   environment: "{{ proxy_env }}"
+
+
+- name: "Create local facts of DC/OS in boostrap node "
+  gather_facts: False
+  hosts: dcos_bootstrap
+  tags: ['install', 'dcos-fact']
+  environment: "{{ proxy_env }}"
+  tasks:
+    - name: Create Ansible local directory
+      become: yes
+      file: path=/etc/ansible/facts.d state=directory
+    
+    - name: Aquire Auth token 
+      shell: dcos config show core.dcos_acs_token
+      register: auth_token_ret
+      changed_when: False
+
+    - name: Aquire DC/OS metadata
+      become: yes
+      uri:
+        url: "{{dcos_cluster_url}}/dcos-metadata/{{item}}"
+        dest: "/etc/ansible/facts.d/{{item}}.fact"
+        method: GET
+        return_content: yes
+        validate_certs: False
+        headers: 
+          Authorization: "token={{auth_token.stdout}}"
+          Accept: "application/json"
+      with_items:
+        - bootstrap-config.json
+        - dcos-version.json
+    - name: re-read facts after adding custom fact
+      setup: filter=ansible_local

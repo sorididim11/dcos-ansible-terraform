@@ -2,8 +2,6 @@
 services:
   - name: cluster-registry
     package: registry
-    user: nobody
-    role: { name: '*'}
     options: {
       is_insecure_registry: false,
       make_external: true,

@@ -37,3 +37,21 @@
   roles:
     - { role: dcos/node/upgrade-node, node_type: slave, svc_name: dcos-mesos-slave-public } 
   environment: "{{ proxy_env }}"
+
+
+- name: Update edcos_security_mode ingroup_vars 
+  hosts: dcos_bootstrap
+  gather_facts: False
+  tags: ['upgrade-security']
+  tasks:
+    - name: Update config.yml file with new security mode , {{edcos_security_mode}}
+      lineinfile: 
+        dest: "{{inventory_dir}}/group_vars/all.yml"
+        regexp: "{{item.regex}}"
+        line: "{{item.replace_with}}"
+      with_items:
+        - regex: '^edcos_security_mode:'
+          replace_with: "edcos_security_mode: {{edcos_security_mode}}"
+        - regex: '^dcos_version:'
+          replace_with: "dcos_version: {{dcos_version}}"
+      environment: "{{ proxy_env }}"
