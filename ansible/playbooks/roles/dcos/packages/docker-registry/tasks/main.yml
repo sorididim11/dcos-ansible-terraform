@@ -21,8 +21,6 @@
          -x509 -days 365 
          -out domain.crt
          -extfile {{ dcos_bootstrap_root_path }}/extfile.cnf"  
-  args:
-    chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve"
   when: dcos_is_insecure_registry == False and is_cert_exists.stat.exists == False
 
 
