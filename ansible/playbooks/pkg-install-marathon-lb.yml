@@ -5,7 +5,7 @@
   vars_files: 
     - pkg-desc/marathon-lb.yml
   roles:
-    - { role: dcos/packages/service-account, when: edcos_security_mode == 'strict' } 
+    - { role: dcos/packages/service-account } 
     - { role: dcos/packages/installer }
   environment: "{{ proxy_env }}"
 

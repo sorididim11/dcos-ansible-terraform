@@ -1,1 +1,0 @@
-subjectAltName = {% for ip in groups['dcos_slaves_public'] %} IP: {{ip}}  {% if not loop.last %}, {% endif %} {% endfor %}
