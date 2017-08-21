@@ -1,9 +1,13 @@
 --- 
 
-- name: "Install Monitoring platform"
+- include: pkg-install-marathon-lb.yml
+
+- name: Install Monitoring platform
   gather_facts: False
   hosts: dcos_cli[0]
+  vars_files: 
+    - pkg-desc/monitoring.yml
   tags: ['pkg']
   roles:
-    - dcos/packages/monitoring
+    - dcos/packages/installer
   environment: "{{ proxy_env }}"

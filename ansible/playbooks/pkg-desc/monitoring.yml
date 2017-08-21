@@ -1,0 +1,20 @@
+---
+services:
+  - name: cluster-cadvisor
+    package: cadvisor
+    options: {
+      influxdb_name: cluster-influxdb
+    }
+
+  - name: cluster-influxdb
+    package: influxdb
+    options: {
+      host_db_volume_path: /tmp
+    }
+   
+  - name: cluster-grafana
+    package: grafana
+    options: {
+      password: admin # no ID setup. defaults is 'admin'
+    }
+   

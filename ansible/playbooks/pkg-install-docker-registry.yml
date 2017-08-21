@@ -7,8 +7,6 @@
     - pkg-desc/registry.yml
   tags: ['pkg']
   pre_tasks:
-
-
     - name: Generate subjectAltName for public access to docker registry 
       template:
         src: extfile.cnf.j2

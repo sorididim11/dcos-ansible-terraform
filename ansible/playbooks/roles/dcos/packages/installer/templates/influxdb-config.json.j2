@@ -1,23 +1,13 @@
 {
   "service": {
-    "name": "influxdb",
+    "name": "{{item.name}}",
     "cpus": 1,
     "mem": 2048
   },
   "storage": {
     "pre_create_database": true,
     "pre_create_database_name": "cadvisor",
-    "host_volume_influxdb": "/tmp",
-    "persistence": {
-      "enable": false,
-      "volume_size_influxdb": 2048,
-      "external": {
-        "enable": false,
-        "volume_name_influxdb": "influxdb",
-        "provider": "dvdi",
-        "driver": "rexray"
-      }
-    }
+    "host_volume_influxdb": "{{ item.options.host_db_volume_path | default('/tmp') }}"
   },
   "networking": {
     "port": 8083,

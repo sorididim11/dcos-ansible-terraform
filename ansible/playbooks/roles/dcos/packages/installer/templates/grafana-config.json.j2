@@ -1,11 +1,11 @@
 {
   "service": {
-    "name": "grafana"
+    "name": "{{item.name}}"
   },
   "grafana": {
     "cpus": 0.3,
     "mem": 512,
-    "admin_password": "admin"
+    "admin_password": "{{ item.options.password | default('admin') }}"
   },
   "networking": {
     "external_access": {
