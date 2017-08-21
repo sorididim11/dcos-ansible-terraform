@@ -1,8 +1,0 @@
----
-# docker registry
-dcos_is_insecure_registry: False
-dcos_registry_name: cluster-registry
-dcos_is_registry_external: false
-dcos_registry_internal_port: 5000
-dcos_registry_external_port: 15000
-dcos_host_volume_registry: '/tmp'  # docker registry volume path

@@ -5,7 +5,7 @@
   },
 
   "security": {
-    "enable": {{ item.options.is_insecure_registry | default('false') }},
+    "enable": {{ item.options.is_insecure_registry | default(false) | lower }},
     "http_tls_download_ip": "{{groups['dcos_bootstrap'][0]}}",
     "http_tls_download_port": "{{ dcos_bootstrap_port }}",
     "http_tls_certificate_filename": "{{item.name}}.crt",
@@ -14,12 +14,12 @@
 
   "storage": {
     "storage_path": "/var/lib/registry",
-    "host_volume_registry": "{{ item.options.host_volume_path | default('tmp')}}"
+    "host_volume_registry": "{{ item.options.host_volume_path | default('tmp') | lower }}"
   },
 
   "networking": {
     "external_access":  {
-      "enable": {{item.options.make_external | default('false')}},
+      "enable": {{item.options.make_external | default(false) | lower }},
       "external_access_port": {{item.options.external_port | default(15000)}}
     },
     "port": {{ item.options.internal_port | default(5000) }}
