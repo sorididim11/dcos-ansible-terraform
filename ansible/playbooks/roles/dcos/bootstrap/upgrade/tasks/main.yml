@@ -3,6 +3,7 @@
 - name: Aquire Auth token 
   shell: dcos config show core.dcos_acs_token
   register: auth_token_ret
+  changed_when: False
   tags: upgrade-mesos-wait
 
 

@@ -5,7 +5,7 @@
   hosts: dcos_bootstrap
   tags: ['pkg']
   roles:
-    - { role: dcos/bootstrap/boot_web,  when: dcos_is_insecure_registry == False }
+    - { role: dcos/bootstrap/boot_web }
   environment: "{{ proxy_env }}"
 
 

@@ -33,3 +33,4 @@
     state: started
     ports: "{{dcos_bootstrap_port}}:80"
     volumes: "{{ dcos_bootstrap_root_path }}/genconf/serve:/usr/share/nginx/html:ro"
+  changed_when: False

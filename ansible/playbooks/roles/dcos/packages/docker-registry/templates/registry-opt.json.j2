@@ -3,7 +3,6 @@
   "service": {
     "name": "{{dcos_registry_name}}"
   },
-dcos_cluster_url: "{{ (edcos_security_mode == 'disabled') | ternary('http', 'https')}}://{{dcos_first_master_internal_ip}}"
 
   "security": {
     "enable": {{ dcos_is_insecure_registry | ternary('true', 'false') }},
