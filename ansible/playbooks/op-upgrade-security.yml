@@ -44,5 +44,5 @@
   gather_facts: False
   tags: ['upgrade-security']
   roles:
-    - { role: dcos/bootstrap/local-fact, op_ytpe: update }
+    - { role: dcos/bootstrap/local-facts, op_ytpe: update }
   environment: "{{ proxy_env }}"
