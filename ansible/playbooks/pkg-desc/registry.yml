@@ -5,7 +5,7 @@ services:
     user: nobody
     role: { name: '*'}
     options: {
-      is_insecure_registry: true,
+      is_insecure_registry: false,
       make_external: true,
       internal_port: 5000,
       external_port: 15000,
