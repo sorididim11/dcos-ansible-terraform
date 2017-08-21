@@ -13,7 +13,7 @@
 - name: Aquire DC/OS metadata
   become: yes
   uri:
-    url: "{{dcos_cluster_url}}/dcos-metadata/{{item}}"
+    url: "{{dcos_cluster_url}}/dcos-metadata/{{item}}.json"
     dest: "/etc/ansible/facts.d/{{item}}.fact"
     method: GET
     return_content: yes
@@ -22,8 +22,8 @@
       Authorization: "token={{auth_token.stdout}}"
       Accept: "application/json"
   with_items:
-    - bootstrap-config.json
-    - dcos-version.json
+    - bootstrap-config
+    - dcos-version
 
 
 - name: re-read facts after adding custom fact
