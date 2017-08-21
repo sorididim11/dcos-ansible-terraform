@@ -107,3 +107,17 @@ failed_when:
 
 it means if result is not 0 or not 2 then failed.
  
+
+## ansible.cfg
+
+The precedence order for Ansible config files is2:
+
+ANSIBLE_CONFIG (an environment variable pointing to a file)
+ansible.cfg (in the current directory)
+.ansible.cfg (in the home directory)
+/etc/ansible/ansible.cfg
+
+In this config file, I always set at least two options:
+
+hostfile = ./inventories/dev
+roles_path = ./.imported_roles:/some/dev/place/with/roles

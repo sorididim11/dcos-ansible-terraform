@@ -1,46 +1,12 @@
 --- 
 
-- name: Aquire Auth token 
-  shell: dcos config show core.dcos_acs_token
-  register: auth_token_ret
-  changed_when: False
-  tags: upgrade-mesos-wait
-
-
-- name: Set fact, auth_token
-  set_fact: 
-    auth_token: "{{auth_token_ret.stdout}}"
-  tags: upgrade-mesos-wait
-
-
-- name: Aquire DC/OS metadata
-  uri:
-    url: "{{dcos_cluster_url}}/dcos-metadata/{{item}}"
-    method: GET
-    return_content: yes
-    validate_certs: False
-    headers: 
-      Authorization: "token={{auth_token}}"
-      Accept: "application/json"
-  register: dcos_metadata_jsons
-  with_items:
-    - bootstrap-config.json
-    - dcos-version.json
-
-
-- name: Update facts with security mode and version of DC/OS metadata
-  set_fact: 
-    edcos_security_mode: "{{ (dcos_metadata_jsons.results[0].content | from_json)['security'] }}"
-    dcos_version: "{{ (dcos_metadata_jsons.results[1].content | from_json)['version'] }}"
-    
-
-- assert: { that: "edcos_security_mode != 'strict'", msg: "What??? you are already in strict mode!! "}
-- debug:  msg="Current security mode, {{edcos_security_mode}}"
+- assert: { that: "ansible_local.security != 'strict'", msg: "What??? you are already in strict mode!! "}
+- debug:  msg="Current security mode, {{ansible_local.security}}"
 
 
 - name: Update fact, edcos_security_mode  
   set_fact: 
-    edcos_security_mode: "{{ (edcos_security_mode == 'permissive') | ternary('strict', 'permissive')  }}"
+    edcos_security_mode: "{{ (ansible_local.security == 'permissive') | ternary('strict', 'permissive')  }}"
 
 
 - debug:  msg="Upgrade Security to {{edcos_security_mode}}. DC/OS {{dcos_version}}"

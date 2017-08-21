@@ -24,12 +24,3 @@
   roles:
     - { role: dcos/node/add-node, node_type: slave_public, service_name: dcos-mesos-slave-public } 
   environment: "{{ proxy_env }}"
-
-
-- name: "Create local facts of DC/OS in boostrap node "
-  gather_facts: False
-  hosts: dcos_bootstrap
-  tags: ['install', 'dcos-fact']
-  environment: "{{ proxy_env }}"
-  roles: 
-    - { role: dcos/bootstrap/local-facts, op_type: create }
