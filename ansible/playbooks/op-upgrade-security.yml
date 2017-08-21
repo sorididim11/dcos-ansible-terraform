@@ -39,10 +39,10 @@
   environment: "{{ proxy_env }}"
 
 
-- name: Update edcos_security_mode ingroup_vars 
+- name: Update edcos_security_mode in group_vars 
   hosts: dcos_bootstrap
   gather_facts: False
-  tags: ['upgrade-security']
+  tags: ['upgrade-security', 'update-groupvars']
   roles:
-    - { role: dcos/bootstrap/local-facts, op_ytpe: update }
+    - { role: dcos/bootstrap/local-facts, op_type: update }
   environment: "{{ proxy_env }}"
