@@ -20,8 +20,7 @@
       command: >
           "openssl req -newkey rsa:4096 -nodes -sha256 
           -subj '/emailAddress=jong-gun.kim@hpe.com/C=KR/ST=Seoul/L=Seoul/O=Global Security/OU=IT Deparment/CN={{dcos_registry_name}}.marathon.l4lb.thisdcos.directory'
-           -keyout domain.key  -x509 -days 365 -out domain.crt
-           -extfile {{ dcos_bootstrap_root_path }}/extfile.cnf"  
+           -keyout domain.key  -x509 -days 365 -out domain.crt"
       args:
         chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve"
       when: dcos_is_insecure_registry == False and is_cert_exists.stat.exists == False
