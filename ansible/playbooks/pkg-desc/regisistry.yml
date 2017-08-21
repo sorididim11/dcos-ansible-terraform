@@ -1,0 +1,8 @@
+---
+services:
+  - name: cluster-registry
+    package: registry
+    user: nobody
+    role: { name: '*'}
+    options:
+      - op1

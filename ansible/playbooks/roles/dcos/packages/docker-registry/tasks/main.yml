@@ -1,48 +1,5 @@
 
----
-- name: Check if Docker certificates exist
-  stat:
-    path: "{{ dcos_bootstrap_root_path }}/genconf/serve/domain.crt"
-  register: is_cert_exists
-  when: dcos_is_insecure_registry == False
-
-
-- name: Generate subjectAltName for public access to docker registry 
-  template:
-    src: extfile.cnf.j2
-    dest: "{{ dcos_bootstrap_root_path }}/extfile.cnf"
-
-
-- name: Generate self-signed certificate for registry
-  command: >
-        "openssl req -newkey rsa:4096 -nodes -sha256 
-        -subj '/emailAddress=jong-gun.kim@hpe.com/C=KR/ST=Seoul/L=Seoul/O=Global Security/OU=IT Deparment/CN={{dcos_registry_name}}.marathon.l4lb.thisdcos.directory'
-         -keyout domain.key 
-         -x509 -days 365 
-         -out domain.crt
-         -extfile {{ dcos_bootstrap_root_path }}/extfile.cnf"  
-  when: dcos_is_insecure_registry == False and is_cert_exists.stat.exists == False
-
-
-- name: Copy domina key, certificte to Web directory
-  copy: "src={{item}} dest={{ dcos_bootstrap_root_path }}/genconf/serve"
-  with_items:
-    - domain.key
-    - domain.crt
-  when: dcos_is_insecure_registry == False 
-  
-
-- name: Insert crts, key to docker cert directory and restart docker engine in each agent
-  become: yes
-  shell: |
-            mkdir -p /etc/docker/certs.d/{{dcos_registry_name}}.marathon.l4lb.thisdcos.directory:{{dcos_registry_internal_port}} 
-            curl -o /etc/docker/certs.d/{{dcos_registry_name}}.marathon.l4lb.thisdcos.directory:{{dcos_registry_internal_port}}/ca.crt http://{{groups['dcos_bootstrap'][0]}}:{{dcos_bootstrap_port}}/domain.crt 
-            systemctl restart docker.service
-  delegate_to: "{{item}}"
-  when: dcos_is_insecure_registry == False 
-  with_items: "{{ groups['dcos_nodes'] }}"
-  
-  
+---  
 - name: Generate docker registry config 
   template:
     src: registry-opt.json.j2

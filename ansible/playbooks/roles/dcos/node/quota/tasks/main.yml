@@ -18,7 +18,7 @@
 
 - name: Do operation
   uri:
-    url: "https://{{dcos_first_master_internal_ip}}/mesos/api/v1"
+    url: "{{dcos_cluster_url}}/mesos/api/v1"
     method: POST
     validate_certs: False
     headers: 

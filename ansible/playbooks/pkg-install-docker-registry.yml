@@ -4,6 +4,32 @@
   gather_facts: False
   hosts: dcos_bootstrap
   tags: ['pkg']
+  pre_tasks:
+    - name: Check if Docker certificates exist
+      stat:
+        path: "{{ dcos_bootstrap_root_path }}/genconf/serve/domain.crt"
+      register: is_cert_exists
+      when: dcos_is_insecure_registry == False
+
+    - name: Generate self-signed certificate for registry
+      command: >
+          "openssl req -newkey rsa:4096 -nodes -sha256 
+          -subj '/emailAddress=jong-gun.kim@hpe.com/C=KR/ST=Seoul/L=Seoul/O=Global Security/OU=IT Deparment/CN={{dcos_registry_name}}.marathon.l4lb.thisdcos.directory'
+           -keyout domain.key  -x509 -days 365 -out domain.crt
+           -extfile {{ lookup('template', 'extfile.cnf.j2') }}"  
+      args:
+        chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve"
+      when: dcos_is_insecure_registry == False and is_cert_exists.stat.exists == False
+
+    - name: Insert crts, key to docker cert directory and restart docker engine in each agent
+      become: yes
+      shell: |
+            mkdir -p /etc/docker/certs.d/{{dcos_registry_name}}.marathon.l4lb.thisdcos.directory:{{dcos_registry_internal_port}} 
+            curl -o /etc/docker/certs.d/{{dcos_registry_name}}.marathon.l4lb.thisdcos.directory:{{dcos_registry_internal_port}}/ca.crt http://{{groups['dcos_bootstrap'][0]}}:{{dcos_bootstrap_port}}/domain.crt 
+            systemctl restart docker.service
+      delegate_to: "{{item}}"
+      when: dcos_is_insecure_registry == False 
+      with_items: "{{ groups['dcos_nodes'] }}"
   roles:
     - { role: dcos/bootstrap/boot_web }
   environment: "{{ proxy_env }}"
@@ -13,5 +39,5 @@
   gather_facts: False
   hosts: dcos_cli[0]
   roles:
-    - dcos/packages/docker-registry
+    - dcos/packages/installer
   environment: "{{ proxy_env }}"

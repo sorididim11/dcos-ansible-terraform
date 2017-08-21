@@ -15,7 +15,7 @@
 
 - name: Aquire DC/OS metadata
   uri:
-    url: "https://{{dcos_first_master_internal_ip}}/dcos-metadata/{{item}}"
+    url: "{{dcos_cluster_url}}/dcos-metadata/{{item}}"
     method: GET
     return_content: yes
     validate_certs: False
