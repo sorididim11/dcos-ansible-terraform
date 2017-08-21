@@ -7,12 +7,7 @@
     - pkg-desc/registry.yml
   tags: ['pkg']
   pre_tasks:
-    - name: Check if Docker certificates exist
-      stat:
-        path: "{{ dcos_bootstrap_root_path }}/genconf/serve/{{item.name}}.crt"
-      register: is_cert_exists
-      when: item.options.is_insecure_registry == False
-      with_items: "{{services}}"
+
 
     - name: Generate subjectAltName for public access to docker registry 
       template:
@@ -26,7 +21,7 @@
            -keyout {{item.name}}.key  -x509 -days 365 -out {{item.name}}.crt
       args:
         chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve"
-      when: item.options.is_insecure_registry == False and is_cert_exists.stat.exists == False
+      when: item.options.is_insecure_registry == False
       with_items: "{{services}}"
 
     - name: Insert crts, key to docker cert directory and restart docker engine in each agent
