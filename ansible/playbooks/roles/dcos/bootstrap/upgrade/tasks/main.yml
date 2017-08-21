@@ -4,10 +4,18 @@
 - debug:  msg="Current security mode, {{ansible_local['bootstrap-config'].security}}"
 
 
+- name: Aquire Auth token 
+  shell: dcos config show core.dcos_acs_token
+  register: auth_token_data
+  changed_when: False
+
+
+
 - name: Update fact, edcos_security_mode  
   set_fact: 
     edcos_security_mode: "{{ (ansible_local['bootstrap-config'].security == 'permissive') | ternary('strict', 'permissive')  }}"
     dcos_version: "{{ansible_local['dcos-version'].version}}"
+    auth_token: "{{ auth_token_data.stdout }}"
 
 
 - debug:  msg="Upgrade Security to {{edcos_security_mode}}. DC/OS {{dcos_version}}"
