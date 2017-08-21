@@ -8,6 +8,6 @@
     line: "{{item.replace_with}}"
   with_items:
     - regex: '^edcos_security_mode:'
-      replace_with: "edcos_security_mode: {{ansible_local.security}}"
+      replace_with: "edcos_security_mode: {{ansible_local['bootstrap-config'].security}}"
     - regex: '^dcos_version:'
-      replace_with: "dcos_version: {{ansible_local.version}}"
+      replace_with: "dcos_version: {{ansible_local['dcos-version'].version}}"
