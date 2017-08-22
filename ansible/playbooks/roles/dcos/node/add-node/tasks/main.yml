@@ -18,7 +18,7 @@
     force: no #if yes, if it keeps downloading
 
 
-- name: Install dcos "{{ node_type }}"
+- name: Install dcos {{ node_type }}
   become: yes
   command: "bash dcos_install.sh {{ node_type }}"
   args:
