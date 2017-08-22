@@ -42,6 +42,17 @@
   when: dcos_is_use_proxy == False and node_type == "master" and proxy_env.http_proxy is defined 
 
 
+- name: Wait for mesos master running
+  become: yes
+  shell: "systemctl status dcos-mesos-master"
+  register: result
+  until: result.stdout.find("running") != -1
+  retries: 1000
+  delay: 30 # unit, second
+  tags: upgrade-master
+  changed_when: no
+
+
 - name: Restat dcos-cosmos
   become: yes
   systemd: name=dcos-cosmos state=restarted
