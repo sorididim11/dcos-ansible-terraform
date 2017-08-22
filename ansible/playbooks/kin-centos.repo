@@ -1,17 +1,17 @@
 [kin-base]
 name=kin-CentOS-$releasever - Base
-baseurl=http://ftp.daumkakao.com/centos/$releasever/os/$basearch/
+mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os
 gpgcheck=0 
 enabled=1
 
 [kin-updates]
 name=kin-CentOS-$releasever - Updates
-baseurl=http://ftp.daumkakao.com/centos/$releasever/updates/$basearch/
+mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=updates
 gpgcheck=0
 enabled=1 
 
 [kin-extras]
 name=kin-CentOS-$releasever - Extras
-baseurl=http://ftp.daumkakao.com/centos/$releasever/extras/$basearch/
+mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=extras
 gpgcheck=0
 enabled=1

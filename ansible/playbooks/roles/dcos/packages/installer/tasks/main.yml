@@ -1,4 +1,9 @@
 ---
+- name: Do pre-tasks
+  include: pretask-{{pretask_name}}.yml
+  when: pretask_name is defined 
+
+
 - name: Generates config for each role
   template:
     src: "{{item.package}}-config.json.j2"
@@ -9,3 +14,8 @@
 - name: Deploy "{{item.name}}"
   command: "dcos package install --options={{dcos_bootstrap_root_path}}/packages/{{item.name}}-config.json {{item.package}} --yes" 
   with_items: "{{services}}"
+
+
+- name: Do post-tasks
+  include: posttask-{{pretask_name}}.yml
+  when: posttask_name is defined 
