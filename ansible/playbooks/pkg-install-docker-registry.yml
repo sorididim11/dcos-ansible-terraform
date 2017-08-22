@@ -28,13 +28,11 @@
       with_nested:
         - "{{ groups['dcos_nodes'] }}"
         - "{{ services }}"
-
-    - name: Generate docker daemon.json 
-      template: src=daemon.json.j2 dest=/etc/docker/daemon.json
-    
-    - name: Restart docker 
-      systemd: name=docker state=restart
-      changed_when: False
+    # - name: Generate docker daemon.json 
+    #   template: src=daemon.json.j2 dest=/etc/docker/daemon.json    
+    # - name: Restart docker 
+    #   systemd: name=docker state=restart
+    #   changed_when: False
 
   roles:
     - { role: dcos/bootstrap/boot_web }
