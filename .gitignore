@@ -8,3 +8,4 @@ ihos.osrc
 terraform.tfstate*
 password
 dcos_generate_config.ee.sh
+dciaauto001-ihos.pem
