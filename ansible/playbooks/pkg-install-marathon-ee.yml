@@ -1,8 +1,8 @@
 ---
-- include: util-dcos-bugfix.yml
-  when: edcos_security_mode == "strict"
+# - include: util-dcos-bugfix.yml
+#   when: edcos_security_mode == "strict"
 
-- name: Install custom marathon
+- name: Install Marathon-ee
   hosts: dcos_cli[0]
   vars_files: 
     - pkg-desc/marathon-ee.yml   
