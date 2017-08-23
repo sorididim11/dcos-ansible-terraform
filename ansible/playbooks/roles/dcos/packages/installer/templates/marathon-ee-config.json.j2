@@ -15,7 +15,7 @@
     "container":{  
        "type":"DOCKER",
        "docker":{  
-          "image":"{{service.options.image}}",
+          "image":"{{service.options.repo}}/{{service.options.image}}",
           "network":"HOST",
           "privileged":false,
           "parameters":[  
