@@ -5,19 +5,31 @@
   changed_when: False
 
 
-- name: Create Key pair 
-  command: "dcos security org service-accounts keypair {{item.name}}.pem {{item.name}}-pub.pem creates={{item.name}}.pem"
-  with_items: "{{services}}"
+- name: Resolve secret name 
+  set_fact: 
+    secret_name: "{{services[0].name}}/{{services[0].secret_name | default('secret')"
 
 
-- name: Create service account as ID
-  command: "dcos security org service-accounts create -p {{item.name}}-pub.pem -d '{{item.name}} service account' {{item.name}}"
-  with_items: "{{services}}"
+- name: Aquire secrets in secret store
+  command: "dcos security secrets get {{secret_name}} --json"
+  register: secrets_json
+
+  
+- block: 
+    - name: Create Key pair 
+      command: "dcos security org service-accounts keypair {{item.name}}.pem {{item.name}}-pub.pem creates={{item.name}}.pem"
+      with_items: "{{services}}"
 
 
-- name: Create service secret as Password
-  command: "dcos security secrets create-sa-secret {% if edcos_security_mode == 'strict'%} --strict {% endif %} {{item.name}}.pem {{item.name}} {{item.name}}/{{item.secret_name | default('secret') }}"
-  with_items: "{{services}}"
+    - name: Create service account as ID
+      command: "dcos security org service-accounts create -p {{item.name}}-pub.pem -d '{{item.name}} service account' {{item.name}}"
+      with_items: "{{services}}"
+
+
+    - name: Create service secret as Password
+      command: "dcos security secrets create-sa-secret {% if edcos_security_mode == 'strict'%} --strict {% endif %} {{item.name}}.pem {{item.name}} {{item.name}}/{{item.secret_name | default('secret') }}"
+      with_items: "{{services}}"
+  when: (secrets_json.stdout | from_json)['uid'] != services[0].name
 
 
 - name: Create permissions for {{ item.0.name }}
