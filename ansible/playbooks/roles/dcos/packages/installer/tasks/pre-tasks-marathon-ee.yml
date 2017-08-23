@@ -3,8 +3,8 @@
 - name: Docker login 
   become: yes
   docker_login:
-    username: soridiidm11
-    password: rekcod
+    username: "{{docker_hub_id}}"
+    password: "{{docker_hub_pwd}}"
 
 
 - name: Archive docker credential
