@@ -24,6 +24,19 @@
 * vagrant: 1.9.7
 * terraform 
 
+
+## Getting started
+### terraform 
+1) Clone the project 
+2) install terraform 
+3) go to dcos-ansible-terraform/terraform
+3) source ihos.osrc - set credential for openstack for example. 
+4) modify number of masters/slaves/slaves_public in variable.tf
+5-1) check out security you wanna set. -  ansible/inventories/helion/group_vars/all.yml
+5-1) check out dcos license in case you use enterprise DC/OS. -  ansible/inventories/helion/group_vars/all.yml 
+6) terraform apply
+
+
 ## General Parameters for both community and enterprise version 
 
 * dcos_is_enterprise: True or False - enterprise dcos or open source 

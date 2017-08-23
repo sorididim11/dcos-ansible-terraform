@@ -14,8 +14,8 @@ edcos_license: !vault |
           3662323162663964323836633831383431666133653937643239
 
 
-edcos_superuser: root          # dcos amdin permission 
-edcos_superuser_pwd: root      # dcos amdin permission 
+edcos_superuser: superman          # dcos amdin permission 
+edcos_superuser_pwd: 12345      # dcos amdin permission 
 edcos_security_mode: permissive  # security type  disabed, permissive, strict 
 
 #bootstrap 
