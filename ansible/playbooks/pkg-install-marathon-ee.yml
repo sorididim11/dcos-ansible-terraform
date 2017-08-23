@@ -4,7 +4,6 @@
 
 - name: Install Marathon-ee
   hosts: dcos_cli[0]
-  gather_facts: yes
   vars_files: 
     - pkg-desc/marathon-ee.yml   
   roles:
