@@ -48,14 +48,14 @@
           replace_with: "https_proxy={{proxy_env.http_proxy}}"
         - regex: ^no_proxy=
           replace_with: "no_proxy={{proxy_env.no_proxy}}"
+
+    - name: Restat dcos-cosmos
+      systemd: name=dcos-cosmos state=restarted
+      changed_when: false
   become: yes
   when: dcos_is_use_proxy == False and node_type == "master" and proxy_env.http_proxy is defined 
 
 
-- name: Restat dcos-cosmos
-  become: yes
-  systemd: name=dcos-cosmos state=restarted
-  when: dcos_is_use_proxy == False and node_type == "master" and proxy_env.http_proxy is defined 
-  changed_when: false
+
   
 
