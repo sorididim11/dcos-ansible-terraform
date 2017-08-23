@@ -1,6 +1,6 @@
 ---
-# - include: util-dcos-bugfix.yml
-#   when: edcos_security_mode == "strict"
+- include: util-dcos-bugfix.yml
+  when: edcos_security_mode == "strict"
 
 - name: Install Marathon-ee
   hosts: dcos_cli[0]
