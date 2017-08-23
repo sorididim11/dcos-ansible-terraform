@@ -1,6 +1,6 @@
 ---
-services:
-  - name: cluster-registry
+service:
+    name: cluster-registry
     package: registry
     options: {
       is_secure_registry: true,

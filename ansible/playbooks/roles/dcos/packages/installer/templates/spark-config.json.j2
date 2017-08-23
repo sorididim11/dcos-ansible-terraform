@@ -1,9 +1,9 @@
 {  
    "service":{  
-      "name": "{{item.name}}",
-      "principal": "{{item.name}}",
-      "secret": "{{item.name}}/{{item.secret_name | default('secret')}}",
-      {% if edcos_security_mode == 'strict' %}"user": "{{item.user}}", {% endif %}
-      "role": "{{item.role.name}}"
+      "name": "{{service.name}}",
+      "principal": "{{service.name}}",
+      "secret": "{{service.name}}/{{service.secret_name | default('secret')}}",
+      {% if edcos_security_mode == 'strict' %}"user": "{{service.user}}", {% endif %}
+      "role": "{{service.role.name}}"
    }
 }

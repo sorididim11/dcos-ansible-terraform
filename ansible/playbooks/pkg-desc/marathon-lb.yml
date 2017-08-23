@@ -1,6 +1,6 @@
 ---
-services:
-  - name: marathon-lb-dev
+service:
+    name: marathon-lb-dev
     secret_name: kin-secret
     package: marathon-lb
     user: nobody

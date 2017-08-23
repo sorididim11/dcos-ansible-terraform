@@ -1,45 +1,42 @@
 ---
 - name: Check if dcoc/dist dir exists
   file:
-    path: "{{ dcos_bootstrap_root_path }}/dist"
+    path: "{{ dcos_bootstrap_root_path }}/genconf/serve"
     state: directory
-  register: installer
 
 
-- name: Generate self-signed certificate for registry
-  command: >
-      openssl req -newkey rsa:4096 -nodes -sha256 
-        -subj '/emailAddress=jong-gun.kim@hpe.com/C=KR/ST=Seoul/L=Seoul/O=Global Security/OU=IT Deparment/CN={{item.name}}.marathon.l4lb.thisdcos.directory'
-        -keyout {{item.name}}.key  -x509 -days 365 -out {{item.name}}.crt
-  args:
-    chdir: "{{ dcos_bootstrap_root_path }}/dist"
+- name: Generate/Distribute self-signed certificate 
+  block:
+    - name: Generate self-signed certificate for registry
+      command: >
+          openssl req -newkey rsa:4096 -nodes -sha256 
+            -subj '/emailAddress=jong-gun.kim@hpe.com/C=KR/ST=Seoul/L=Seoul/O=Global Security/OU=IT Deparment/CN={{item.name}}.marathon.l4lb.thisdcos.directory'
+            -keyout {{item.name}}.key  -x509 -days 365 -out {{item.name}}.crt
+      args:
+        chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve"
+      with_items: "{{services}}"
+
+    - name: Run web container to distribute keys
+      become: yes
+      docker_container: 
+        name: boot-nginx
+        image: nginx
+        state: started
+        ports: "{{dcos_bootstrap_port}}:80"
+        volumes: "{{ dcos_bootstrap_root_path }}/genconf/serve:/usr/share/nginx/html:ro"
+      changed_when: False
+
+    - name: Insert crts, key to docker cert directory and restart docker engine in each agent
+      become: yes
+      shell: |
+          mkdir -p /etc/docker/certs.d/{{item[1].name}}.marathon.l4lb.thisdcos.directory:{{item[1].options.internal_port}} 
+          curl -o /etc/docker/certs.d/{{item[1].name}}.marathon.l4lb.thisdcos.directory:{{item[1].options.internal_port}}/ca.crt http://{{groups['dcos_cli'][0]}}:{{dcos_bootstrap_port}}/{{item[1].name}}.crt 
+          systemctl restart docker.service
+      delegate_to: "{{item[0]}}"
+      with_nested:
+        - "{{ groups['dcos_nodes'] }}"
+        - "{{ services }}"
   when: item.options.is_secure_registry == True
-  with_items: "{{services}}"
-
-
-- name: Run web container for keys
-  become: yes
-  docker_container: 
-    name: boot-nginx
-    detach: True
-    image: nginx
-    state: started
-    ports: "{{dcos_bootstrap_port}}:80"
-    volumes: "{{ dcos_bootstrap_root_path }}/dist:/usr/share/nginx/html:ro"
-  changed_when: False
-
-
-- name: Insert crts, key to docker cert directory and restart docker engine in each agent
-  become: yes
-  shell: |
-      mkdir -p /etc/docker/certs.d/{{item[1].name}}.marathon.l4lb.thisdcos.directory:{{item[1].options.internal_port}} 
-      curl -o /etc/docker/certs.d/{{item[1].name}}.marathon.l4lb.thisdcos.directory:{{item[1].options.internal_port}}/ca.crt http://{{groups['dcos_cli'][0]}}:{{dcos_bootstrap_port}}/{{item[1].name}}.crt 
-      systemctl restart docker.service
-  delegate_to: "{{item[0]}}"
-  when: item[1].options.is_secure_registry == True 
-  with_nested:
-    - "{{ groups['dcos_nodes'] }}"
-    - "{{ services }}"
 
 
 - name: Generate docker conf file, daemon.json for docker cli node 

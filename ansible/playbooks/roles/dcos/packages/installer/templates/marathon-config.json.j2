@@ -1,14 +1,14 @@
 
 {
   "service": {
-    "name": "{{item.name}}"
+    "name": "{{service.name}}"
   },
   "marathon": {
-     "default-accepted-resource-roles": "{{item.role.name}}",
+     "default-accepted-resource-roles": "{{service.role.name}}",
      "mesos-authentication": true,
-     "mesos-authentication-principal": "{{item.name}}",
-     "mesos-authentication-secret": "{{item.name}}/{{item.secret_name | default('secret')}}",
-     "mesos-role": "{{item.role.name}}",
-     "mesos-user": "{{item.user}}"
+     "mesos-authentication-principal": "{{service.name}}",
+     "mesos-authentication-secret": "{{service.name}}/{{service.secret_name | default('secret')}}",
+     "mesos-role": "{{service.role.name}}",
+     "mesos-user": "{{service.user}}"
      }
 } 

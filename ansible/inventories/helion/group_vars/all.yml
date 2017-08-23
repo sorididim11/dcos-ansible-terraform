@@ -50,6 +50,7 @@ selinux_mode: permissive
 # docker 
 
 # docker 
+marathon_ee_image: sorididim11/marathon-dcos-ee:v1.4.7_1.9.8
 docker_hub_id: sorididim11
 docker_hub_pwd: !vault |
           $ANSIBLE_VAULT;1.1;AES256
@@ -59,5 +60,6 @@ docker_hub_pwd: !vault |
           3662663939333662380a386565333262346631616564313531383433306264396565663234343132
           6138
           
+docker_hub_mail: sorididim11@gmail.com
 docker_volume_fs: overlay
 docker_version: 1.13.1

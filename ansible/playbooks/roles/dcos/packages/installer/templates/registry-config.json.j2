@@ -1,27 +1,27 @@
 
 {
   "service": {
-    "name": "{{item.name}}"
+    "name": "{{service.name}}"
   },
 
   "security": {
-    "enable": {{ item.options.is_secure_registry | default(true) | lower }},
+    "enable": {{ service.options.is_secure_registry | default(true) | lower }},
     "http_tls_download_ip": "{{groups['dcos_bootstrap'][0]}}",
     "http_tls_download_port": "{{ dcos_bootstrap_port }}",
-    "http_tls_certificate_filename": "{{item.name}}.crt",
-    "http_tls_key_filename": "{{item.name}}.key"
+    "http_tls_certificate_filename": "{{service.name}}.crt",
+    "http_tls_key_filename": "{{service.name}}.key"
   },
 
   "storage": {
     "storage_path": "/var/lib/registry",
-    "host_volume_registry": "{{ item.options.host_volume_path | default('tmp') | lower }}"
+    "host_volume_registry": "{{ service.options.host_volume_path | default('tmp') | lower }}"
   },
 
   "networking": {
     "external_access":  {
-      "enable": {{item.options.make_external | default(false) | lower }},
-      "external_access_port": {{item.options.external_port | default(15000)}}
+      "enable": {{service.options.make_external | default(false) | lower }},
+      "external_access_port": {{service.options.external_port | default(15000)}}
     },
-    "port": {{ item.options.internal_port | default(5000) }}
+    "port": {{ service.options.internal_port | default(5000) }}
   }
 }

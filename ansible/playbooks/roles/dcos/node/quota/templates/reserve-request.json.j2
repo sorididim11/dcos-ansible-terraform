@@ -1,6 +1,6 @@
 {
 {% for target in nodes %}
-{% if item.role.name != '*' and item.role.hostname == target.hostname %} 
+{% if service.role.hostname == target.hostname %} 
 
   "type": "{{op_type | upper}}",
   "{{op_type | lower }}": {
@@ -12,37 +12,37 @@
         "type": "SCALAR",
         "name": "cpus",
         "reservation": {
-          "principal": "{{item.role.principal}}"
+          "principal": "{{service.role.principal}}"
         },
-        "role": "{{item.role.name}}",
+        "role": "{{service.role.name}}",
         "scalar": {
-          "value": {{ item.role.cpus | default(0.0) }}
+          "value": {{ service.role.cpus | default(0.0) }}
         }
       },
       {
         "type": "SCALAR",
         "name": "gpus",
         "reservation": {
-          "principal": "{{item.role.principal}}"
+          "principal": "{{service.role.principal}}"
         },
-        "role": "{{item.role.name}}",
+        "role": "{{service.role.name}}",
         "scalar": {
-          "value": {{ item.role.gpus | default(0.0) }}
+          "value": {{ service.role.gpus | default(0.0) }}
         }
       },
-  {% if item.role.begin_port is defined %}
+  {% if service.role.begin_port is defined %}
       {
         "type": "RANGES",
         "name": "ports",
         "reservation": {
-          "principal": "{{item.role.principal}}"
+          "principal": "{{service.role.principal}}"
         },
-        "role": "{{item.role.name}}",
+        "role": "{{service.role.name}}",
         "ranges": {
           "range": [
             {
-              "begin": {{ item.role.begin_port }},
-              "end": {{ item.role.end_port }}
+              "begin": {{ service.role.begin_port }},
+              "end": {{ service.role.end_port }}
             }
           ]
         }
@@ -52,11 +52,11 @@
         "type": "SCALAR",
         "name": "mem",
         "reservation": {
-          "principal": "{{item.role.principal}}"
+          "principal": "{{service.role.principal}}"
         },
-        "role": "{{item.role.name}}",
+        "role": "{{service.role.name}}",
         "scalar": {
-          "value": {{ item.role.mem | default(0) }}
+          "value": {{ service.role.mem | default(0) }}
         }
       }
     ]

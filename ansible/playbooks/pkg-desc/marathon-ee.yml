@@ -1,6 +1,6 @@
 
-services:
-  - name: marathon-ee-dev
+service: 
+    name: marathon-ee-dev
     package: marathon-ee
     user: nobody
     role: { principal: root, hostname: 10.0.15.31,  name: dev,  cpus: 1.0, mem: 500, disks: 1000, begin_port: 1025,  end_port: 2180 }
@@ -14,9 +14,10 @@ services:
       - { perm: "dcos:mesos:master:volume:role:dev", action: create, desc: " " }
     options: {
       image: "cluster-registry.marathon.l4lb.thisdcos.directory:5000/marathon-dcos-ee",
-      tag: "1.4.7",
+      tag: "v1.4.7",
       docker_credential: "{{dcos_bootstrap_url}}/docker.tar.gz"
     }
+
 
   # - name: marathon-ee-svc
   #   package: marathon-ee
