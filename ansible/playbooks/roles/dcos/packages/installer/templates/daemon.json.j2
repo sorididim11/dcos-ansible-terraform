@@ -1,3 +1,3 @@
 {
-    "insecure-registries": ["{{groups['dcos_slaves_public']:15000 | join(',')}}"]
+    "insecure-registries": [" {%for ip in groups['dcos_slaves_public'] %} {{ip}}:15000 {% "," if not loop.last %} {% endif %}   {% endfor %}
 }
