@@ -14,6 +14,13 @@
     chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve"
 
 
+- name: Docker pull Marathon-ee image 
+  become: yes
+  docker_image: 
+    name: "{{marathon_ee_image}}" 
+    pull: True
+
+
 - name: Docker logout
   become: yes
   docker_login:
@@ -29,13 +36,6 @@
     ports: "{{dcos_bootstrap_port}}:80"
     volumes: "{{ dcos_bootstrap_root_path }}/genconf/serve:/usr/share/nginx/html:ro"
   changed_when: False
-
-
-- name: Docker pull Marathon-ee image 
-  become: yes
-  docker_image: 
-    name: "{{marathon_ee_image}}" 
-    pull: True
 
 
 - name: Tag and push Marathon-ee to cluster registery
