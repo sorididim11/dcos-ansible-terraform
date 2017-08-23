@@ -12,11 +12,11 @@
 
 - name: Deploy {{ service.name }}
   command: >
-    "{% if custom_type is defined and custom_type == True %}
+    {% if custom_type is defined and custom_type == True %}
         dcos marathon app add {{service.name}}-config.json
      {% else %}
         dcos package install --options={{service.name}}-config.json {{service.package}} --yes
-     {% endif %}"
+     {% endif %}
   args: 
     chdir: "{{dcos_bootstrap_root_path}}/packages"
 
