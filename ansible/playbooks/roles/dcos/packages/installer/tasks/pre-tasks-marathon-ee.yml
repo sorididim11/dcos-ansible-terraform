@@ -36,6 +36,6 @@
   become: yes
   docker_image:
     name: "{{marathon_ee_image}}"
-    repository: "{{groups['dcos_slaves_public'][0]}}:15000/marathon-dcos-ee"
+    repository: "{{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:15000/marathon-dcos-ee"
     tag: "{{service.options.tag}}"
     push: yes
