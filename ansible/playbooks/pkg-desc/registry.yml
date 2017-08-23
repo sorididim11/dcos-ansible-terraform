@@ -3,7 +3,7 @@ services:
   - name: cluster-registry
     package: registry
     options: {
-      issecure_registry: true,
+      is_secure_registry: true,
       make_external: true,
       internal_port: 5000,
       external_port: 15000,
