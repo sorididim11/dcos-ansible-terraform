@@ -14,7 +14,7 @@
            -keyout {{item.name}}.key  -x509 -days 365 -out {{item.name}}.crt
       args:
         chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve"
-      when: item.options.is_insecure_registry == False
+      when: item.options.is_secure_registry == True
       with_items: "{{services}}"
 
     - name: Insert crts, key to docker cert directory and restart docker engine in each agent
@@ -24,7 +24,7 @@
             curl -o /etc/docker/certs.d/{{item[1].name}}.marathon.l4lb.thisdcos.directory:{{item[1].options.internal_port}}/ca.crt http://{{groups['dcos_bootstrap'][0]}}:{{dcos_bootstrap_port}}/{{item[1].name}}.crt 
             systemctl restart docker.service
       delegate_to: "{{item[0]}}"
-      when: item[1].options.is_insecure_registry == False 
+      when: item[1].options.is_secure_registry == True 
       with_nested:
         - "{{ groups['dcos_nodes'] }}"
         - "{{ services }}"

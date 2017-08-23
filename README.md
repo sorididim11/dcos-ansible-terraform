@@ -69,7 +69,7 @@
 
 * docker_volume_fs                  - default docker overlayfs (DC/OS 1.9 mendatory param for )
 * docker_version:                   - default 1.13.1 (DC/OS 1.9 mendatory param for )
-* dcos_is_insecure_registry: False  - install docker private regisry in insecure or secure 
+* dcos_is_secure_registry: True  - install docker private regisry in insecure or secure 
 * dcos_host_volume_registry: '/tmp' - docker registry volume path. ex) /tmp/nfs-share or host diretory 
 
 

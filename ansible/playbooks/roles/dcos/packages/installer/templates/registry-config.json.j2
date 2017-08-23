@@ -5,7 +5,7 @@
   },
 
   "security": {
-    "enable": {{ item.options.is_insecure_registry | default(false) | lower }},
+    "enable": {{ item.options.is_secure_registry | default(true) | lower }},
     "http_tls_download_ip": "{{groups['dcos_bootstrap'][0]}}",
     "http_tls_download_port": "{{ dcos_bootstrap_port }}",
     "http_tls_certificate_filename": "{{item.name}}.crt",
