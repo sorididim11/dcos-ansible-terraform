@@ -15,6 +15,7 @@
 
 
 - name: Docker logout
+  become: yes
   docker_login:
     state: absent
 
