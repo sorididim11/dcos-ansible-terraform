@@ -26,7 +26,7 @@
   become: yes
   docker_image:
     name: "sorididim11/marathon-dcos-ee:v1.4.7_1.9.8"
-    repository: "{{groups['dcos_slaves_public']}}[0]:15000/marathon-dcos-ee"
+    repository: "{{groups['dcos_slaves_public'][0]}}:15000/marathon-dcos-ee"
     tag: "{{services[0].options.tag}}"
     push: yes
 
