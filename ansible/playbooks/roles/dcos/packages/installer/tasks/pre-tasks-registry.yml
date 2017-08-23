@@ -49,7 +49,7 @@
 
 - name: Restart docker 
   become: yes
-  systemd: name=docker state=restart
+  systemd: name=docker state=restarted
   changed_when: False
 
 
