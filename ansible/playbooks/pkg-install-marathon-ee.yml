@@ -9,6 +9,6 @@
   roles:
     - { role: dcos/node/quota, op_type: reserve_resources } 
     - { role: dcos/packages/service-account } 
-    - { role: dcos/packages/installer, pre_tasks: marathon-ee }
+    - { role: dcos/packages/installer, pre_tasks: marathon-ee, tags: marathon-ee}
   environment: "{{ proxy_env }}"
 

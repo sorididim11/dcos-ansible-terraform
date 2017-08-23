@@ -18,7 +18,7 @@
 - name: Docker pull Marathon-ee image 
   become: yes
   docker_image: 
-    nam: "sorididim11/marathon-dcos-ee:v1.4.7_1.9.8" 
+    name: "sorididim11/marathon-dcos-ee:v1.4.7_1.9.8" 
     pull: True
 
 
