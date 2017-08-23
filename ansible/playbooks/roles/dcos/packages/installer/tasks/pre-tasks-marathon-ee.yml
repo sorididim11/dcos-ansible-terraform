@@ -1,0 +1,42 @@
+---
+
+- name: Docker login 
+  become: yes
+  docker_login:
+    username: soridiidm11
+    password: rekcod
+
+
+- name: Archive docker credential
+  become: yes
+  command: sudo tar cvzf docker.tar.gz ~/.docker  
+  args:
+    chdir: "{{ dcos_bootstrap_root_path }}/dist"
+
+
+- name: Docker pull Marathon-ee image 
+  become: yes
+  docker_image: 
+    nam: "sorididim11/marathon-dcos-ee:v1.4.7_1.9.8" 
+    pull: True
+
+
+- name: Tag and push to cluster registery
+  become: yes
+  docker_image:
+    name: sorididim11/marathon-dcos-ee:v1.4.7_1.9.8
+    repository: "{{groups['dcos_slaves_public'][0]:15000}}/marathon-dcos-ee"
+    tag: 1.4.7
+    push: yes
+
+
+- name: Run web container for keys
+  become: yes
+  docker_container: 
+    name: boot-nginx
+    detach: True
+    image: nginx
+    state: started
+    ports: "{{dcos_bootstrap_port}}:80"
+    volumes: "{{ dcos_bootstrap_root_path }}/dist:/usr/share/nginx/html:ro"
+  changed_when: False

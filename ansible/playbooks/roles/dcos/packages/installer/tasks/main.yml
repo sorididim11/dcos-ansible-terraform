@@ -1,4 +1,9 @@
 ---
+- name: Do pre-tasks for {{pre_tasks}}
+  include: pre-tasks-{{pre_tasks}}.yml
+  when: pre_tasks is defined 
+
+
 - name: Generates config for {{ item.name }}
   template:
     src: "{{item.package}}-config.json.j2"
@@ -9,3 +14,8 @@
 - name: Deploy {{ item.name }}
   command: "dcos package install --options={{dcos_bootstrap_root_path}}/packages/{{item.name}}-config.json {{item.package}} --yes"
   with_items: "{{services}}"
+
+
+- name: Do post-tasks for {{post_tasks}}
+  include: pre-tasks-{{post_tasks}}.yml
+  when: post_tasks is defined 

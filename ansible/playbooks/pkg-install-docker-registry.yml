@@ -1,49 +1,9 @@
 --- 
-
-- name: "Run web server for file distribution"
-  gather_facts: False
-  hosts: dcos_bootstrap
-  vars_files: 
-    - pkg-desc/registry.yml
-  tags: ['pkg']
-  pre_tasks:
-    - name: Generate self-signed certificate for registry
-      command: >
-          openssl req -newkey rsa:4096 -nodes -sha256 
-          -subj '/emailAddress=jong-gun.kim@hpe.com/C=KR/ST=Seoul/L=Seoul/O=Global Security/OU=IT Deparment/CN={{item.name}}.marathon.l4lb.thisdcos.directory'
-           -keyout {{item.name}}.key  -x509 -days 365 -out {{item.name}}.crt
-      args:
-        chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve"
-      when: item.options.is_secure_registry == True
-      with_items: "{{services}}"
-
-    - name: Insert crts, key to docker cert directory and restart docker engine in each agent
-      become: yes
-      shell: |
-            mkdir -p /etc/docker/certs.d/{{item[1].name}}.marathon.l4lb.thisdcos.directory:{{item[1].options.internal_port}} 
-            curl -o /etc/docker/certs.d/{{item[1].name}}.marathon.l4lb.thisdcos.directory:{{item[1].options.internal_port}}/ca.crt http://{{groups['dcos_bootstrap'][0]}}:{{dcos_bootstrap_port}}/{{item[1].name}}.crt 
-            systemctl restart docker.service
-      delegate_to: "{{item[0]}}"
-      when: item[1].options.is_secure_registry == True 
-      with_nested:
-        - "{{ groups['dcos_nodes'] }}"
-        - "{{ services }}"
-    # - name: Generate docker daemon.json 
-    #   template: src=daemon.json.j2 dest=/etc/docker/daemon.json    
-    # - name: Restart docker 
-    #   systemd: name=docker state=restart
-    #   changed_when: False
-
-  roles:
-    - { role: dcos/bootstrap/boot_web }
-  environment: "{{ proxy_env }}"
-
-
 - name: "Install docker private registry"
   gather_facts: False
   hosts: dcos_cli[0]
   vars_files: 
     - pkg-desc/registry.yml
   roles:
-    - dcos/packages/installer
+    - { role: dcos/packages/installer, pre_tasks: registry }
   environment: "{{ proxy_env }}"
