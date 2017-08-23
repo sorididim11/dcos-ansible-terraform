@@ -5,6 +5,7 @@
   docker_login:
     username: "{{docker_hub_id}}"
     password: "{{docker_hub_pwd}}"
+    email: "sorididim11@gmail.com"
 
 
 - name: Archive docker credential
