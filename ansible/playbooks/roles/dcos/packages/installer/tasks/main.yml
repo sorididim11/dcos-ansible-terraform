@@ -15,8 +15,11 @@
     "{% if custom_type is defined and custom_type == True %}
         dcos marathon app add {{service.name}}-config.json
      {% else %}
-        dcos package install --options={{dcos_bootstrap_root_path}}/packages/{{service.name}}-config.json {{service.package}} --yes
+        dcos package install --options={{service.name}}-config.json {{service.package}} --yes
      {% endif %}"
+  args: 
+    chdir: "{{dcos_bootstrap_root_path}}/packages"
+
 
 - name: Do post-tasks for {{post_tasks}}
   include: pre-tasks-{{post_tasks}}.yml
