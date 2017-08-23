@@ -5,6 +5,17 @@
     state: directory
 
 
+- name: Generate docker conf file, daemon.json for docker cli node 
+  become: yes
+  template: src=daemon.json.j2 dest=/etc/docker/daemon.json   
+
+
+- name: Restart docker 
+  become: yes
+  systemd: name=docker state=restarted
+  changed_when: False
+
+
 - name: Generate/Distribute self-signed certificate 
   block:
     - name: Generate self-signed certificate for registry
@@ -34,16 +45,5 @@
       delegate_to: "{{item}}"
       with_items: "{{ groups['dcos_nodes'] }}"
   when: service.options.is_secure_registry == True
-
-
-- name: Generate docker conf file, daemon.json for docker cli node 
-  become: yes
-  template: src=daemon.json.j2 dest=/etc/docker/daemon.json   
-
-
-- name: Restart docker 
-  become: yes
-  systemd: name=docker state=restarted
-  changed_when: False
 
 
