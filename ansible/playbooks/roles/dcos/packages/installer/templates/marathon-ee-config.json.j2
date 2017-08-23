@@ -1,6 +1,6 @@
 {  
-    "id":"/<non-native-marathon>",
-    "cmd":"cd $MESOS_SANDBOX && LIBPROCESS_PORT=$PORT1 && /marathon/bin/start --default_accepted_resource_roles \"*,<myrole>\" --enable_features \"vips,task_killing,external_volumes,secrets,gpu_resources\" --framework_name <non-native-marathon> --hostname $LIBPROCESS_IP --http_port $PORT0 --master zk://master.mesos:2181/mesos --max_tasks_per_offer 1 --mesos_leader_ui_url /mesos --mesos_role <myrole>  --zk zk://master.mesos:2181/universe/<non-native-marathon> --mesos_user nobody --mesos_authentication --mesos_authentication_principal <service-account-id>",
+    "id":"/{{item.name}}",
+    "cmd":"cd $MESOS_SANDBOX && LIBPROCESS_PORT=$PORT1 && /marathon/bin/start --default_accepted_resource_roles \"*,{{item.role.name}}\" --enable_features \"vips,task_killing,external_volumes,secrets,gpu_resources\" --framework_name {{item.name}} --hostname $LIBPROCESS_IP --http_port $PORT0 --master zk://master.mesos:2181/mesos --max_tasks_per_offer 1 --mesos_leader_ui_url /mesos --mesos_role {{item.role.name}}  --zk zk://master.mesos:2181/universe/{{item.name}} --mesos_user {{item.user}} --mesos_authentication --mesos_authentication_principal {{item.name}}",
     "user":"nobody",
     "cpus":2,
     "mem":4096,
@@ -15,7 +15,7 @@
     "container":{  
        "type":"DOCKER",
        "docker":{  
-          "image":"<your-repo>/marathon-dcos-ee:<your-tag>",
+          "image":"{{item.options.image}}",
           "network":"HOST",
           "privileged":false,
           "parameters":[  
@@ -60,11 +60,11 @@
     ],
     "secrets":{  
        "service-credential":{  
-          "source":"<path-to-secret-name>"
+          "source":"{{item.name}}/{{item.secret_name | default('secret')}}"
        }
     },
     "labels":{  
-       "DCOS_SERVICE_NAME":"<non-native-marathon>",
+       "DCOS_SERVICE_NAME":"{{item.name}}",
        "DCOS_SERVICE_PORT_INDEX":"0",
        "DCOS_SERVICE_SCHEME":"http"
     },
@@ -80,7 +80,7 @@
     ],
     "fetch":[  
        {  
-          "uri":"file:///home/<linux-user>/docker.tar.gz"
+          "uri":"{{item.options.docker_credential}}"
        }
     ]
   }

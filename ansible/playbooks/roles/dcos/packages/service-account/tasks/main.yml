@@ -16,7 +16,7 @@
 
 
 - name: Create service secret as Password
-  command: "dcos security secrets create-sa-secret {% if edcos_security_mode == 'strict'%} --strict {% endif %} {{item.name}}.pem {{item.name}} {{item.name}}/{{item.secrete_name | default('secret') }}"
+  command: "dcos security secrets create-sa-secret {% if edcos_security_mode == 'strict'%} --strict {% endif %} {{item.name}}.pem {{item.name}} {{item.name}}/{{item.secret_name | default('secret') }}"
   with_items: "{{services}}"
 
 

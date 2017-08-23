@@ -12,7 +12,10 @@ services:
       - { perm: "dcos:mesos:master:framework:role:dev", action: create, desc: " " } 
       - { perm: "dcos:mesos:master:reservation:role:dev", action: create, desc: " " }
       - { perm: "dcos:mesos:master:volume:role:dev", action: create, desc: " " }
-
+    options: {
+      image: sorididim11/marathon-dcos-ee:v1.4.7_1.9.8,
+      docker_credential: "http://{{bootstrap_url}}/docker.tar.gz"
+    }
 
   - name: marathon-ee-svc
     package: marathon-ee
@@ -26,3 +29,7 @@ services:
       - { perm: "dcos:mesos:master:framework:role:svc", action: create, desc: " " } 
       - { perm: "dcos:mesos:master:reservation:role:svc", action: create, desc: " " }
       - { perm: "dcos:mesos:master:volume:role:svc", action: create, desc: " " }
+    options: {
+      image: sorididim11/marathon-dcos-ee:v1.4.7_1.9.8,
+      docker_credential: "http://{{bootstrap_url}}/docker.tar.gz"
+    }
