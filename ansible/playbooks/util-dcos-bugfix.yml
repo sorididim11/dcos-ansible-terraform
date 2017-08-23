@@ -8,17 +8,19 @@
       dest: /opt/mesosphere/etc/mesos/master_firewall.json
       regexp: '"\/api\/v1",'
       state: absent
+    register: firewall_updated
 
-  - name: Restat dcos-mesos-master
-    systemd: name=dcos-mesos-master state=restarted  
-    changed_when: false
-    
-  - name: Wait for mesos master running
-    become: yes
-    shell: "systemctl status dcos-mesos-master"
-    register: result
-    until: result.stdout.find("running") != -1
-    retries: 1000
-    delay: 30 # unit, second
-    tags: upgrade-master
-    changed_when: no
+  - block:
+      - name: Restat dcos-mesos-master
+        systemd: name=dcos-mesos-master state=restarted  
+        
+      - name: Wait for mesos master running
+        become: yes
+        shell: "systemctl status dcos-mesos-master"
+        register: result
+        until: result.stdout.find("running") != -1
+        retries: 1000
+        delay: 30 # unit, second
+        tags: upgrade-master
+        changed_when: no
+    when: firewall_updated.changed == True 
