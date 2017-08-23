@@ -1,0 +1,14 @@
+---
+- include: util-dcos-bugfix.yml
+  when: edcos_security_mode == "strict"
+
+- name: Install custom marathon
+  hosts: dcos_cli[0]
+  vars_files: 
+    - pkg-desc/marathon.yml   
+  roles:
+    - { role: dcos/node/quota, op_type: reserve_resources } 
+    - { role: dcos/packages/service-account } 
+    - { role: dcos/packages/installer, custom_type: True }
+  environment: "{{ proxy_env }}"
+

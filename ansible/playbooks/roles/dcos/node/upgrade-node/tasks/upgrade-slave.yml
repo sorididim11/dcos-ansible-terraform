@@ -22,21 +22,21 @@
   shell: sudo mv -f /tmp/docker-wrapper /usr/bin/docker
 
 
-- name: Download the DC/OS installer from the NGINX Docker container
+- name: Download the DC/OS update script from the bootstrap web server
   get_url:
     url: "{{hostvars[groups['dcos_bootstrap'][0]]['upgrade_url']}}"
     dest: /tmp/dcos/dcos_node_upgrade.sh
     force: no #if yes, if it keeps downloading
 
 
-- name: Upgrade "{{node_typ}}"
+- name: Upgrade {{node_typ}}
   become: yes
   command: "bash dcos_node_upgrade.sh"
   args:
     chdir: /tmp/dcos
 
 
-- name: Wait for mesos {{svc_name}} running
+- name: Wait for {{svc_name}} running
   become: yes
   shell: "systemctl status {{svc_name}}"
   register: result
@@ -47,7 +47,7 @@
   changed_when: no
 
 
-- name: Verify mertrict snapshot of mesos slave
+- name: Verify mertric snapshot of mesos slave
   uri:
     url: "https://{{inventory_hostname}}:5051/metrics/snapshot"
     method: GET

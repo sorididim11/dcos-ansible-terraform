@@ -26,5 +26,5 @@
     - dcos-version
 
 
-- name: re-read facts after adding custom fact
+- name: Re-read facts after adding custom fact
   setup: filter=ansible_local

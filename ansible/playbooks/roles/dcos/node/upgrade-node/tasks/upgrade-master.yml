@@ -25,7 +25,7 @@
   changed_when: no
 
 
-- name: Verify mertrict snapshot of mesos master
+- name: Verify mertric snapshot of mesos master
   uri:
     url: "https://{{inventory_hostname}}:5050/metrics/snapshot"
     method: GET
