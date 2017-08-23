@@ -13,7 +13,8 @@ services:
       - { perm: "dcos:mesos:master:reservation:role:dev", action: create, desc: " " }
       - { perm: "dcos:mesos:master:volume:role:dev", action: create, desc: " " }
     options: {
-      image: "cluster-registry.marathon.l4lb.thisdcos.directory:5000/marathon-dcos-ee:1.4",
+      image: "cluster-registry.marathon.l4lb.thisdcos.directory:5000/marathon-dcos-ee",
+      tag: "1.4.7",
       docker_credential: "{{dcos_bootstrap_url}}/docker.tar.gz"
     }
 
