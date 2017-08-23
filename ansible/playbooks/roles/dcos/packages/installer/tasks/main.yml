@@ -4,13 +4,13 @@
   when: pre_tasks is defined 
 
 
-- name: Generates config for {{ item.name }}
+- name: Generates config for {{ service.name }}
   template:
     src: "{{service.package}}-config.json.j2"
     dest: "{{dcos_bootstrap_root_path}}/packages/{{service.name}}-config.json"
 
 
-- name: Deploy {{ item.name }}
+- name: Deploy {{ service.name }}
   command: "dcos package install --options={{dcos_bootstrap_root_path}}/packages/{{service.name}}-config.json {{service.package}} --yes"
 
 
