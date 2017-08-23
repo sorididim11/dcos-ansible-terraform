@@ -10,11 +10,10 @@
     - name: Generate self-signed certificate for registry
       command: >
           openssl req -newkey rsa:4096 -nodes -sha256 
-            -subj '/emailAddress=jong-gun.kim@hpe.com/C=KR/ST=Seoul/L=Seoul/O=Global Security/OU=IT Deparment/CN={{item.name}}.marathon.l4lb.thisdcos.directory'
-            -keyout {{item.name}}.key  -x509 -days 365 -out {{item.name}}.crt
+            -subj '/emailAddress=jong-gun.kim@hpe.com/C=KR/ST=Seoul/L=Seoul/O=Global Security/OU=IT Deparment/CN={{service.name}}.marathon.l4lb.thisdcos.directory'
+            -keyout {{service.name}}.key  -x509 -days 365 -out {{service.name}}.crt
       args:
         chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve"
-      with_items: "{{services}}"
 
     - name: Run web container to distribute keys
       become: yes
@@ -29,14 +28,12 @@
     - name: Insert crts, key to docker cert directory and restart docker engine in each agent
       become: yes
       shell: |
-          mkdir -p /etc/docker/certs.d/{{item[1].name}}.marathon.l4lb.thisdcos.directory:{{item[1].options.internal_port}} 
-          curl -o /etc/docker/certs.d/{{item[1].name}}.marathon.l4lb.thisdcos.directory:{{item[1].options.internal_port}}/ca.crt http://{{groups['dcos_cli'][0]}}:{{dcos_bootstrap_port}}/{{item[1].name}}.crt 
+          mkdir -p /etc/docker/certs.d/{{service.name}}.marathon.l4lb.thisdcos.directory:{{service.options.internal_port}} 
+          curl -o /etc/docker/certs.d/{{service.name}}.marathon.l4lb.thisdcos.directory:{{service.options.internal_port}}/ca.crt http://{{groups['dcos_cli'][0]}}:{{dcos_bootstrap_port}}/{{service.name}}.crt 
           systemctl restart docker.service
-      delegate_to: "{{item[0]}}"
-      with_nested:
-        - "{{ groups['dcos_nodes'] }}"
-        - "{{ services }}"
-  when: item.options.is_secure_registry == True
+      delegate_to: "{{item}}"
+      with_items: "{{ groups['dcos_nodes'] }}"
+  when: service.options.is_secure_registry == True
 
 
 - name: Generate docker conf file, daemon.json for docker cli node 

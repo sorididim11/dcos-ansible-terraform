@@ -37,5 +37,5 @@
   docker_image:
     name: "{{marathon_ee_image}}"
     repository: "{{groups['dcos_slaves_public'][0]}}:15000/marathon-dcos-ee"
-    tag: "{{services[0].options.tag}}"
+    tag: "{{service.options.tag}}"
     push: yes
