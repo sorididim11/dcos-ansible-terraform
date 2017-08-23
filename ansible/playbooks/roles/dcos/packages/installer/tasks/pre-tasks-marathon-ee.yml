@@ -14,6 +14,11 @@
     chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve"
 
 
+- name: Docker logout
+  docker_login:
+    state: absent
+
+
 - name: Run web container for docker credential
   become: yes
   docker_container: 
