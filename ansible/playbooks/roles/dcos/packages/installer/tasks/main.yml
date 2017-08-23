@@ -6,14 +6,12 @@
 
 - name: Generates config for {{ item.name }}
   template:
-    src: "{{item.package}}-config.json.j2"
-    dest: "{{dcos_bootstrap_root_path}}/packages/{{item.name}}-config.json"
-  with_items: "{{services}}"
+    src: "{{service.package}}-config.json.j2"
+    dest: "{{dcos_bootstrap_root_path}}/packages/{{service.name}}-config.json"
 
 
 - name: Deploy {{ item.name }}
-  command: "dcos package install --options={{dcos_bootstrap_root_path}}/packages/{{item.name}}-config.json {{item.package}} --yes"
-  with_items: "{{services}}"
+  command: "dcos package install --options={{dcos_bootstrap_root_path}}/packages/{{service.name}}-config.json {{service.package}} --yes"
 
 
 - name: Do post-tasks for {{post_tasks}}
