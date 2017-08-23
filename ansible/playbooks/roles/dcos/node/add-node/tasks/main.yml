@@ -53,7 +53,7 @@
       systemd: name=dcos-cosmos state=restarted
       changed_when: false
   become: yes
-  tag: apply-proxy
+  tags: apply-proxy
   when: dcos_is_use_proxy == False and node_type == "master" and proxy_env.http_proxy is defined 
 
 
