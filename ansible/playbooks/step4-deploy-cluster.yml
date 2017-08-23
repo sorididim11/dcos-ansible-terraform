@@ -2,6 +2,7 @@
 - name: "Deploy DC/OS masters"
   gather_facts: False
   hosts: dcos_masters
+  serial: 1
   tags: ['install']
   roles:
     - { role: dcos/node/add-node, node_type: master, service_name: dcos-mesos-master } 
