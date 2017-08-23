@@ -27,6 +27,10 @@
     state: absent
 
 
+- name: Restart docker 
+  become: yes
+  systemd: name=docker state=restarted
+
 - name: Run web container for docker credential
   become: yes
   docker_container: 
