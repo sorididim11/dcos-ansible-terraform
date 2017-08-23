@@ -1,11 +1,11 @@
 {
   "service": {
-    "name": "{{item.name}}"
+    "name": "{{service.name}}"
   },
   "storage": {
     "pre_create_database": true,
     "pre_create_database_name": "cadvisor",
-    "host_volume_influxdb": "{{ item.options.host_db_volume_path | default('/tmp') }}"
+    "host_volume_influxdb": "{{ service.options.host_db_volume_path | default('/tmp') }}"
   },
   "networking": {
     "port": 8083,

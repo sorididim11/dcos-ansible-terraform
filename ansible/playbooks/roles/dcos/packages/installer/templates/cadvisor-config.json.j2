@@ -1,12 +1,12 @@
 {
   "service": {
-    "name": "{{item.name}}",
+    "name": "{{service.name}}",
     "instances": {{ (groups['dcos_slaves'] | length) +  (groups['dcos_slaves_public'] | length) }} ,
     "cpus": 0.1,
     "mem": 128
   },
   "networking": {
-    "influxdb_host": "{{item.options.influxdb_name}}.marathon.l4lb.thisdcos.directory",
+    "influxdb_host": "{{service.options.influxdb_name}}.marathon.l4lb.thisdcos.directory",
     "influxdb_port": 8086,
     "external_access": {
       "enable": false,
