@@ -5,7 +5,7 @@
 - name: Install custom marathon
   hosts: dcos_cli[0]
   vars_files: 
-    - pkg-desc/marathon.yml   
+    - pkg-desc/marathon-ee.yml   
   roles:
     - { role: dcos/node/quota, op_type: reserve_resources } 
     - { role: dcos/packages/service-account } 
