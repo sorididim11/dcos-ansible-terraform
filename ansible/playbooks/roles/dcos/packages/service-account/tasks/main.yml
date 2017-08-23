@@ -20,7 +20,7 @@
   with_items: "{{services}}"
 
 
-- name: Create permissions for "{{ item.0.name }}"
+- name: Create permissions for {{ item.0.name }}
   uri:
     url: "{{dcos_cluster_url}}/acs/api/v1/acls/{{item.1.perm}}"
     method: PUT
@@ -35,7 +35,7 @@
     - permissions
 
 
-- name: Assign the permissions to "{{ item.0.name }}"
+- name: Assign the permissions to {{ item.0.name }}
   uri:
     url: "{{dcos_cluster_url}}/acs/api/v1/acls/{{item.1.perm}}/users/{{item.0.name}}/{{item.1.action}}"
     method: PUT
