@@ -7,7 +7,7 @@
 
 - name: Resolve secret name 
   set_fact: 
-    secret_name: "{{services[0].name}}/{{services[0].secret_name | default('secret')"
+    secret_name: "{{ services[0].name}}/{{services[0].secret_name | default('secret') }}"
 
 
 - name: Aquire secrets in secret store
