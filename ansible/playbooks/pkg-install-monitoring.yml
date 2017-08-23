@@ -1,6 +1,6 @@
 --- 
 
-# - include: pkg-install-marathon-lb.yml
+- include: pkg-install-marathon-lb.yml
 
 - name: Install cadvisor
   gather_facts: False
