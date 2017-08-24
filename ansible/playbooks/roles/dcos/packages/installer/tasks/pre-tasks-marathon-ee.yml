@@ -14,7 +14,7 @@
 
 - name: Move file
   become: yes
-  copy: remote_src=True src=docker.targ.gz dest="{{ dcos_bootstrap_root_path }}/genconf/serve"
+  copy: remote_src=True src=docker.tar.gz dest="{{ dcos_bootstrap_root_path }}/genconf/serve"
 
 
 - name: Docker pull Marathon-ee image 
