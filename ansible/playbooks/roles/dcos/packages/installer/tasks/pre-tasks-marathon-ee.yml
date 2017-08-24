@@ -9,9 +9,12 @@
 
 - name: Archive docker credential
   become: yes
-  command: tar cvzf docker.tar.gz ~/.docker  
-  args:
-    chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve"
+  command: tar cvzf docker.tar.gz .docker  
+
+
+- name: Move file
+  become: yes
+  copy: remote_src=True src=docker.targ.gz dest="{{ dcos_bootstrap_root_path }}/genconf/serve"
 
 
 - name: Docker pull Marathon-ee image 
