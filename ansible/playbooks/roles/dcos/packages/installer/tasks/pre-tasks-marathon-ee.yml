@@ -44,7 +44,7 @@
 
 - name: Tag and push Marathon-ee to cluster registery
   become: yes
-  command: |
+  shell: |
              docker tag {{marathon_ee_image}} {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:15000/{{service.options.image}}
              docker push {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:15000/{{service.options.image}}
   # docker_image:
