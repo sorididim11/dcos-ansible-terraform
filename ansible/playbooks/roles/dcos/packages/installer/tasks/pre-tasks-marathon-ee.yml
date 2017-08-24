@@ -49,3 +49,6 @@
     repository: "{{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:15000/{{service.options.image}}"
     use_tls: no
     push: yes
+    state: present
+    force: yes
+    

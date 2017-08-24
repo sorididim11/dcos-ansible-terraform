@@ -26,16 +26,18 @@
   when: is_mesos_installed.stat.exists == False
 
 
-- block:
-    - name: Wait for mesos master running
-      shell: "systemctl status dcos-mesos-master"
-      register: result
-      until: result.stdout.find("running") != -1
-      retries: 1000
-      delay: 30 # unit, second
-      tags: upgrade-master
-      changed_when: no
+- name: Wait for mesos master running
+  shell: "systemctl status dcos-mesos-master"
+  register: result
+  until: result.stdout.find("running") != -1
+  retries: 1000
+  delay: 30 # unit, second
+  tags: upgrade-master
+  changed_when: no
+  when: node_type == "master"
 
+
+- block:
     - name: Configure DC/OS for Proxy
       lineinfile: 
         dest: /opt/mesosphere/etc/proxy.env
