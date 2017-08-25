@@ -14,7 +14,7 @@
 
 - name: Put docker credential to DC/OS root directory for marathon-ee
   become: yes
-  copy: remote_src=True src=docker.tar.gz dest="{{ dcos_bootstrap_root_path }}/genconf/serve" owner="{{ansible_user_id}}" group={{ansible_user_id}}
+  copy: remote_src=True src=~/docker.tar.gz dest="{{ dcos_bootstrap_root_path }}/genconf/serve" owner="{{ansible_user_id}}" group={{ansible_user_id}}
 
 
 - name: Docker pull Marathon-ee image 

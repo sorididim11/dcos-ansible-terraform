@@ -1,4 +1,6 @@
 # Features
+dcos config set marathon.url
+  
 * Support vagrant, terraform for openstack
 * Install DC/OS cluster based advanced custom installation of DC/OS which is upgradable
   - Install/configure prerequisites of DC/OS including docker
