@@ -7,7 +7,18 @@ service:
       make_external: true
       internal_port: 5000
       external_port: 15000
-      host_volume_path: '/tmp'  # docker registry volume path
-      images: 
+      host_volume_path: /tmp  # docker registry volume path
+    proxy:
+      use_proxy: True
+      remote_url: https://registry-1.docker.io
+      username: sorididim11
+      password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          37373831343531363831353634656337643436393461616563653862656431383933623631386632
+          6537323636353137353465316166376637336432396433300a306261656336373862626134396530
+          34306339613835303730333639353166396535616466363332313330633634343662373030616335
+          3662663939333662380a386565333262346631616564313531383433306264396565663234343132
+          6138
+    images: 
         - marathon: "repo/hello:1.0"
     

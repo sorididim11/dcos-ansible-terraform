@@ -1,7 +1,15 @@
 
 {
   "service": {
-    "name": "{{service.name}}"
+    "name": "{{service.name}}",
+    "proxy": {
+      "enable": {{service.proxy.use_proxy | default(false)  | lower }},
+  {% if service.proxy.use_proxy == 'True' %}
+      "remote_url": "{{service.proxy.remote_url | default('https://registry-1.docker.io') }}",
+      "username": "{{service.proxy.username}}",
+      "password": "{{service.proxy.password}}"
+  {% endif %}
+    }
   },
 
   "security": {

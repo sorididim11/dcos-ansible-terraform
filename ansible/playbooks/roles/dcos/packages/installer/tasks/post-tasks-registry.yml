@@ -24,7 +24,7 @@
   docker_image: 
     name: "{{item}}" 
     pull: True
-  with_items: "{{service.options.images}}"
+  with_items: "{{service.images}}"
 
 
 - name: Docker logout
@@ -54,7 +54,7 @@
   shell: |
           docker tag {{marathon_ee_image}} {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.options.external_port}}/{{item}}
           docker push {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.options.external_port}}/{{item}}
-  with_items: "{{service.options.images}}"
+  with_items: "{{service.images}}"
   # docker_image:
   #   name: "{{marathon_ee_image}}"
   #   repository: "{{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:15000/{{service.options.image}}"
