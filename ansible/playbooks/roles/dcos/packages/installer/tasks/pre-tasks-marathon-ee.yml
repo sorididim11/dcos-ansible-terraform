@@ -12,9 +12,14 @@
   command: tar cvzf docker.tar.gz .docker  
 
 
-- name: Move file
+- name: Put docker credential to DC/OS root directory for marathon-ee
   become: yes
   copy: remote_src=True src=docker.tar.gz dest="{{ dcos_bootstrap_root_path }}/genconf/serve"
+
+- name: Distribute docker credential
+  command: "curl -O http://{{dcos_bootstrap_url}}/docker.tar.gz"
+  delegate_to: "{{item}}"
+  with_items: "{{groups['dcos_nodes']}}"
 
 
 - name: Docker pull Marathon-ee image 
@@ -34,6 +39,7 @@
   become: yes
   systemd: name=docker state=restarted
 
+
 - name: Run web container for docker credential
   become: yes
   docker_container: 
@@ -48,8 +54,8 @@
 - name: Tag and push Marathon-ee to cluster registery
   become: yes
   shell: |
-             docker tag {{marathon_ee_image}} {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:15000/{{service.options.image}}
-             docker push {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:15000/{{service.options.image}}
+          docker tag {{marathon_ee_image}} {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:15000/{{service.options.image}}
+          docker push {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:15000/{{service.options.image}}
   # docker_image:
   #   name: "{{marathon_ee_image}}"
   #   repository: "{{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:15000/{{service.options.image}}"
