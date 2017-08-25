@@ -23,5 +23,13 @@
       "external_access_port": {{service.options.external_port | default(15000)}}
     },
     "port": {{ service.options.internal_port | default(5000) }}
+  },
+
+  "env": {
+    "REGISTRY_AUTH": "token", 
+    "REGISTRY_AUTH_TOKEN_REALM": "https://registry.example.com:5001/auth",
+    "REGISTRY_AUTH_TOKEN_SERVICE": "Docker registry",
+    "REGISTRY_AUTH_TOKEN_ISSUER": "Auth Service",
+    # "REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE": "/ssl/server.pem"
   }
 }
