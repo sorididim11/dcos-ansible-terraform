@@ -16,11 +16,6 @@
   become: yes
   copy: remote_src=True src=docker.tar.gz dest="{{ dcos_bootstrap_root_path }}/genconf/serve" owner="{{ansible_user_id}}" group={{ansible_user_id}}
 
-- name: Distribute docker credential
-  command: "curl -O http://{{dcos_bootstrap_url}}/docker.tar.gz"
-  delegate_to: "{{item}}"
-  with_items: "{{groups['dcos_nodes']}}"
-
 
 - name: Docker pull Marathon-ee image 
   become: yes
