@@ -9,7 +9,7 @@ service:
       external_port: 15000
       host_volume_path: /tmp  # docker registry volume path
     auth:
-      name: reg-auth
+      name: auth-server
       internal_port: 5001
       external_port: 15001
       is_haproxy: False
