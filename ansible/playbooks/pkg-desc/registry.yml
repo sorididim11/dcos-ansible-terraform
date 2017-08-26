@@ -28,7 +28,7 @@ service:
           3662323162663964323836633831383431666133653937643239
         email: sorididim11@gmail.com
       dest_repo: 
-        url: "{{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.options.external_port}}"
+        url: "172.16.1.51:15000"
         id: admin
         pwd: badmin
       images: 
