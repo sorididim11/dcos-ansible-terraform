@@ -16,7 +16,7 @@ service:
       accepted_role: slave_public
     registry: 
       src_repo:  
-        url: https://index.docker.io/v1/
+        url: "https://index.docker.io/v1/"
         id: sorididim11
         pwd: !vault |
           $ANSIBLE_VAULT;1.1;AES256
