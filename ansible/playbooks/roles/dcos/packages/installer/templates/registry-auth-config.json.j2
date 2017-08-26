@@ -75,7 +75,7 @@
     },
     "env": {
       "REGISTRY_AUTH": "token", 
-      "REGISTRY_AUTH_TOKEN_REALM": "https://{{service.auth.name}}.marathon.l4lb.thisdcos.directory:{{service.auth.internal_port}}/auth",
+      "REGISTRY_AUTH_TOKEN_REALM": "https://{{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.auth.internal_port}}/auth",
       "REGISTRY_AUTH_TOKEN_SERVICE": "Docker registry",
       "REGISTRY_AUTH_TOKEN_ISSUER": "Auth Service",
       "REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE": "/mnt/mesos/sandbox/{{service.auth.name}}.pem",
