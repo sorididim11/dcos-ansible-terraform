@@ -1,0 +1,49 @@
+{
+    "id": "/{{service.auth.name}}",
+    "instances": 1,
+    "cpus": 0.2,
+    "mem": 256,
+    "disk": 0,
+    "fetch": [
+      {
+        "uri": "{{dcos_bootstrap_url}}/auth_config.yml"
+      },
+      {
+        "uri": "{{dcos_bootstrap_url}}/{{service.auth.name}}.pem"
+      },
+      {
+        "uri": "{{dcos_bootstrap_url}}/{{service.auth.name}}.key"
+      }
+    ],
+    "args": ["/mnt/mesos/sandbox/auth_config.yml"],
+    "container": {
+      "type": "DOCKER",
+      "docker": {
+        "image": "cesanta/docker_auth",
+        "network": "BRIDGE",
+        "portMappings": [
+          {
+            "containerPort": {{service.auth.internal_port}},
+    {% if service.auth.is_haproxy == True %}
+            "servicePort": {{service.auth.external_port}},
+            "hostPort": 0,
+    {% else %}
+             "hostPort": {{service.auth.external_port}},
+    {% endif %}
+            "protocol": "tcp",
+            "name": "{{service.auth.name}}",
+            "labels": {
+              "VIP_0": "/{{service.auth.name}}:{{service.auth.internal_port}}"
+            }
+          }
+        ]
+      }
+    },
+{% if service.auth.is_haproxy == True %}
+    "labels": {
+      "HAPROXY_GROUP": "external"
+    }
+{% else %}
+    "acceptedResourceRoles": ["{{service.auth.accepted_role}}"]
+{% endif %}
+  }
