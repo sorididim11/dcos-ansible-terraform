@@ -21,11 +21,11 @@
     dest: "{{item.dest}}"
   with_items:
     - { src: auth_config.yml.j2, dest: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth_config.yml" }
-    - { src: registry-auth-config.json.j2, dest: "{{ dcos_bootstrap_root_path }}/packages/{{service.auth.name}}-config.yml" }
+    - { src: registry-auth-config.json.j2, dest: "{{ dcos_bootstrap_root_path }}/packages/{{service.auth.name}}-config.json" }
 
 
 - name: Install Auth server 
-  command: "dcos marathon install {{ dcos_bootstrap_root_path }}/packages/{{service.auth.name}}-config.yml"
+  command: "dcos marathon app add {{ dcos_bootstrap_root_path }}/packages/{{service.auth.name}}-config.json"
 
 
 - name: Generate docker conf file, daemon.json for docker cli node 
