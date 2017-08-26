@@ -2,7 +2,6 @@
 - name: Login into Source image registry  
   become: yes
   docker_login:
-    registry: "{{service.repository.src_repo.url}}"
     username: "{{service.repository.src_repo.id}}"
     password: "{{service.repository.src_repo.pwd}}"
     email: "{{service.repository.src_repo.email}}"
