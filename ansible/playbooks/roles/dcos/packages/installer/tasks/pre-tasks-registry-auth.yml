@@ -21,7 +21,7 @@
     dest: "{{item.dest}}"
   with_items:
     - { src: auth_config.yml.j2, dest: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth_config.yml" }
-    - { src: registry-auth-config.json.j2, dest: "{{ dcos_bootstrap_root_path }}/packages/{{service.auth.name}}-config.json" }
+    - { src: auth-config.json.j2, dest: "{{ dcos_bootstrap_root_path }}/packages/{{service.auth.name}}-config.json" }
 
 
 - name: Install Auth server 
@@ -51,15 +51,6 @@
         ports: "{{dcos_bootstrap_port}}:80"
         volumes: "{{ dcos_bootstrap_root_path }}/genconf/serve:/usr/share/nginx/html:ro"
       changed_when: False
-
-    - name: Insert crts, key to docker cert directory and restart docker engine in each agent
-      become: yes
-      shell: |
-          mkdir -p /etc/docker/certs.d/{{service.name}}.marathon.l4lb.thisdcos.directory:{{service.options.internal_port}} 
-          curl -o /etc/docker/certs.d/{{service.name}}.marathon.l4lb.thisdcos.directory:{{service.options.internal_port}}/ca.crt http://{{groups['dcos_cli'][0]}}:{{dcos_bootstrap_port}}/{{service.name}}.crt 
-          systemctl restart docker.service
-      delegate_to: "{{item}}"
-      with_items: "{{ groups['dcos_nodes'] }}"
   when: service.options.is_secure_registry == True
 
 

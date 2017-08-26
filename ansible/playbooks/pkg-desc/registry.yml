@@ -1,7 +1,7 @@
 ---
 service:
     name: cluster-registry
-    package: registry
+    package: registry-auth # registry(no auth)  or registry-auth
     options: 
       is_secure_registry: true
       make_external: true
@@ -12,7 +12,7 @@ service:
         - marathon: "repo/hello:1.0"
 
     auth:
-      name: registry-auth
+      name: reg-auth
       internal_port: 5001
       external_port: 15001
       is_haproxy: False
