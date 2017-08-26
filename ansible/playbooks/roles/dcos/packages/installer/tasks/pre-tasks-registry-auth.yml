@@ -5,10 +5,10 @@
     path: "{{ dcos_bootstrap_root_path }}/genconf/serve"
     state: directory
 
-
+ 
 - name: Generate self-signed certificate for registry
   command: >
-          openssl req -newkey rsa:4096 -nodes -sha256 
+          openssl req -newkey rsa:2048 -nodes -sha256 
             -subj '/emailAddress=jong-gun.kim@hpe.com/C=KR/ST=Seoul/L=Seoul/O=Global Security/OU=IT Deparment/CN={{service.name}}.marathon.l4lb.thisdcos.directory'
             -keyout {{service.auth.name}}.key  -x509 -days 365 -out {{service.auth.name}}.pem
   args:
