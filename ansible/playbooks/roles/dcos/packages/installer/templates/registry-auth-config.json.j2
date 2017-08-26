@@ -10,7 +10,7 @@
     "maxLaunchDelaySeconds": 3600,
     "fetch": [
       {
-        "uri": "{{dcos_bootstrap_url}}/{{service.auth.name}}.pem"
+        "uri": "{{dcos_bootstrap_url}}/server.pem"
       }
     ],
     "container": {
@@ -78,7 +78,7 @@
       "REGISTRY_AUTH_TOKEN_REALM": "http://{{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.auth.external_port}}/auth",
       "REGISTRY_AUTH_TOKEN_SERVICE": "Docker registry",
       "REGISTRY_AUTH_TOKEN_ISSUER": "Auth Service",
-      "REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE": "/mnt/mesos/sandbox/{{service.auth.name}}.pem",
+      "REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE": "/mnt/mesos/sandbox/server.pem",
       "REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY": "/var/lib/registry"
     }
   }
