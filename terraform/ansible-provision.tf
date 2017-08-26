@@ -59,7 +59,7 @@ resource "null_resource" "provision" {
   }
   
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook ../ansible/playbooks/pkg-install-docker-registry.yml"
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook ../ansible/playbooks/pkg-install-docker-registry-auth.yml"
   }
   
   provisioner "local-exec" {
