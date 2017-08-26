@@ -1,3 +1,3 @@
 {
-    "insecure-registries": ["{{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{servie.options.external_port}}"]
+    "insecure-registries": ["{{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.options.external_port}}"]
 }

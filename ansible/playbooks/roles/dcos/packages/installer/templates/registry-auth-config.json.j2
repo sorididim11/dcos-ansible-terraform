@@ -9,10 +9,10 @@
         "uri": "{{dcos_bootstrap_url}}/auth_config.yml"
       },
       {
-        "uri": "{{dcos_bootstrap_url}}/{{service.name}}.pem"
+        "uri": "{{dcos_bootstrap_url}}/{{service.auth.name}}.pem"
       },
       {
-        "uri": "{{dcos_bootstrap_url}}/{{service.name}}.key"
+        "uri": "{{dcos_bootstrap_url}}/{{service.auth.name}}.key"
       }
     ],
     "args": ["/mnt/mesos/sandbox/auth_config.yml"],
