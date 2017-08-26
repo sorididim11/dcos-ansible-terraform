@@ -9,7 +9,7 @@
     - pkg-desc/monitoring.yml
   tags: ['pkg']
   roles:
-    - { role: dcos/packages/installer, service: "{{services[0]}}" }
-    - { role: dcos/packages/installer, service: "{{services[1]}}" }
-    - { role: dcos/packages/installer, service: "{{services[2]}}" }
+    - { role: dcos/packages/installer, service: "{{services['cadvisor']}}" }
+    - { role: dcos/packages/installer, service: "{{services['influxdb']}}" }
+    - { role: dcos/packages/installer, service: "{{services['grafana']}}" }
   environment: "{{ proxy_env }}"

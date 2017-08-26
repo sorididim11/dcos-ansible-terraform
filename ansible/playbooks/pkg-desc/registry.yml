@@ -8,8 +8,13 @@ service:
       internal_port: 5000
       external_port: 15000
       host_volume_path: /tmp  # docker registry volume path
-    proxy:
-      use_proxy: false
     images: 
         - marathon: "repo/hello:1.0"
+
+    auth:
+      name: registry-auth
+      internal_port: 5001
+      external_port: 15001
+      is_haproxy: False
+      accepted_role: slave_public
     
