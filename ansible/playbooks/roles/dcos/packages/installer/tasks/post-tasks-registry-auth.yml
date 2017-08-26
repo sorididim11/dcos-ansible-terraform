@@ -6,6 +6,7 @@
     username: "{{service.repository.src_repo.id}}"
     password: "{{service.repository.src_repo.pwd}}"
     email: "{{service.repository.src_repo.email}}"
+    reauthorize: yes
 
 
 - name: Docker pull images from the source registry
