@@ -1,0 +1,9 @@
+--- 
+- name: "Install docker private registry with auth"
+  gather_facts: False
+  hosts: dcos_cli[0]
+  vars_files: 
+    - pkg-desc/registry.yml
+  roles:
+    - { role: dcos/packages/installer, pre_tasks: registry-auth, custom_type: True}
+  environment: "{{ proxy_env }}"
