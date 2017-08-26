@@ -1,0 +1,65 @@
+---
+- name: Login into Source image registry  
+  become: yes
+  docker_login:
+    registry: "{{service.registry.src_repo.url}}"
+    username: "{{service.registry.src_repo.id}}"
+    password: "{{service.registry.src_repo.pwd}}"
+    email: "{{service.registry.src_repo.email}}"
+
+
+- name: Docker pull images from the source registry
+  become: yes
+  docker_image: 
+    name: "{{item}}" 
+    pull: True
+  with_items: "{{service.registry.images.pull}}"
+
+
+- name: Docker logout
+  become: yes
+  docker_login:
+    state: absent
+
+
+- name: Log into target registry and force re-authorization
+  docker_login:
+    registry: "{{service.registry.dest_repo.url}}"
+    username: "{{service.registry.dest_repo.id}}"
+    password: "{{service.registry.dest_repo.pwd}}"
+    reauthorize: yes
+
+
+- name: Tag and push Marathon-ee to cluster registery
+  become: yes
+  shell: |
+          docker tag {{item.pull}} {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.options.external_port}}/{{item.push}}
+          docker push /{{item.push}}
+  with_items: "{{service.registry.images}}"
+  
+
+- name: Archive traget registry credential
+  become: yes
+  command: tar cvzf docker.tar.gz .docker  
+  args:
+    chdir: "{{ansible_user_dir}}"
+
+
+- name: Put docker credential to DC/OS root directory
+  become: yes
+  copy: remote_src=True src=docker.tar.gz dest="{{ dcos_bootstrap_root_path }}/genconf/serve" owner="{{ansible_user_id}}" group={{ansible_user_id}}
+
+
+- name: Run web container for docker credential
+  become: yes
+  docker_container: 
+    name: boot-nginx
+    image: nginx
+    state: started
+    ports: "{{dcos_bootstrap_port}}:80"
+    volumes: "{{ dcos_bootstrap_root_path }}/genconf/serve:/usr/share/nginx/html:ro"
+  changed_when: False
+
+
+
+    
