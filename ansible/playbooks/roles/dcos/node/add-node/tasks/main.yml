@@ -37,27 +37,27 @@
   when: node_type == "master"
 
 
-- block:
-    - name: Configure DC/OS for Proxy
-      lineinfile: 
-        dest: /opt/mesosphere/etc/proxy.env
-        regexp: "{{item.regex}}"
-        line: "{{item.replace_with}}"
-      with_items:
-        - regex: ^http_proxy=
-          replace_with: "http_proxy={{proxy_env.http_proxy}}"
-        - regex: ^https_proxy=
-          replace_with: "https_proxy={{proxy_env.http_proxy}}"
-        - regex: ^no_proxy=
-          replace_with: "no_proxy={{proxy_env.no_proxy}}"
-
-    - name: Restat dcos-cosmos
-      systemd: name=dcos-cosmos state=restarted
-      changed_when: false
+- name: Configure DC/OS for Proxy
   become: yes
-  tags: apply-proxy
-  when: dcos_is_use_proxy == False and proxy_env.http_proxy is defined 
+  lineinfile: 
+    dest: /opt/mesosphere/etc/proxy.env
+    regexp: "{{item.regex}}"
+    line: "{{item.replace_with}}"
+  with_items:
+    - regex: ^http_proxy=
+      replace_with: "http_proxy={{proxy_env.http_proxy}}"
+    - regex: ^https_proxy=
+      replace_with: "https_proxy={{proxy_env.http_proxy}}"
+    - regex: ^no_proxy=
+      replace_with: "no_proxy={{proxy_env.no_proxy}}"
 
+
+- name: Restat dcos-cosmos
+  become: yes
+  systemd: name=dcos-cosmos state=restarted
+  when: dcos_is_use_proxy == False and node_type == "master" and proxy_env.http_proxy is defined 
+  changed_when: false  
+  tags: apply-proxy
 
 
   
