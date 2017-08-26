@@ -18,7 +18,7 @@
 - name: Generate auth config file 
   template:
     src: "{{item.src}}"
-    dest: "/{{item.dest}}"
+    dest: "{{item.dest}}"
   with_items:
     - { src: auth_config.yml.j2, dest: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth_config.yml" }
     - { src: registry-auth-config.json.j2, dest: "{{ dcos_bootstrap_root_path }}/packages/{{service.auth.name}}-config.yml" }

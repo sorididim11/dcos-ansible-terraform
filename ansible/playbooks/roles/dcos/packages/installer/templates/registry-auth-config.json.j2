@@ -31,7 +31,7 @@
              "hostPort": {{service.auth.external_port}},
     {% endif %}
             "protocol": "tcp",
-            "name": "{{{{service.auth.name}}}}",
+            "name": "{{service.auth.name}}",
             "labels": {
               "VIP_0": "/{{service.auth.name}}:{{service.auth.internal_port}}"
             }
