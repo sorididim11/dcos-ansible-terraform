@@ -2,10 +2,10 @@
 - name: Login into Source image registry  
   become: yes
   docker_login:
-    registry: "{{service.registry.src_repo.url}}"
-    username: "{{service.registry.src_repo.id}}"
-    password: "{{service.registry.src_repo.pwd}}"
-    email: "{{service.registry.src_repo.email}}"
+    registry: "{{service.repository.src_repo.url}}"
+    username: "{{service.repository.src_repo.id}}"
+    password: "{{service.repository.src_repo.pwd}}"
+    email: "{{service.repository.src_repo.email}}"
 
 
 - name: Docker pull images from the source registry
@@ -13,7 +13,7 @@
   docker_image: 
     name: "{{item}}" 
     pull: True
-  with_items: "{{service.registry.images.pull}}"
+  with_items: "{{service.repository.images.pull}}"
 
 
 - name: Docker logout
@@ -24,9 +24,9 @@
 
 - name: Log into target registry and force re-authorization
   docker_login:
-    registry: "{{service.registry.dest_repo.url}}"
-    username: "{{service.registry.dest_repo.id}}"
-    password: "{{service.registry.dest_repo.pwd}}"
+    registry: "{{service.repository.dest_repo.url}}"
+    username: "{{service.repository.dest_repo.id}}"
+    password: "{{service.repository.dest_repo.pwd}}"
     reauthorize: yes
 
 
@@ -35,8 +35,8 @@
   shell: |
           docker tag {{item.pull}} {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.options.external_port}}/{{item.push}}
           docker push /{{item.push}}
-  with_items: "{{service.registry.images}}"
-  
+  with_items: "{{service.repository.images}}"
+
 
 - name: Archive traget registry credential
   become: yes

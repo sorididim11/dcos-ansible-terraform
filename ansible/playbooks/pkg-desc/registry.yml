@@ -14,7 +14,7 @@ service:
       external_port: 15001
       is_haproxy: False
       accepted_role: slave_public
-    registry: 
+    repository: 
       src_repo:  
         url: "https://index.docker.io/v1/"
         id: sorididim11
