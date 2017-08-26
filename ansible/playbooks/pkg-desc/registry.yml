@@ -32,4 +32,4 @@ service:
         id: admin
         pwd: badmin
       images: 
-        - { pull: sorididim11/marathon-dcos-ee:v1.4.7_1.9.8, push: marathon-dcos-ee:v1.4.7 }
+        - { pull: "sorididim11/marathon-dcos-ee:v1.4.7_1.9.8", push: "marathon-dcos-ee:v1.4.7" }
