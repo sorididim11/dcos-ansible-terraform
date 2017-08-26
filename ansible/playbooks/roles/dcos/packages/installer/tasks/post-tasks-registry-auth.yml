@@ -11,9 +11,9 @@
 - name: Docker pull images from the source registry
   become: yes
   docker_image: 
-    name: "{{item}}" 
+    name: "{{item.pull}}" 
     pull: True
-  with_items: "{{service.repository.images.pull}}"
+  with_items: "{{service.repository.images}}"
   tags: registry-post
 
 
