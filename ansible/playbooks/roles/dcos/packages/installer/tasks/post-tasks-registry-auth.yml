@@ -31,7 +31,6 @@
     registry: "{{service.repository.dest_repo.url}}"
     username: "{{service.repository.dest_repo.id}}"
     password: "{{service.repository.dest_repo.pwd}}"
-    reauthorize: yes
   tags: registry-post
 
 
