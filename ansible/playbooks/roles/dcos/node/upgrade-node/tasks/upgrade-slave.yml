@@ -29,7 +29,7 @@
     force: no #if yes, if it keeps downloading
 
 
-- name: Upgrade {{node_typ}}
+- name: Upgrade {{node_type}}
   become: yes
   command: "bash dcos_node_upgrade.sh"
   args:

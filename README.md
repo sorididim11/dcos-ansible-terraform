@@ -24,7 +24,7 @@ dcos config set marathon.url
 * OS: Centos above 7.2 (DC/OS requirement)
 * ansible:  2.3.1
 * vagrant: 1.9.7
-* terraform 
+* terraform: 0.9.3
 
 
 ## Getting started
