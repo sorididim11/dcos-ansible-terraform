@@ -18,13 +18,6 @@
   tags: registry-post
 
 
-- name: Docker logout
-  become: yes
-  docker_login:
-    state: absent
-  tags: registry-post
-
-
 - name: Log into target registry and force re-authorization
   become: yes
   docker_login:
