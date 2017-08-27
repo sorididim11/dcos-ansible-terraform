@@ -38,7 +38,7 @@
 
 
 - name: Configure DC/OS for Proxy
-  tags: update-proxy
+  tags: apply-proxy
   become: yes
   lineinfile: 
     dest: /opt/mesosphere/etc/proxy.env
