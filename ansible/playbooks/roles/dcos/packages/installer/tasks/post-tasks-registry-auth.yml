@@ -43,7 +43,7 @@
   archive:
     path: /root/.docker
     dest: "{{ dcos_bootstrap_root_path }}/genconf/serve/docker.tar.gz"
-    format: zip
+    format: tar.gz
   tags: registry-post
 
 
