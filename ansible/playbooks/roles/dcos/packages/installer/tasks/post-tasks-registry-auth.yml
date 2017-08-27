@@ -37,9 +37,10 @@
   tags: registry-post
          # docker tag {{item.pull}} {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.options.external_port}}/{{item.push}}
 
-- debug:
+- name: home dir ...
+  debug:
     become: yes
-    msg: "{{ansible_user_dir}}"
+    msg: "become home dir {{ansible_user_dir}}"
 
 
 - name: Archive traget registry credential
