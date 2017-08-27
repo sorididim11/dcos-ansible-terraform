@@ -41,7 +41,7 @@
 - name: Archive traget registry credential
   become: yes
   archive:
-    path: /root/.docker
+    path: ~/.docker
     dest: "{{ dcos_bootstrap_root_path }}/genconf/serve/docker.tar.gz"
     format: tar
   tags: registry-post
