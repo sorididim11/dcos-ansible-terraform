@@ -41,6 +41,7 @@
   debug:
     become: yes
     msg: "become home dir {{ansible_user_dir}}"
+  tags: registry-post
 
 
 - name: Archive traget registry credential
