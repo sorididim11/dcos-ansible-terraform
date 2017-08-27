@@ -37,16 +37,10 @@
   tags: registry-post
          # docker tag {{item.pull}} {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.options.external_port}}/{{item.push}}
 
-- name: home dir ...
-  debug:
-    become: yes
-    msg: "become home dir {{ansible_user_dir}}"
-  tags: registry-post
-
 
 - name: Archive traget registry credential
   become: yes
-  command: tar cvzf docker.tar.gz .docker
+  command: sudo tar cvzf docker.tar.gz .docker
   tags: registry-post
 
 
