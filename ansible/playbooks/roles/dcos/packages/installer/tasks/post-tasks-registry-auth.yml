@@ -31,6 +31,7 @@
     registry: "{{service.repository.dest_repo.url}}"
     username: "{{service.repository.dest_repo.id}}"
     password: "{{service.repository.dest_repo.pwd}}"
+    reauthorize: yes
   tags: registry-post
 
 
@@ -38,7 +39,7 @@
   become: yes
   shell: |
           docker tag {{item.pull}} {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.options.external_port}}/{{item.push}}
-          docker push /{{item.push}}
+          docker push {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.options.external_port}}/{{item.push}}
   with_items: "{{service.repository.images}}"
   tags: registry-post
 
