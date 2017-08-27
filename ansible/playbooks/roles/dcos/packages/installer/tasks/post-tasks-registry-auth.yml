@@ -47,9 +47,7 @@
 
 - name: Archive traget registry credential
   become: yes
-  command: tar cvzf docker.tar.gz .docker  
-  args:
-    chdir: "{{ansible_user_dir}}"
+  command: tar cvzf docker.tar.gz .docker
   tags: registry-post
 
 
