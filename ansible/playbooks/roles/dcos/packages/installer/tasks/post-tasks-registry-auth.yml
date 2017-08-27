@@ -40,13 +40,9 @@
 
 - name: Archive traget registry credential
   become: yes
-  command: sudo tar cvzf docker.tar.gz .docker
-  tags: registry-post
-
-
-- name: Put docker credential to DC/OS root directory
-  become: yes
-  copy: remote_src=True src=docker.tar.gz dest="{{ dcos_bootstrap_root_path }}/genconf/serve" owner="{{ansible_user_id}}" group={{ansible_user_id}}
+  archive:
+    path: /root/.docker
+    dest: "{{ dcos_bootstrap_root_path }}/genconf/serve/docker.tar.gz"
   tags: registry-post
 
 
