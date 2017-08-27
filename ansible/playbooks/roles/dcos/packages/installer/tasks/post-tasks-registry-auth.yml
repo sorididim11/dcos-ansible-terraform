@@ -38,10 +38,11 @@
 - name: Tag and push Marathon-ee to cluster registery
   become: yes
   shell: |
-          docker tag {{item.pull}} {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.options.external_port}}/{{item.push}}
-          docker push {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.options.external_port}}/{{item.push}}
+          docker tag {{item.pull}} {{service.repository.dest_repo.url}}/{{item.push}}
+          docker push {{service.repository.dest_repo.url}}/{{item.push}}
   with_items: "{{service.repository.images}}"
   tags: registry-post
+         # docker tag {{item.pull}} {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.options.external_port}}/{{item.push}}
 
 
 - name: Archive traget registry credential
