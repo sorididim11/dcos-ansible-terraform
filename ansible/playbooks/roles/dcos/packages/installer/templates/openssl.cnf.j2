@@ -6,6 +6,7 @@ distinguished_name = req_distinguished_name
 [req_distinguished_name]
 
 [ v3_req ]
+extendedKeyUsage = serverAuth
 subjectAltName=IP:{{registry_ip}}
 basicConstraints = CA:FALSE
 keyUsage = digitalSignature, keyEncipherment
