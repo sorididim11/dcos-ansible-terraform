@@ -1,14 +1,11 @@
 
 [req]
-req_extensions = v3_ca
 distinguished_name = req_distinguished_name
-copy_extensions = copy
+x509_extensions = v3_req
 
 [req_distinguished_name]
 
-[ v3_ca ]
+[ v3_req ]
 subjectAltName=IP:{{registry_ip}}
 keyUsage = digitalSignature, keyEncipherment
 extendedKeyUsage = serverAuth
-copy_extensions = copy
-
