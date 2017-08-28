@@ -21,7 +21,7 @@
 - name: Log into target registry and force re-authorization
   become: yes
   docker_login:
-    registry: "{{service.repository.dest_repo.url}}"
+    registry: "{{registry_ip}}"
     username: "{{service.repository.dest_repo.id}}"
     password: "{{service.repository.dest_repo.pwd}}"
     reauthorize: yes
