@@ -6,8 +6,7 @@
     state: directory
 
 
-- name: Registry 
-  set_fact: 
+- set_fact: 
     registry_ip: "{{hostvars[groups['dcos_bootstrap'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}"
 
 - template: 
