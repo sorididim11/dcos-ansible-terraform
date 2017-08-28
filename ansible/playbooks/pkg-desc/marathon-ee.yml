@@ -34,6 +34,6 @@ services:
       - { perm: "dcos:mesos:master:volume:role:svc", action: create, desc: " " }
     options: {
       repo: "cluster-registry.marathon.l4lb.thisdcos.directory:5000",
-      image: "marathon-dcos-ee:v1.4.7_1.9.8",
+      image: "marathon-dcos-ee:v1.4.7",
       docker_credential: "http://{{dcos_bootstrap_url}}/auth/docker.tar.gz"
     }
