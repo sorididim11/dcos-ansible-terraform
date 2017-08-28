@@ -24,47 +24,6 @@
     # creates: "{{service.name}}.crt"
     # -config {{ dcos_bootstrap_root_path }}/genconf/serve/auth/extfile.cnf -extensions 'v3_req'
 
-- name: Generate auth config file 
-  template:
-    src: auth_config.yml.j2
-    dest: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth/auth_config.yml" 
-
-
-- name: Run cesanta, auth server
-  become: yes
-  docker_container: 
-    name: cesanta-auth
-    image: cesanta/docker_auth
-    restart_policy: always
-    state: started
-    ports: "{{service.auth.internal_port}}:{{service.auth.internal_port}}"
-    volumes: 
-      - "{{ dcos_bootstrap_root_path }}/genconf/serve/auth:/config"
-
-
-- name: Run docker privat registry
-  become: yes
-  docker_container: 
-    name: cesanta-registry
-    image: registry:2.5.1
-    restart_policy: always
-    state: started
-    ports: "{{service.options.internal_port}}:{{service.options.internal_port}}"
-    volumes: 
-      - "{{dcos_bootstrap_root_path}}/genconf/serve/auth:/ssl"
-      - "{{service.options.host_volume_path}}:/var/lib/registry"
-    env:
-      REGISTRY_HTTP_TLS_KEY: "/ssl/{{service.name}}.key"
-      REGISTRY_HTTP_TLS_CERTIFICATE: "/ssl/{{service.name}}.crt"
-      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /var/lib/registry
-      REGISTRY_AUTH: token
-      REGISTRY_AUTH_TOKEN_REALM: "https://{{registry_ip}}:{{service.auth.internal_port}}/auth"
-      REGISTRY_AUTH_TOKEN_SERVICE: "Docker registry" 
-      REGISTRY_AUTH_TOKEN_ISSUER: "Auth Service"
-      REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE: "/ssl/{{service.name}}.crt"
-
-
-
 - name: Run web container to distribute keys
   become: yes
   docker_container: 
@@ -84,6 +43,46 @@
   delegate_to: "{{item}}"
   with_items: "{{ groups['all'] }}"
 
+
+
+- name: Generate auth config file 
+  template:
+    src: auth_config.yml.j2
+    dest: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth/auth_config.yml" 
+
+
+- name: Run cesanta, auth server
+  become: yes
+  docker_container: 
+    name: cesanta-auth
+    image: cesanta/docker_auth
+    # restart_policy: always
+    state: started
+    ports: "{{service.auth.internal_port}}:{{service.auth.internal_port}}"
+    volumes: 
+      - "{{ dcos_bootstrap_root_path }}/genconf/serve/auth:/config"
+
+
+- name: Run docker privat registry
+  become: yes
+  docker_container: 
+    name: cesanta-registry
+    image: registry:2.5.1
+    # restart_policy: always
+    state: started
+    ports: "{{service.options.internal_port}}:{{service.options.internal_port}}"
+    volumes: 
+      - "{{dcos_bootstrap_root_path}}/genconf/serve/auth:/ssl"
+      - "{{service.options.host_volume_path}}:/var/lib/registry"
+    env:
+      REGISTRY_HTTP_TLS_KEY: "/ssl/{{service.name}}.key"
+      REGISTRY_HTTP_TLS_CERTIFICATE: "/ssl/{{service.name}}.crt"
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /var/lib/registry
+      REGISTRY_AUTH: token
+      REGISTRY_AUTH_TOKEN_REALM: "https://{{registry_ip}}:{{service.auth.internal_port}}/auth"
+      REGISTRY_AUTH_TOKEN_SERVICE: "Docker registry" 
+      REGISTRY_AUTH_TOKEN_ISSUER: "Auth Service"
+      REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE: "/ssl/{{service.name}}.crt"
 
 
 
