@@ -2,72 +2,83 @@
 
 - name: Check if dcoc/dist dir exists
   file:
-    path: "{{ dcos_bootstrap_root_path }}/genconf/serve"
+    path: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth"
     state: directory
 
 
-- name: Generate self-signed certificate for Auth server 
-  command: >
-          openssl req -newkey rsa:2048 -nodes -x509 -days 365
-            -subj '/emailAddress=jong-gun.kim@hpe.com/C=KR/ST=Seoul/L=Seoul/O=Global Security/OU=IT Deparment/CN={{service.auth.name}}.marathon.l4lb.thisdcos.directory'
-            -keyout {{service.auth.name}}.key   -out {{service.auth.name}}.pem
-  args:
-    chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve"
+- name: Registry 
+  set_fact: 
+    registry_ip: "{{hostvars[groups['dcos_bootstrap'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}"
 
+
+- name: Generate self-signed certificate for both auth and registry with common name, boostrap node IP address
+  command: >
+          openssl req -newkey rsa:4096 -nodes -sha256 
+            -subj '/emailAddress=jong-gun.kim@hpe.com/C=KR/ST=Seoul/L=Seoul/O=Global Security/OU=IT Deparment/CN={{registry_ip}}'
+            -keyout {{service.name}}.key  -x509 -days 365 -out {{service.name}}.crt
+  args:
+    chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth"
 
 
 - name: Generate auth config file 
   template:
-    src: "{{item.src}}"
-    dest: "{{item.dest}}"
-  with_items:
-    - { src: auth_config.yml.j2, dest: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth_config.yml" }
-    - { src: auth-server-config.json.j2, dest: "{{ dcos_bootstrap_root_path }}/packages/{{service.auth.name}}-config.json" }
+    src: auth_config.yml.j2
+    dest: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth/auth_config.yml" 
 
 
-- name: Install Censanta/docker_auth, Auth server 
-  command: "dcos marathon app add {{ dcos_bootstrap_root_path }}/packages/{{service.auth.name}}-config.json"
-
-
-- name: Generate docker conf file, daemon.json for docker cli node 
+- name: Run cesanta, auth server
   become: yes
-  template: src=daemon.json.j2 dest=/etc/docker/daemon.json   
+  docker_container: 
+    name: cesanta-auth
+    image: cesanta/docker
+    state: started
+    ports: "{{service.auth.internal_port}}:{{service.auth.internal_port}}"
+    volumes: 
+      - "{{ dcos_bootstrap_root_path }}/genconf/serve/auth:/config:ro"
+      - "{{dcos_bootstrap_root_path}}/genconf/serve/auth:/ssl"
 
 
-- name: Restart docker 
+- name: Run docker privat registry
   become: yes
-  systemd: name=docker state=restarted
-  changed_when: False
+  docker_container: 
+    name: cesanta-registry
+    image: registry:2.5.1
+    state: started
+    ports: "{{service.options.internal_port}}:{{service.options.internal_port}}"
+    volumes: 
+      - "{{dcos_bootstrap_root_path}}/genconf/serve/auth:/ssl"
+      - "{{service.options.host_volume_path}}:/var/lib/registry"
+    env:
+      REGISTRY_HTTP_TLS_KEY: "/ssl/{{service.name}}.key"
+      REGISTRY_HTTP_TLS_CERTIFICATE: "/ssl/{{service.name}}.crt"
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /var/lib/registry
+      REGISTRY_AUTH: token
+      REGISTRY_AUTH_TOKEN_REALM: "https://{{registry_ip}}:{{service.auth.internal_port}}/auth"
+      REGISTRY_AUTH_TOKEN_SERVICE: "Docker registry" 
+      REGISTRY_AUTH_TOKEN_ISSUER: "Auth Service"
+      REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE: "/ssl/{{service.name}}.crt"
 
 
-- name: Generate/Distribute self-signed certificate 
-  block:
-    - name: Generate self-signed certificate for registry
-      command: >
-          openssl req -newkey rsa:4096 -nodes -sha256 
-            -subj '/emailAddress=jong-gun.kim@hpe.com/C=KR/ST=Seoul/L=Seoul/O=Global Security/OU=IT Deparment/CN={{service.name}}.marathon.l4lb.thisdcos.directory'
-            -keyout {{service.name}}.key  -x509 -days 365 -out {{service.name}}.crt
-      args:
-        chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve"
 
-    - name: Run web container to distribute keys
-      become: yes
-      docker_container: 
-        name: boot-nginx
-        image: nginx
-        state: started
-        ports: "{{dcos_bootstrap_port}}:80"
-        volumes: "{{ dcos_bootstrap_root_path }}/genconf/serve:/usr/share/nginx/html:ro"
-      changed_when: False
+- name: Run web container to distribute keys
+  become: yes
+  docker_container: 
+    name: boot-nginx
+    image: nginx
+    state: started
+    ports: "{{dcos_bootstrap_port}}:80"
+    volumes: "{{ dcos_bootstrap_root_path }}/genconf/serve:/usr/share/nginx/html:ro"
 
-    - name: Insert crts, key to docker cert directory and restart docker engine in each agent
-      become: yes
-      shell: |
+
+- name: Insert crts, key to docker cert directory and restart docker engine in each agent
+  become: yes
+  shell: |
           mkdir -p /etc/docker/certs.d/{{service.name}}.marathon.l4lb.thisdcos.directory:{{service.options.internal_port}} 
-          curl -o /etc/docker/certs.d/{{service.name}}.marathon.l4lb.thisdcos.directory:{{service.options.internal_port}}/ca.crt http://{{groups['dcos_cli'][0]}}:{{dcos_bootstrap_port}}/{{service.name}}.crt 
+          curl -o /etc/docker/certs.d/{{service.name}}.marathon.l4lb.thisdcos.directory:{{service.options.internal_port}}/ca.crt http://{{groups['dcos_cli'][0]}}:{{dcos_bootstrap_port}}/auth/{{service.name}}.crt 
           systemctl restart docker.service
-      delegate_to: "{{item}}"
-      with_items: "{{ groups['dcos_nodes'] }}"
-  when: service.options.is_secure_registry == True
+  delegate_to: "{{item}}"
+  with_items: "{{ groups['dcos_nodes'] }}"
+
+
 
 

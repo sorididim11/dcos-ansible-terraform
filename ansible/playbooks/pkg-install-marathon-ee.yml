@@ -3,32 +3,6 @@
   when: edcos_security_mode == "strict"
 
 
-- name: Package private docker registry credential 
-  hosts: dcos_masters[0]
-  vars_files: 
-    - pkg-desc/registry.yml   
-  tasks:
-    - name: Log into target registry and force re-authorization
-      become: yes
-      docker_login:
-        registry: "{{service.repository.dest_repo.url}}"
-        username: "{{service.repository.dest_repo.id}}"
-        password: "{{service.repository.dest_repo.pwd}}"
-    - name: Archive traget registry credential
-      become: yes
-      archive:
-        path: ~/.docker
-        dest: ~/docker.tar.gz
-        format: tar
-    - name: Copy data
-      become: yes
-      synchronize: 
-        src: /root/docker.tar.gz
-        dest: "{{dcos_bootstrap_root_path}}/genconf/serve"
-      delegate_to: "{{groups['dcos_bootstrap'][0]}}"
-
-
-
 - name: Install Marathon-ee
   hosts: dcos_cli[0]
   vars_files: 
@@ -36,6 +10,6 @@
   roles:
     - { role: dcos/node/quota, op_type: reserve_resources, role_def: "{{service.role}}" } 
     - { role: dcos/packages/service-account } 
-    - { role: dcos/packages/installer, custom_type: True, tags: marathon-ee}
+    - { role: dcos/packages/installer, custom_type: app, tags: marathon-ee}
   environment: "{{ proxy_env }}"
 

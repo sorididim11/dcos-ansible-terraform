@@ -5,5 +5,5 @@
   vars_files: 
     - pkg-desc/registry.yml
   roles:
-    - { role: dcos/packages/installer, custom_type: True, pre_tasks: registry-auth, post_tasks: registry-auth}
+    - { role: dcos/packages/installer, custom_type: none, pre_tasks: registry-auth, post_tasks: registry-auth}
   environment: "{{ proxy_env }}"
