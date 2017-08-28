@@ -38,25 +38,25 @@
          # docker tag {{item.pull}} {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.options.external_port}}/{{item.push}}
 
 
-- name: Archive traget registry credential
-  become: yes
-  archive:
-    path: ~/.docker
-    dest: "{{ dcos_bootstrap_root_path }}/genconf/serve/docker.tar.gz"
-    format: tar
-  tags: registry-post
+# - name: Archive traget registry credential
+#   become: yes
+#   archive:
+#     path: ~/.docker
+#     dest: "{{ dcos_bootstrap_root_path }}/genconf/serve/docker.tar.gz"
+#     format: tar
+#   tags: registry-post
 
 
-- name: Run web container for docker credential
-  become: yes
-  docker_container: 
-    name: boot-nginx
-    image: nginx
-    state: started
-    ports: "{{dcos_bootstrap_port}}:80"
-    volumes: "{{ dcos_bootstrap_root_path }}/genconf/serve:/usr/share/nginx/html:ro"
-  changed_when: False
-  tags: registry-post
+# - name: Run web container for docker credential
+#   become: yes
+#   docker_container: 
+#     name: boot-nginx
+#     image: nginx
+#     state: started
+#     ports: "{{dcos_bootstrap_port}}:80"
+#     volumes: "{{ dcos_bootstrap_root_path }}/genconf/serve:/usr/share/nginx/html:ro"
+#   changed_when: False
+#   tags: registry-post
 
 
 

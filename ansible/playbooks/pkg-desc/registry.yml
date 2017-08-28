@@ -12,7 +12,7 @@ service:
       name: auth-server
       internal_port: 5001
       external_port: 15001
-      is_haproxy: False
+      is_haproxy: True
       accepted_role: slave_public
     repository: 
       src_repo:  
