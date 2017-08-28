@@ -25,7 +25,7 @@
     - { src: auth-server-config.json.j2, dest: "{{ dcos_bootstrap_root_path }}/packages/{{service.auth.name}}-config.json" }
 
 
-- name: Install Auth server 
+- name: Install Censanta/docker_auth, Auth server 
   command: "dcos marathon app add {{ dcos_bootstrap_root_path }}/packages/{{service.auth.name}}-config.json"
 
 

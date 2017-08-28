@@ -14,7 +14,6 @@
         registry: "{{service.repository.dest_repo.url}}"
         username: "{{service.repository.dest_repo.id}}"
         password: "{{service.repository.dest_repo.pwd}}"
-        email: "sorididim11@gmail.com"
     - name: Archive traget registry credential
       become: yes
       archive:
