@@ -22,7 +22,7 @@
             -keyout {{service.name}}.key  -x509 -days 365 -out {{service.name}}.crt -config {{ dcos_bootstrap_root_path }}/genconf/serve/auth/openssl.cnf
   args:
     chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth"
-    creates: "{{service.name}}.crt"
+    #creates: "{{service.name}}.crt"
 
 
 - name: Generate auth config file 
