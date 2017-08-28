@@ -14,17 +14,13 @@
         registry: "{{service.repository.dest_repo.url}}"
         username: "{{service.repository.dest_repo.id}}"
         password: "{{service.repository.dest_repo.pwd}}"
-      tags: registry-post
-
     - name: Archive traget registry credential
       become: yes
       archive:
         path: ~/.docker
         dest: ~/docker.tar.gz
         format: tar
-      tags: registry-post
-
-    - name: Copy 
+    - name: Copy data
       become: yes
       synchronize: 
         src: /root/docker.tar.gz
