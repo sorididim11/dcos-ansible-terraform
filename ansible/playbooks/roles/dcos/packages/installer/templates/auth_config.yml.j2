@@ -2,8 +2,8 @@ server:  # Server settings.
   # Address to listen on.
   addr: ":{{service.auth.internal_port}}"
   # TLS certificate and key.
-  certificate: "/mnt/mesos/sandbox/{{service.auth.name}}.pem"
-  key: "/mnt/mesos/sandbox/{{service.auth.name}}.key"
+  certificate: "/mnt/mesos/sandbox/{{service.name}}.crt"
+  key: "/mnt/mesos/sandbox/{{service.name}}.key"
 
 token:  # Settings for the tokens.
   issuer: "Auth Service"  # Must match issuer in the Registry config.
