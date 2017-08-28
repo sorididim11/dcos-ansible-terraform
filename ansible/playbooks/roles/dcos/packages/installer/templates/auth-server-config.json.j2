@@ -33,7 +33,7 @@
             "protocol": "tcp",
             "name": "{{service.auth.name}}",
             "labels": {
-              "VIP_0": "/{{service.auth.name}}:{{service.auth.internal_port}}"
+              "VIP_0": "/{{service.name}}:{{service.auth.internal_port}}"
             }
           }
         ]
