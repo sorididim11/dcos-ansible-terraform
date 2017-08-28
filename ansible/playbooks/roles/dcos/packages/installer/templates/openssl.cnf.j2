@@ -1,13 +1,14 @@
 
 [req]
-req_extensions = v3_req
+req_extensions = v3_ca
 distinguished_name = req_distinguished_name
+copy_extensions = copy
 
 [req_distinguished_name]
 
-[ v3_req ]
-extendedKeyUsage = serverAuth
+[ v3_ca ]
 subjectAltName=IP:{{registry_ip}}
-basicConstraints = CA:FALSE
 keyUsage = digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+copy_extensions = copy
 
