@@ -6,13 +6,14 @@
     state: directory
 
 
-- name: Generate self-signed certificate for registry
+- name: Generate self-signed certificate for Auth server 
   command: >
           openssl req -newkey rsa:2048 -nodes -x509 -days 365
             -subj '/emailAddress=jong-gun.kim@hpe.com/C=KR/ST=Seoul/L=Seoul/O=Global Security/OU=IT Deparment/CN={{service.name}}.marathon.l4lb.thisdcos.directory'
             -keyout {{service.auth.name}}.key   -out {{service.auth.name}}.pem
   args:
     chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve"
+
 
 
 - name: Generate auth config file 
@@ -41,6 +42,13 @@
 
 - name: Generate/Distribute self-signed certificate 
   block:
+    - name: Generate self-signed certificate for registry
+      command: >
+          openssl req -newkey rsa:4096 -nodes -sha256 
+            -subj '/emailAddress=jong-gun.kim@hpe.com/C=KR/ST=Seoul/L=Seoul/O=Global Security/OU=IT Deparment/CN={{service.name}}.marathon.l4lb.thisdcos.directory'
+            -keyout {{service.name}}.key  -x509 -days 365 -out {{service.name}}.crt
+      args:
+        chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve"
 
     - name: Run web container to distribute keys
       become: yes
@@ -51,6 +59,15 @@
         ports: "{{dcos_bootstrap_port}}:80"
         volumes: "{{ dcos_bootstrap_root_path }}/genconf/serve:/usr/share/nginx/html:ro"
       changed_when: False
+
+    - name: Insert crts, key to docker cert directory and restart docker engine in each agent
+      become: yes
+      shell: |
+          mkdir -p /etc/docker/certs.d/{{service.name}}.marathon.l4lb.thisdcos.directory:{{service.options.internal_port}} 
+          curl -o /etc/docker/certs.d/{{service.name}}.marathon.l4lb.thisdcos.directory:{{service.options.internal_port}}/ca.crt http://{{groups['dcos_cli'][0]}}:{{dcos_bootstrap_port}}/{{service.name}}.crt 
+          systemctl restart docker.service
+      delegate_to: "{{item}}"
+      with_items: "{{ groups['dcos_nodes'] }}"
   when: service.options.is_secure_registry == True
 
 
