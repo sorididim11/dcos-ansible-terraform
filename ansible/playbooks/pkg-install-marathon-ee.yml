@@ -21,6 +21,6 @@
   roles:
     - { role: dcos/node/quota, op_type: reserve_resources, role_def: "{{services['marathon-ee-svc'].role}}", service: "{{services['marathon-ee-svc']}" } 
     - { role: dcos/packages/service-account, service:  "{{services['marathon-ee-svc']}}" } 
-    - { role: dcos/packages/installer, custom_type: app, service: "{{services['marathon-ee-svc']}", tags: marathon-ee}
+    - { role: dcos/packages/installer, custom_type: app, service: "{{services['marathon-ee-svc']}}", tags: marathon-ee}
   environment: "{{ proxy_env }}"
 
