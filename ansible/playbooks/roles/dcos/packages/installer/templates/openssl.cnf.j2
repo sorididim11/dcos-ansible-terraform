@@ -2,10 +2,15 @@
 [req]
 distinguished_name = req_distinguished_name
 x509_extensions = v3_req
-
+prompt = no
 [req_distinguished_name]
-
-[ v3_req ]
-subjectAltName=IP:{{registry_ip}}
-keyUsage = digitalSignature, keyEncipherment
+C = KR
+ST = Seoul
+L = Seoul
+O = YourCompany
+OU = YourDivision
+CN = {{service.name}}.marathon.l4lb.thisdcos.directory
+[v3_req]
+keyUsage = keyEncipherment, dataEncipherment
 extendedKeyUsage = serverAuth
+subjectAltName=IP:{{registry_ip}}
