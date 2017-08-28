@@ -33,6 +33,7 @@ services:
       - { perm: "dcos:mesos:master:reservation:role:svc", action: create, desc: " " }
       - { perm: "dcos:mesos:master:volume:role:svc", action: create, desc: " " }
     options: {
-      image: sorididim11/marathon-dcos-ee:v1.4.7_1.9.8,
+      repo: "cluster-registry.marathon.l4lb.thisdcos.directory:5000",
+      image: "marathon-dcos-ee:v1.4.7_1.9.8",
       docker_credential: "http://{{bootstrap_url}}/auth/docker.tar.gz"
     }
