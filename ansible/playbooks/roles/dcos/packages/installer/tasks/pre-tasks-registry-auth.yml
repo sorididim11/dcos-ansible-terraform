@@ -10,12 +10,16 @@
   set_fact: 
     registry_ip: "{{hostvars[groups['dcos_bootstrap'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}"
 
+- template:
+    src: openssl.cnf.j2
+    dest: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth/extfile.cnf"
 
 - name: Generate self-signed certificate for both auth and registry with common name, boostrap node IP address
   command: >
           openssl req -newkey rsa:4096 -nodes -sha256 
             -subj '/emailAddress=jong-gun.kim@hpe.com/C=KR/ST=Seoul/L=Seoul/O=Global Security/OU=IT Deparment/CN={{registry_ip}}'
             -keyout {{service.name}}.key  -x509 -days 365 -out {{service.name}}.crt
+            -extfile extfile.cnf
   args:
     chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth"
     creates: "{{service.name}}.crt"
