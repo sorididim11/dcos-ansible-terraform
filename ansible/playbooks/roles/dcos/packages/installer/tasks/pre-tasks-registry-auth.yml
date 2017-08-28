@@ -38,7 +38,7 @@
     state: started
     ports: "{{service.auth.internal_port}}:{{service.auth.internal_port}}"
     volumes: 
-      - "{{ dcos_bootstrap_root_path }}/genconf/serve/auth:/config:ro"
+      - "{{ dcos_bootstrap_root_path }}/genconf/serve/auth:/config"
       - "{{dcos_bootstrap_root_path}}/genconf/serve/auth:/ssl"
 
 
