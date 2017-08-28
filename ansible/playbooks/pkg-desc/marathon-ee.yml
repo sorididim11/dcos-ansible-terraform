@@ -15,7 +15,7 @@ service:
     options: {
       repo: "cluster-registry.marathon.l4lb.thisdcos.directory:5000",
       image: "marathon-dcos-ee:v1.4.7",
-      docker_credential: "{{dcos_bootstrap_url}}/docker.tar.gz"
+      docker_credential: "{{dcos_bootstrap_url}}/auth/docker.tar.gz"
     }
 
 
