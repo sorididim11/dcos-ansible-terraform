@@ -1,1 +1,12 @@
+
+[req]
+req_extensions = v3_req
+distinguished_name = req_distinguished_name
+
+[req_distinguished_name]
+
+[ v3_req ]
 subjectAltName=IP:{{registry_ip}}
+basicConstraints = CA:FALSE
+keyUsage = digitalSignature, keyEncipherment
+
