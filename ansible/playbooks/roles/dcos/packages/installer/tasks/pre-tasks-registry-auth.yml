@@ -10,6 +10,8 @@
   set_fact: 
     registry_ip: "{{hostvars[groups['dcos_bootstrap'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}"
 
+- debug:
+    msg: "{{registry_ip}}"
 
 - name: Generate self-signed certificate for both auth and registry with common name, boostrap node IP address
   command: >
@@ -18,6 +20,7 @@
             -keyout {{service.name}}.key  -x509 -days 365 -out {{service.name}}.crt
   args:
     chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth"
+    creates: "{{service.name}}.crt"
 
 
 - name: Generate auth config file 
@@ -31,7 +34,7 @@
   docker_container: 
     name: cesanta-auth
     image: cesanta/docker_auth
-    restart_policy: always
+    # restart_policy: always
     state: started
     ports: "{{service.auth.internal_port}}:{{service.auth.internal_port}}"
     volumes: 
@@ -44,7 +47,7 @@
   docker_container: 
     name: cesanta-registry
     image: registry:2.5.1
-    restart_policy: always
+    # restart_policy: always
     state: started
     ports: "{{service.options.internal_port}}:{{service.options.internal_port}}"
     volumes: 
