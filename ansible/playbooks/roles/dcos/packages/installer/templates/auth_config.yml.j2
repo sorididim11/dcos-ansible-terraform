@@ -2,8 +2,8 @@ server:  # Server settings.
   # Address to listen on.
   addr: ":{{service.auth.internal_port}}"
   # TLS certificate and key.
-  certificate: "/config/{{service.name}}.crt"
-  key: "/ssl/{{service.name}}.key"
+  certificate: "/{{service.name}}.crt"
+  key: "/{{service.name}}.key"
 
 token:  # Settings for the tokens.
   issuer: "Auth Service"  # Must match issuer in the Registry config.

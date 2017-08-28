@@ -10,8 +10,6 @@
   set_fact: 
     registry_ip: "{{hostvars[groups['dcos_bootstrap'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}"
 
-- debug:
-    msg: "{{registry_ip}}"
 
 - name: Generate self-signed certificate for both auth and registry with common name, boostrap node IP address
   command: >
@@ -38,8 +36,7 @@
     state: started
     ports: "{{service.auth.internal_port}}:{{service.auth.internal_port}}"
     volumes: 
-      - "{{ dcos_bootstrap_root_path }}/genconf/serve/auth:/config"
-      - "{{dcos_bootstrap_root_path}}/genconf/serve/auth:/ssl"
+      - "{{ dcos_bootstrap_root_path }}/genconf/serve/auth:/"
 
 
 - name: Run docker privat registry
