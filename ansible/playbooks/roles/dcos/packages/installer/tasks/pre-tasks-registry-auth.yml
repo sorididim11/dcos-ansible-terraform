@@ -36,7 +36,7 @@
     name: cesanta-auth
     image: cesanta/docker_auth
     restart_policy: always
-    state: started
+    state: restarted
     ports: "{{service.auth.internal_port}}:{{service.auth.internal_port}}"
     volumes: 
       - "{{ dcos_bootstrap_root_path }}/genconf/serve/auth:/config"
@@ -48,7 +48,7 @@
     name: cesanta-registry
     image: registry:2.5.1
     restart_policy: always
-    state: started
+    state: restarted
     ports: "{{service.options.internal_port}}:{{service.options.internal_port}}"
     volumes: 
       - "{{dcos_bootstrap_root_path}}/genconf/serve/auth:/ssl"
