@@ -30,7 +30,7 @@
   become: yes
   docker_container: 
     name: cesanta-auth
-    image: cesanta/docker
+    image: cesanta/docker_auth
     state: started
     ports: "{{service.auth.internal_port}}:{{service.auth.internal_port}}"
     volumes: 
