@@ -26,6 +26,22 @@ dcos config set marathon.url
 * vagrant: 1.9.7
 * terraform: 0.9.3
 
+## Private registry 
+1) openssl 
+add  subjectAltName for ip to /etc/pki/tls/openssl.cnf
+[ v3_ca ]
+subjectAltName=IP:172.16.1.70
+
+2) registry
+modify url of registry.yml. or config LDAP in auth_config.yml
+   dest_repo: 
+        url: "172.16.1.51:15000"
+        id: admin
+        pwd: badmin
+
+3) marathon-ee
+modify repo for bootstrap ip
+repo: "cluster-registry.marathon.l4lb.thisdcos.directory:5000",
 
 ## Getting started
 ### terraform 

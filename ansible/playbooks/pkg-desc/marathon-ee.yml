@@ -1,9 +1,10 @@
 
-service: 
+services: 
+  marathon-ee-dev:
     name: marathon-ee-dev
     package: marathon-ee
     user: nobody
-    role: { principal: "{{dcos_superuser}}", hostname: 10.0.15.31,  name: dev,  cpus: 1.0, mem: 500, disks: 1000, begin_port: 1025,  end_port: 2180 }
+    role: { principal: hpc, hostname: 10.0.15.31,  name: dev,  cpus: 1.0, mem: 500, disks: 1000, begin_port: 1025,  end_port: 2180 }
     permissions: 
       - { perm: "dcos:mesos:master:reservation:principal:marathon-ee-dev", action: delete, desc: " " } 
       - { perm: "dcos:mesos:master:volume:principal:marathon-ee-dev", action: delete, desc: " " }
@@ -18,20 +19,20 @@ service:
       docker_credential: "{{dcos_bootstrap_url}}/auth/docker.tar.gz"
     }
 
-
-  # - name: marathon-ee-svc
-  #   package: marathon-ee
-  #   user: nobody
-  #   role: { principal: root, hostname: 10.0.15.31,  name: svc,  cpus: 1.0, mem: 500, disks: 1000, begin_port: 1025,  end_port: 2180 }
-  #   permissions: 
-  #     - { perm: "dcos:mesos:master:reservation:principal:marathon-ee-svc", action: delete, desc: " " } 
-  #     - { perm: "dcos:mesos:master:volume:principal:marathon-ee-svc", action: delete, desc: " " }
-  #     - { perm: "dcos:mesos:master:task:user:nobody", action: create, desc: "Allows Linux user nobody to execute tasks" }
-  #     - { perm: "dcos:mesos:master:task:app_id:%252F", action: create, desc: " " }
-  #     - { perm: "dcos:mesos:master:framework:role:svc", action: create, desc: " " } 
-  #     - { perm: "dcos:mesos:master:reservation:role:svc", action: create, desc: " " }
-  #     - { perm: "dcos:mesos:master:volume:role:svc", action: create, desc: " " }
-  #   options: {
-  #     image: sorididim11/marathon-dcos-ee:v1.4.7_1.9.8,
-  #     docker_credential: "http://{{bootstrap_url}}/docker.tar.gz"
-  #   }
+  marathon-ee-svc:
+    name: marathon-ee-svc
+    package: marathon-ee
+    user: nobody
+    role: { principal: hpc, hostname: 10.0.15.31,  name: svc,  cpus: 1.0, mem: 500, disks: 1000, begin_port: 1025,  end_port: 2180 }
+    permissions: 
+      - { perm: "dcos:mesos:master:reservation:principal:marathon-ee-svc", action: delete, desc: " " } 
+      - { perm: "dcos:mesos:master:volume:principal:marathon-ee-svc", action: delete, desc: " " }
+      - { perm: "dcos:mesos:master:task:user:nobody", action: create, desc: "Allows Linux user nobody to execute tasks" }
+      - { perm: "dcos:mesos:master:task:app_id:%252F", action: create, desc: " " }
+      - { perm: "dcos:mesos:master:framework:role:svc", action: create, desc: " " } 
+      - { perm: "dcos:mesos:master:reservation:role:svc", action: create, desc: " " }
+      - { perm: "dcos:mesos:master:volume:role:svc", action: create, desc: " " }
+    options: {
+      image: sorididim11/marathon-dcos-ee:v1.4.7_1.9.8,
+      docker_credential: "http://{{bootstrap_url}}/auth/docker.tar.gz"
+    }
