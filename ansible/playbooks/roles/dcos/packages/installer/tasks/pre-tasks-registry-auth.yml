@@ -36,7 +36,7 @@
     state: started
     ports: "{{service.auth.internal_port}}:{{service.auth.internal_port}}"
     volumes: 
-      - "{{ dcos_bootstrap_root_path }}/genconf/serve/auth:/"
+      - "{{ dcos_bootstrap_root_path }}/genconf/serve/auth:/config"
 
 
 - name: Run docker privat registry
