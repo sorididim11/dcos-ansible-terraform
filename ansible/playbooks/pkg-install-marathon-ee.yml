@@ -21,7 +21,7 @@
       become: yes
       archive:
         path: ~/.docker
-        dest: /root/docker.tar.gz
+        dest: ~/docker.tar.gz
         format: tar
       tags: registry-post
 
