@@ -34,7 +34,7 @@
     become: yes
     lineinfile: 
       dest: /etc/hosts
-      regexp: "{{item}}"
+      regexp: "{{hostvars[item]['ansible_hostname']}}"
       line: "{{hostvars[item]['ansible_' + dcos_nic_name]['ipv4']['address']}}   {{hostvars[item]['ansible_hostname']}}"
     with_items: "{{groups['all']}}"
 
