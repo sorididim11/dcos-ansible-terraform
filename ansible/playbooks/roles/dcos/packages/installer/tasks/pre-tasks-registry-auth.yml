@@ -40,8 +40,8 @@
 - name: Insert crts, key to docker cert directory and restart docker engine in each agent
   become: yes
   shell: |
-          mkdir -p /etc/docker/certs.d/{{registry_hostname_or_domain}}:{{service.options.internal_port}} 
-          curl -o /etc/docker/certs.d/{{registry_hostname_or_domain}}:{{service.options.internal_port}}/ca.crt http://{{registry_ip}}:{{dcos_bootstrap_port}}/auth/{{service.name}}.crt 
+          mkdir -p /etc/docker/certs.d/{{registry_hostname_or_domain}}:{{service.options.internal_port}} &&
+          curl -o /etc/docker/certs.d/{{registry_hostname_or_domain}}:{{service.options.internal_port}}/ca.crt http://{{registry_ip}}:{{dcos_bootstrap_port}}/auth/{{service.name}}.crt && 
           systemctl restart docker.service
   delegate_to: "{{item}}"
   with_items: "{{ groups['all'] }}"
