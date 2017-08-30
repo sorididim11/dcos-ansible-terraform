@@ -35,20 +35,8 @@
     lineinfile: 
       dest: /etc/hosts
       regexp: "{{item}}"
-      line: "{{hostvars[item]['ansible_' + dcos_nic_name]['ipv4']['address']jjjj}}   {{hostvars[item]['ansible_hostname']}}"
+      line: "{{hostvars[item]['ansible_' + dcos_nic_name]['ipv4']['address']}}   {{hostvars[item]['ansible_hostname']}}"
     with_items: "{{groups['all']}}"
-
-
-    lineinfile: 
-      dest: "{{inventory_dir}}/group_vars/all.yml"
-      regexp: "{{item.regex}}"
-      line: "{{item.replace_with}}"
-    with_items:
-      - regex: '^edcos_security_mode:'
-        replace_with: "edcos_security_mode: {{ansible_local['bootstrap-config'].security}}"
-      - regex: '^dcos_version:'
-        replace_with: "dcos_version: {{ansible_local['dcos-version'].version}}"
-
 
 
   - name: Install required utils 
