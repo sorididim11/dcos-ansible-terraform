@@ -8,21 +8,24 @@
 
 - name: Registry 
   set_fact: 
+    registry_hostname_or_domain: "{{ansible_hostname}}"
     registry_ip: "{{hostvars[groups['dcos_bootstrap'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}"
+
 
 - template:
     src: openssl.cnf.j2
-    dest: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth/extfile.cnf"
+    dest: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth/extfile.conf"
+
 
 - name: Generate self-signed certificate for both auth and registry with common name, boostrap node IP address
   command: >
-          openssl req -newkey rsa:4096 -nodes -sha256 
-            -subj '/emailAddress=jong-gun.kim@hpe.com/C=KR/ST=Seoul/L=Seoul/O=Global Security/OU=IT Deparment/CN={{registry_ip}}'
-            -keyout {{service.name}}.key  -x509 -days 365 -out {{service.name}}.crt
+          openssl req -x509 -sha256 -newkey rsa:4096 -nodes -days 365
+            -keyout {{service.name}}.key   -out {{service.name}}.crt
+            -config {{ dcos_bootstrap_root_path }}/genconf/serve/auth/extfile.conf
   args:
     chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth"
     # creates: "{{service.name}}.crt"
-    # -config {{ dcos_bootstrap_root_path }}/genconf/serve/auth/extfile.cnf -extensions 'v3_req'
+
 
 - name: Run web container to distribute keys
   become: yes
@@ -37,8 +40,8 @@
 - name: Insert crts, key to docker cert directory and restart docker engine in each agent
   become: yes
   shell: |
-          mkdir -p /etc/docker/certs.d/{{registry_ip}}:{{service.options.internal_port}} 
-          curl -o /etc/docker/certs.d/{{registry_ip}}:{{service.options.internal_port}}/ca.crt http://{{groups['dcos_cli'][0]}}:{{dcos_bootstrap_port}}/auth/{{service.name}}.crt 
+          mkdir -p /etc/docker/certs.d/{{registry_hostname_or_domain}}:{{service.options.internal_port}} 
+          curl -o /etc/docker/certs.d/{{registry_hostname_or_domain}}:{{service.options.internal_port}}/ca.crt http://{{groups['dcos_cli'][0]}}:{{dcos_bootstrap_port}}/auth/{{service.name}}.crt 
           systemctl restart docker.service
   delegate_to: "{{item}}"
   with_items: "{{ groups['all'] }}"
