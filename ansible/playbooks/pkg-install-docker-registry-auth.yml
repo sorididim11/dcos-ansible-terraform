@@ -11,7 +11,7 @@
 
 - name: "Distribute private registry auth token"
   gather_facts: False
-  hosts: dcos_nodes
+  hosts: dcos_slaves:dcos_slaves_public
   tasks:
     - name: Download docker private registry token 
       get_url:
