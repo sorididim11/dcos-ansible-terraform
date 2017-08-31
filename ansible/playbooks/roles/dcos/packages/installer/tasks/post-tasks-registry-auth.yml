@@ -34,7 +34,7 @@
   register: docker_token_data
 
 - set_fact: 
-   docker_token: "{{docker_token_data.stdout}}"
+   docker_token: "{{docker_token_data.stdout | from_json }}"
 
 - name: Tag and push Marathon-ee to cluster registery
   become: yes
