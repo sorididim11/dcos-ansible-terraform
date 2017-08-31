@@ -48,7 +48,8 @@
   with_items: 
     - "{{ groups['dcos_nodes'] }}"
     - "{{ groups['dcos_bootstrap'] }}"
-
+  # with_inventory_hostnames:
+  #   - all:!www
 
 
 - name: Generate auth config file 
