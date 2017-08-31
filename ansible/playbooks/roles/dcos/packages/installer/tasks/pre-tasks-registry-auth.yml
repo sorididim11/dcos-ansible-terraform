@@ -46,7 +46,7 @@
           systemctl restart docker.service
   delegate_to: "{{item}}"
   with_inventory_hostnames: 
-    - dcos_nodes:dcos_bootstrap
+    - dcos_slaves:dcos_slaves_public:dcos_bootstrap
 
 
 - name: Generate auth config file 
