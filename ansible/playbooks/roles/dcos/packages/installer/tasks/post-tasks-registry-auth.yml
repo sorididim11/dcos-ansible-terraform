@@ -31,7 +31,7 @@
 - name: Tag and push Marathon-ee to cluster registery
   become: yes
   shell: |
-          docker tag {{item.pull}} {{service.repository.dest_repo.url}}/{{item.push}}
+          docker tag {{item.pull}} {{registry_hostname_or_domain}}/{{item.push}}
           docker push {{registry_hostname_or_domain}}/{{item.push}}
   with_items: "{{service.repository.images}}"
   tags: registry-post
