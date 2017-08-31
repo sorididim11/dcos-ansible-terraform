@@ -6,7 +6,7 @@
 
 
 - name: Create Key pair 
-  command: "dcos security org service-accounts keypair {{service.name}}.pem {{service.name}}-pub.pem creates={{ dcos_bootstrap_root_path }}/{{service.name}}.pem"
+  command: "dcos security org service-accounts keypair {{service.name}}.pem {{service.name}}-pub.pem creates={{service.name}}.pem"
 
 
 - name: Create service account as ID
