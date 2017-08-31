@@ -20,12 +20,12 @@
 - name: Generate self-signed certificate for both auth and registry with common name, boostrap node IP address
   command: >
           openssl req -x509  -newkey rsa:2048 -nodes -days 365
+          -subj '/emailAddress=jong-gun.kim@hpe.com/C=KR/ST=Seoul/L=Seoul/O=Global Security/OU=IT Deparment/CN={{ansible_hostname}}'
             -keyout {{service.name}}.key   -out {{service.name}}.crt
-            -config {{ dcos_bootstrap_root_path }}/genconf/serve/auth/extfile.conf
   args:
     chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth"
     # creates: "{{service.name}}.crt"
-
+  # -config {{ dcos_bootstrap_root_path }}/genconf/serve/auth/extfile.conf
 
 - name: Run web container to distribute keys
   become: yes
