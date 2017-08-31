@@ -24,6 +24,13 @@
   - name: Add group, nogroup
     group: name=nogroup state=present
 
+  - name: Add mappings to /etc/hosts
+    blockinfile:
+      path: /etc/hosts
+      block: |
+        {{ hostvars[item]['ansible_' + dcos_nic_name].ipv4.address }} {{ hostvars[item]['ansible_hostname'] }}
+      marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.name }}"
+    with_items: "{{groups['all']}}"
 
   # - name: Clean yum packages, metadata, dbcache, all and make new cache.   
   #   command: yum clean packages metadata dbcache all & yum makecache

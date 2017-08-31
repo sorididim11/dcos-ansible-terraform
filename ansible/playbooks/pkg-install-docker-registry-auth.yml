@@ -7,3 +7,30 @@
   roles:
     - { role: dcos/packages/installer, custom_type: none, pre_tasks: registry-auth, post_tasks: registry-auth}
   environment: "{{ proxy_env }}"
+
+
+- name: "Distribute private registry auth token"
+  gather_facts: False
+  hosts: dcos_nodes
+  tasks:
+    - name: Download docker private registry token 
+      get_url:
+        url: "{{ dcos_bootstrap_url }}/auth/docker.tar.gz"
+        dest: "./docker.tar.gz"
+
+    - name: Insert docker token to docker_credentials file
+      become: yes
+      blockinfile: 
+        path: /etc/mesosphere/docker_credentials
+        create: yes
+        marker: "# {mark} ANSIBLE MANAGED BLOCK"
+        block: "{{docker_token}}"
+
+    - set_fact: 
+        svc_name: "{{ (inventory_hostname in groups['dcos_slaves']) | ternary('dcos-mesos-slave'. 'dcos-mesos-slave-public') }}"
+      
+    - name:
+      become: yes
+      systemd: name={{svc_name}} state=restarted
+      
+  environment: "{{ proxy_env }}"

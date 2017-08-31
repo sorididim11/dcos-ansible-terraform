@@ -18,7 +18,7 @@
   tags: registry-post
 
 
-- name: Log into target registry and force re-authorization
+- name: Log into target registry
   become: yes
   docker_login:
     registry: "{{registry_hostname_or_domain}}:{{service.options.internal_port}}"
@@ -27,6 +27,14 @@
     reauthorize: yes
   tags: registry-post
 
+
+- name: 
+  become: yes
+  command: cat /root/.docker/config.json
+  register: docker_token_data
+
+- set_fact: 
+   docker_token: "{{docker_token_data}}"
 
 - name: Tag and push Marathon-ee to cluster registery
   become: yes
