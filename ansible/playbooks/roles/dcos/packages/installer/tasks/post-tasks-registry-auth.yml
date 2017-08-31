@@ -32,7 +32,7 @@
   become: yes
   shell: |
           docker tag {{item.pull}} {{service.repository.dest_repo.url}}/{{item.push}}
-          docker push {{service.repository.dest_repo.url}}/{{item.push}}
+          docker push {{registry_hostname_or_domain}}/{{item.push}}
   with_items: "{{service.repository.images}}"
   tags: registry-post
          # docker tag {{item.pull}} {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.options.external_port}}/{{item.push}}
