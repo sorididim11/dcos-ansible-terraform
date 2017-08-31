@@ -1,7 +1,7 @@
 
 [req]
 distinguished_name = req_distinguished_name
-x509_extensions = v3_req
+x509_extensions = v3_ca
 prompt = no
 [req_distinguished_name]
 C = KR
@@ -10,7 +10,8 @@ L = Seoul
 O = YourCompany
 OU = YourDivision
 CN = {{registry_hostname_or_domain}}
-[v3_req]
-keyUsage = keyEncipherment, dataEncipherment
-extendedKeyUsage = serverAuth
+[v3_ca]
 subjectAltName=IP:{{registry_ip}}
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid:always,issuer
+basicConstraints = CA:true
