@@ -18,7 +18,8 @@
   tags: registry-post
 
 
-- docker_login: become=yes state=absent
+- docker_login: state=absent
+  become: yes
 
 
 - name: Log into target registry
