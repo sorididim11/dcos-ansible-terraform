@@ -31,8 +31,8 @@
 - name: Tag and push Marathon-ee to cluster registery
   become: yes
   shell: |
-          docker tag {{item.pull}} {{registry_hostname_or_domain}}/{{item.push}}
-          docker push {{registry_hostname_or_domain}}/{{item.push}}
+          docker tag {{item.pull}} {{registry_hostname_or_domain}}:{{service.options.internal_port}} /{{item.push}}
+          docker push {{registry_hostname_or_domain}}:{{service.options.internal_port}} /{{item.push}}
   with_items: "{{service.repository.images}}"
   tags: registry-post
          # docker tag {{item.pull}} {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.options.external_port}}/{{item.push}}
