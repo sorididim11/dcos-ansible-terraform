@@ -16,7 +16,7 @@
     - name: Download docker private registry token 
       get_url:
         url: "http://{{groups['dcos_bootstrap'][0]}}:{{dcos_bootstrap_port}}/auth/docker.tar.gz"
-        dest: "./docker.tar.gz"
+        dest: "docker.tar.gz"
 
     - name: Insert docker token to docker_credentials file
       become: yes
@@ -29,7 +29,7 @@
     - set_fact: 
         svc_name: "{{ (inventory_hostname in groups['dcos_slaves']) | ternary('dcos-mesos-slave', 'dcos-mesos-slave-public') }}"
       
-    - name:
+    - name: Restart {{svc_name}} 
       become: yes
       systemd: name={{svc_name}} state=restarted
       

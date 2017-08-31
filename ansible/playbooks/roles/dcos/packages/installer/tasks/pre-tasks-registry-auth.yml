@@ -24,7 +24,7 @@
             -config {{ dcos_bootstrap_root_path }}/genconf/serve/auth/extfile.conf
   args:
     chdir: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth"
-    # creates: "{{service.name}}.crt"
+    creates: "{{service.name}}.crt"
 
 
 - name: Run web container to distribute keys
