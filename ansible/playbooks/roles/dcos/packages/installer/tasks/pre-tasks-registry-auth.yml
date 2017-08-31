@@ -61,7 +61,7 @@
   docker_container: 
     name: cesanta-auth
     image: cesanta/docker_auth
-    # restart_policy: always
+    restart_policy: always
     state: started
     ports: "{{service.auth.internal_port}}:{{service.auth.internal_port}}"
     volumes: 
@@ -73,7 +73,7 @@
   docker_container: 
     name: cesanta-registry
     image: registry:2.5.1
-    # restart_policy: always
+    restart_policy: always
     state: started
     ports: "{{service.options.internal_port}}:{{service.options.internal_port}}"
     volumes: 
