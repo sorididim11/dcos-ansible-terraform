@@ -19,7 +19,7 @@
 
 - name: Generate self-signed certificate for both auth and registry with common name, boostrap node IP address
   command: >
-          openssl req -x509 -sha256 -newkey rsa:4096 -nodes -days 365
+          openssl req -x509  -newkey rsa:2048 -nodes -days 365
             -keyout {{service.name}}.key   -out {{service.name}}.crt
             -config {{ dcos_bootstrap_root_path }}/genconf/serve/auth/extfile.conf
   args:
