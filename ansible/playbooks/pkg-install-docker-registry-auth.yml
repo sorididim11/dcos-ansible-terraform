@@ -24,7 +24,7 @@
         path: /etc/mesosphere/docker_credentials
         create: yes
         marker: "# {mark} ANSIBLE MANAGED BLOCK"
-        block: "{{hostvars[groups[dcos_bootstrap][0]].docker_token}}"
+        block: "{{hostvars[groups['dcos_bootstrap'][0]].docker_token}}"
 
     - set_fact: 
         svc_name: "{{ (inventory_hostname in groups['dcos_slaves']) | ternary('dcos-mesos-slave'. 'dcos-mesos-slave-public') }}"
