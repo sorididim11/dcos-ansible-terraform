@@ -29,7 +29,7 @@ service:
           3662323162663964323836633831383431666133653937643239
 
       dest_repo: 
-        url: "172.16.1.51:5000"
+        url: "registry.kin.com"
         id: admin
         pwd: badmin
       images: 
