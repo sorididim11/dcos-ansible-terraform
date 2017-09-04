@@ -105,12 +105,12 @@
     - dcos_slaves:dcos_slaves_public:dcos_bootstrap
 
 
-# - name: Update CA 
-#   become: yes
-#   command: update-ca-trust
-#   delegate_to: "{{item}}"
-#   with_inventory_hostnames:
-#     - dcos_slaves:dcos_slaves_public:dcos_bootstrap
+- name: Update CA 
+  become: yes
+  command: update-ca-trust
+  delegate_to: "{{item}}"
+  with_inventory_hostnames:
+    - dcos_slaves:dcos_slaves_public:dcos_bootstrap
 
 
 - name: Run docker compose 
