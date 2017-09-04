@@ -45,13 +45,13 @@ services:
       MYSQL_DATABASE: portus_production
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
     volumes:
-      - {{portus_db_path}}:/var/lib/mysql
+      - {{service.storage.portus_db_path}}:/var/lib/mysql
 
   registry:
     image: library/registry:2.6
     command: ["/bin/sh", "/etc/docker/registry/init"]
     extra_hosts:
-      - "{{machine_fqdn}}:{{hostvars[groups['dcos_bootstrap'][0]]['ansible_' + dcos_nic_name].ipv4.address }}"
+      - "{{service.machine_fqdn}}:{{hostvars[groups['dcos_bootstrap'][0]]['ansible_' + dcos_nic_name].ipv4.address }}"
     environment:
       REGISTRY_AUTH_TOKEN_REALM: https://${MACHINE_FQDN}/v2/token
       REGISTRY_AUTH_TOKEN_SERVICE: ${MACHINE_FQDN}
@@ -68,7 +68,7 @@ services:
           threshold: 5
           backoff: 1s
     volumes:
-      - {{registry_volume_path}}:/var/lib/registry
+      - {{service.storage.host_volume_path}}:/var/lib/registry
       - ./secrets:/secrets:ro
       - ./registry/config.yml:/etc/docker/registry/config.yml:ro
       - ./registry/init:/etc/docker/registry/init:ro

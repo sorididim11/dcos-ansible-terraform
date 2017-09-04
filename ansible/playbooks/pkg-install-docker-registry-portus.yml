@@ -3,7 +3,7 @@
   gather_facts: False
   hosts: dcos_cli[0]
   vars_files: 
-    - pkg-desc/registry.yml
+    - pkg-desc/registry-portus.yml
   roles:
     - { role: dcos/packages/registry, registry_package: portus } #portus or cesanta
   environment: "{{ proxy_env }}"

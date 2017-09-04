@@ -4,10 +4,10 @@
 - name: Login into Source image registry  
   become: yes
   docker_login:
-    registry: "{{service.repository.src_repo.url}}"
-    username: "{{service.repository.src_repo.id}}"
-    password: "{{service.repository.src_repo.pwd}}"
-    email: "{{service.repository.src_repo.email}}"
+    registry: "{{service.repository.url}}"
+    username: "{{service.repository.id}}"
+    password: "{{service.repository.pwd}}"
+    email: "{{service.repository.email}}"
 
 
 - name: Docker pull images from the source registry
@@ -25,9 +25,9 @@
 - name: Log into target registry
   become: yes
   docker_login:
-    registry: "{{machine_fqdn}}"
-    username: "{{service.repository.dest_repo.id}}"
-    password: "{{service.repository.dest_repo.pwd}}"
+    registry: "{{service.machine_fqdn}}"
+    username: "{{service.admin.id}}"
+    password: "{{service.admin.pwd}}"
     reauthorize: yes
 
 
@@ -42,8 +42,8 @@
 - name: Tag and push Marathon-ee to cluster registery
   become: yes
   shell: |
-          docker tag {{item.pull}} {{machine_fqdn}}/{{item.push}}
-          docker push {{machine_fqdn}}/{{item.push}}
+          docker tag {{item.pull}} {{service.machine_fqdn}}/{{item.push}}
+          docker push {{service.machine_fqdn}}/{{item.push}}
   with_items: "{{service.repository.images}}"
   tags: registry-post
          # docker tag {{item.pull}} {{hostvars[groups['dcos_slaves_public'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.options.external_port}}/{{item.push}}

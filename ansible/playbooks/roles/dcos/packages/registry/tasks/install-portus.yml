@@ -1,9 +1,6 @@
 ---
 - set_fact: 
     auth_root: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth"
-    machine_fqdn: "{{ service.repository.dest_repo.url }}"
-    registry_volume_path: "{{service.options.host_volume_path}}"
-    portus_db_path: "{{service.options.portus_db_path}}"
 
 
 - name: Install docker-compose
@@ -67,7 +64,7 @@
   blockinfile:
     path: /etc/hosts
     block: |
-        {{ hostvars[groups['dcos_bootstrap'][0]]['ansible_' + dcos_nic_name].ipv4.address }} {{ machine_fqdn }}
+        {{ hostvars[groups['dcos_bootstrap'][0]]['ansible_' + dcos_nic_name].ipv4.address }} {{ service.machine_fqdn }}
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
   delegate_to: "{{item}}"
   with_inventory_hostnames: 
@@ -77,7 +74,7 @@
 - name: Create docker crt directory on each agent
   become: yes
   file:
-    path: "/etc/docker/certs.d/{{machine_fqdn}}"
+    path: "/etc/docker/certs.d/{{service.machine_fqdn}}"
     state: directory
   delegate_to: "{{item}}"
   with_inventory_hostnames: 
@@ -88,7 +85,7 @@
   become: yes
   get_url:
     url: "http://{{groups['dcos_bootstrap'][0]}}:{{dcos_bootstrap_port}}/auth/secrets/portus.crt"
-    dest: "/etc/docker/certs.d/{{machine_fqdn}}/ca.crt"
+    dest: "/etc/docker/certs.d/{{service.machine_fqdn}}/ca.crt"
   delegate_to: "{{item}}"
   with_inventory_hostnames:
     - dcos_slaves:dcos_slaves_public:dcos_bootstrap
@@ -98,7 +95,7 @@
   become: yes
   copy:
     remote_src: yes
-    src: "/etc/docker/certs.d/{{machine_fqdn}}/ca.crt"
+    src: "/etc/docker/certs.d/{{service.machine_fqdn}}/ca.crt"
     dest: /etc/pki/ca-trust/source/anchors/portus.crt
   delegate_to: "{{item}}"
   with_inventory_hostnames:

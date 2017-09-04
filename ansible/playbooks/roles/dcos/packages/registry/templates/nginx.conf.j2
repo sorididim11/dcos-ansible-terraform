@@ -44,7 +44,7 @@ http {
 
   server {
     listen 443 ssl http2;
-    server_name {{machine_fqdn}};
+    server_name {{service.machine_fqdn}};
     root /srv/Portus/public;
 
     ##
