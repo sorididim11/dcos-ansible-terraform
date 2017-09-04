@@ -51,6 +51,7 @@
 
 
 - name: Stop Bootstrap web server because DC/OS upgrade script lauches bootstrap web
+  become: yes
   docker_container: name=boot-nginx state=stopped
 
 
