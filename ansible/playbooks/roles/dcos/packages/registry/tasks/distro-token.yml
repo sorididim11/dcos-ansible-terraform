@@ -20,7 +20,7 @@
 
 
 - set_fact: 
-    svc_name: "{{ (inventory_hostname in groups['dcos_slaves']) | ternary('dcos-mesos-slave', 'dcos-mesos-slave-public') }}"
+    svc_name: "{{ (item in groups['dcos_slaves']) | ternary('dcos-mesos-slave', 'dcos-mesos-slave-public') }}"
     tags: distro_token
   delegate_to: "{{item}}"
   with_inventory_hostnames:
