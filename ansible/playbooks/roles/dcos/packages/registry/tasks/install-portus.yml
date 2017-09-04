@@ -116,6 +116,11 @@
   args:
     chdir: "{{auth_root}}"
 
+
+- pause:
+    prompt: "Create account if you don't use LDAP and regiser private registry to portus. continue?"
+
+      
 #ansible 2.3.1 & compose 1.16.0 is not working  msg: unable to load docker-compose. Error: cannot import name splitdrive
 # - name: Run portus, private registry
 #   become: yes
