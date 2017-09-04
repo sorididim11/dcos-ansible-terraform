@@ -122,5 +122,5 @@
 - name: Run portus, private registry
   become: yes
   docker_service:
-    project_src: "{{auth_root}}/docker-compose.yml"
-    state: present
+    project_src: "{{auth_root}}"
+    state: restarted
