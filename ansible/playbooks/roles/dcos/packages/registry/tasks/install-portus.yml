@@ -113,12 +113,13 @@
     - dcos_slaves:dcos_slaves_public:dcos_bootstrap
 
 
-- name: Run docker compose 
-  become: yes
-  command: docker-compose up -d
-  args:
-    chdir: "{{auth_root}}"
+# - name: Run docker compose 
+#   become: yes
+#   command: docker-compose up -d
+#   args:
+#     chdir: "{{auth_root}}"
 
-  # docker_service:
-  #   project_src: "{{auth_root}}/docker-compose.yml"
-  #   state: present
+- name: Run portus, private registry
+  docker_service:
+    project_src: "{{auth_root}}/docker-compose.yml"
+    state: present
