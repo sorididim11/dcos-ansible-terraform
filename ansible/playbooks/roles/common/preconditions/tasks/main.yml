@@ -25,10 +25,10 @@
     group: name=nogroup state=present
 
 
-  - name: Clean yum packages, metadata, dbcache, all and make new cache.   
-    shell: yum clean packages metadata dbcache all && yum makecache
-    args:
-      warn: no
+  # - name: Clean yum packages, metadata, dbcache, all and make new cache.   
+  #   shell: yum clean packages metadata dbcache all && yum makecache
+  #   args:
+  #     warn: no
 
 
   - name: Install required utils 
