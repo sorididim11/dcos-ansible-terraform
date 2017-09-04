@@ -1,7 +1,7 @@
 ---
 - name: Download docker private registry token 
   get_url:
-    url: "http://{{dcos_bootstrap_url}}/auth/docker.tar.gz"
+    url: "{{dcos_bootstrap_url}}/auth/docker.tar.gz"
     dest: "~/docker.tar.gz"
   delegate_to: "{{item}}"
   with_inventory_hostnames:
