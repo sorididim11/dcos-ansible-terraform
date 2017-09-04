@@ -50,6 +50,10 @@
   when: is_config_file.stat.exists == True
 
 
+- name: Stop Bootstrap web server because DC/OS upgrade script lauches bootstrap web
+  docker_container: name=boot-nginx state=stopped
+
+
 - name: Generate upgrade scripts
   become: yes
   command: "bash {{ dcos_installer_name }} --generate-node-upgrade-script {{dcos_version}}"
