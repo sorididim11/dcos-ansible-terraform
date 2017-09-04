@@ -62,12 +62,12 @@
     volumes: "{{ dcos_bootstrap_root_path }}/genconf/serve:/usr/share/nginx/html:ro"
 
 
-- name: Update cluster nodes in /etc/hosts
+- name: Update /etc/hosts for registry 
   become: yes
   blockinfile:
     path: /etc/hosts
     block: |
-        {{ hostvars[item]['ansible_' + dcos_nic_name].ipv4.address }} {{ machine_fqdn }}
+        {{ hostvars[groups['dcos_bootstrap'][0]]['ansible_' + dcos_nic_name].ipv4.address }} {{ machine_fqdn }}
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
   delegate_to: "{{item}}"
   with_inventory_hostnames: 
