@@ -45,7 +45,7 @@ services:
       MYSQL_DATABASE: portus_production
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
     volumes:
-      - /var/lib/portus/mariadb:/var/lib/mysql
+      - {{portus_db_path}}:/var/lib/mysql
 
   registry:
     image: library/registry:2.6
@@ -68,7 +68,7 @@ services:
           threshold: 5
           backoff: 1s
     volumes:
-      - /var/lib/portus/registry:/var/lib/registry
+      - {{registry_volume_path}}:/var/lib/registry
       - ./secrets:/secrets:ro
       - ./registry/config.yml:/etc/docker/registry/config.yml:ro
       - ./registry/init:/etc/docker/registry/init:ro

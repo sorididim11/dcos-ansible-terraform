@@ -6,7 +6,7 @@ ansible-valut edit <file-name>      -  edit the file
 ansible-valut edit <file-name>      -  edit the file
 ansible-vault decrypt foo.yml       - decypt file
 
-ansible-vault encrypt_string "42"   - encryt string
+ansible-vault encrypt_string "42" --ask-vault-pass    - encryt string with password
 
 put encoded value to somewhare in playbook like global var ( | for multi lines)
 notsecret: myvalue

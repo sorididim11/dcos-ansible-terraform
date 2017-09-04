@@ -1,2 +1,9 @@
 --- 
 - include: "{{op_type}}{% if registry_package is defined %}-{{registry_package}}{% endif %}.yml"
+
+- include: sync-registry.yml
+
+- include: distro-token.yml
+  delegate_to: "{{item}}"
+  with_inventory_hostnames:
+    - dcos_slaves:dcos_slaves_public

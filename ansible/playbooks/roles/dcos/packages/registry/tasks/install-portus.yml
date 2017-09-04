@@ -2,6 +2,8 @@
 - set_fact: 
     auth_root: "{{ dcos_bootstrap_root_path }}/genconf/serve/auth"
     machine_fqdn: "{{ service.repository.dest_repo.url }}"
+    registry_volume_path: "{{service.options.host_volume_path}}"
+    portus_db_path: "{{service.options.portus_db_path}}"
 
 
 - name: Install docker-compose
@@ -46,6 +48,37 @@
   args:
     chdir: "{{auth_root}}/secrets"
     creates: "portus.crt"
+
+
+- name: Run web container to distribute keys
+  become: yes
+  docker_container: 
+    name: boot-nginx
+    image: nginx
+    restart_policy: unless-stopped
+    state: started
+    ports: "{{dcos_bootstrap_port}}:80"
+    volumes: "{{ dcos_bootstrap_root_path }}/genconf/serve:/usr/share/nginx/html:ro"
+
+
+- name: Insert crts, key to docker cert directory on each agent
+  become: yes
+  file:
+    path: "/etc/docker/certs.d/{{machine_fqdn}}"
+    state: directory
+  delegate_to: "{{item}}"
+  with_inventory_hostnames: 
+    - dcos_slaves:dcos_slaves_public:dcos_bootstrap
+
+
+- name: Download docker private certificate
+  become: yes
+  get_url:
+    url: "http://{{groups['dcos_bootstrap'][0]}}:{{dcos_bootstrap_port}}/auth/secrets/portus.crt"
+    dest: "/etc/docker/certs.d/{{machine_fqdn}}/ca.crt"
+  delegate_to: "{{item}}"
+  with_inventory_hostnames:
+    - dcos_slaves:dcos_slaves_public:dcos_bootstrap
 
 # - name: Copy portus cert to /etc/pki/ca-trust/source/anchors
 #   become: yes

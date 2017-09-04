@@ -6,14 +6,4 @@
     - pkg-desc/registry.yml
   roles:
     - { role: dcos/packages/registry, op_type: install, registry_package: portus }
-    - { role: dcos/packages/registry,  op_type: sync-registry }
-  environment: "{{ proxy_env }}"
-
-
-
-- name: "Distribute private registry auth token to dcos nodes"
-  gather_facts: False
-  hosts: dcos_slaves:dcos_slaves_public
-  roles:
-    - { role: dcos/packages/registry,  op_type: distro-token }
   environment: "{{ proxy_env }}"
