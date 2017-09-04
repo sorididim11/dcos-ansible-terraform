@@ -15,7 +15,7 @@
     "container":{  
        "type":"DOCKER",
        "docker":{  
-          "image":"{{service.options.repo}}/{{service.options.image}}",
+          "image":"{{service.registry.repo}}/{{service.registry.image}}",
           "network":"HOST",
           "privileged":false,
           "parameters":[  
@@ -80,7 +80,7 @@
     ],
     "fetch":[  
        {  
-          "uri":"{{service.options.docker_credential}}"
+          "uri":"{{service.registry.docker_credential}}"
        }
     ]
   }

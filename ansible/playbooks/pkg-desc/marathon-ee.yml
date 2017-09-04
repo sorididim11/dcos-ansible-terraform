@@ -21,7 +21,7 @@ services:
       - { perm: "dcos:mesos:master:framework:role:dev", action: create, desc: " " } 
       - { perm: "dcos:mesos:master:reservation:role:dev", action: create, desc: " " }
       - { perm: "dcos:mesos:master:volume:role:dev", action: create, desc: " " }
-    options: 
+    registry: 
       repo: "{{docker_private_url}}"
       image: "marathon-dcos-ee:v1.4.7"
       docker_credential: "{{dcos_bootstrap_url}}/auth/docker.tar.gz"
@@ -48,8 +48,8 @@ services:
       - { perm: "dcos:mesos:master:framework:role:svc", action: create, desc: " " } 
       - { perm: "dcos:mesos:master:reservation:role:svc", action: create, desc: " " }
       - { perm: "dcos:mesos:master:volume:role:svc", action: create, desc: " " }
-    options: 
-      repo: "registry.kin.com"
+    registry: 
+      repo: "{{docker_private_url}}"
       image: "marathon-dcos-ee:v1.4.7"
       docker_credential: "http://{{dcos_bootstrap_url}}/auth/docker.tar.gz"
     
