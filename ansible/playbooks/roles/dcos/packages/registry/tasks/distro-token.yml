@@ -19,16 +19,9 @@
     - dcos_slaves:dcos_slaves_public
 
 
-- set_fact: 
-    svc_name: "{{ (item in groups['dcos_slaves']) | ternary('dcos-mesos-slave', 'dcos-mesos-slave-public') }}"
-    tags: distro_token
-  delegate_to: "{{item}}"
-  with_inventory_hostnames:
-    - dcos_slaves:dcos_slaves_public
-
 - name: Restart {{svc_name}} 
   become: yes
-  systemd: name={{svc_name}} state=restarted
+  systemd: name={{ (item in groups['dcos_slaves']) | ternary('dcos-mesos-slave', 'dcos-mesos-slave-public') }} state=restarted
   delegate_to: "{{item}}"
   with_inventory_hostnames:
     - dcos_slaves:dcos_slaves_public
