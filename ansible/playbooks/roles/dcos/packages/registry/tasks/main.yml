@@ -4,6 +4,3 @@
 - include: sync-registry.yml
 
 - include: distro-token.yml
-  delegate_to: "{{item}}"
-  with_inventory_hostnames:
-    - dcos_slaves:dcos_slaves_public

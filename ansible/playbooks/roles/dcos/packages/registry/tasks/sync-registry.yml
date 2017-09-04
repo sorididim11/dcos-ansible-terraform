@@ -8,7 +8,6 @@
     username: "{{service.repository.src_repo.id}}"
     password: "{{service.repository.src_repo.pwd}}"
     email: "{{service.repository.src_repo.email}}"
-  tags: registry-post
 
 
 - name: Docker pull images from the source registry
@@ -17,7 +16,6 @@
     name: "{{item.pull}}" 
     pull: True
   with_items: "{{service.repository.images}}"
-  tags: registry-post
 
 
 - docker_login: state=absent
@@ -31,7 +29,6 @@
     username: "{{service.repository.dest_repo.id}}"
     password: "{{service.repository.dest_repo.pwd}}"
     reauthorize: yes
-  tags: registry-post
 
 
 - name: 

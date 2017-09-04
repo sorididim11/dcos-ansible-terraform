@@ -3,6 +3,10 @@
   get_url:
     url: "http://{{groups['dcos_bootstrap'][0]}}:{{dcos_bootstrap_port}}/auth/docker.tar.gz"
     dest: "docker.tar.gz"
+  delegate_to: "{{item}}"
+  with_inventory_hostnames:
+    - dcos_slaves:dcos_slaves_public
+
 
 - name: Insert docker token to docker_credentials file
   become: yes
@@ -10,13 +14,22 @@
     content: "{{hostvars[groups['dcos_bootstrap'][0]].docker_token}}"
     dest: /etc/mesosphere/docker_credentials
     backup: yes
+  delegate_to: "{{item}}"
+  with_inventory_hostnames:
+    - dcos_slaves:dcos_slaves_public
 
 
 - set_fact: 
     svc_name: "{{ (inventory_hostname in groups['dcos_slaves']) | ternary('dcos-mesos-slave', 'dcos-mesos-slave-public') }}"
     tags: distro_token
-
+  delegate_to: "{{item}}"
+  with_inventory_hostnames:
+    - dcos_slaves:dcos_slaves_public
 
 - name: Restart {{svc_name}} 
   become: yes
   systemd: name={{svc_name}} state=restarted
+  delegate_to: "{{item}}"
+  with_inventory_hostnames:
+    - dcos_slaves:dcos_slaves_public
+    
