@@ -62,7 +62,7 @@ resource "null_resource" "provision" {
   }
   
   provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook ../ansible/playbooks/pkg-install-docker-registry-auth.yml"
+    command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook ../ansible/playbooks/pkg-install-docker-registry-portus.yml"
   }
   
   provisioner "local-exec" {
