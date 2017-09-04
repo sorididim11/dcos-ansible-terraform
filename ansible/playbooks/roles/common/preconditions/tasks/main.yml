@@ -25,15 +25,6 @@
     group: name=nogroup state=present
 
 
-  - name: Update cluster nodes in /etc/hosts
-    blockinfile:
-      path: /etc/hosts
-      block: |
-        {{ hostvars[item]['ansible_' + dcos_nic_name].ipv4.address }} {{ hostvars[item]['ansible_hostname'] }}
-      marker: "# {mark} ANSIBLE MANAGED BLOCK"
-    with_items: "{{groups['all']}}"
-
-
   # - name: Clean yum packages, metadata, dbcache, all and make new cache.   
   #   command: yum clean packages metadata dbcache all & yum makecache
   #   args:
@@ -50,7 +41,11 @@
       - curl 
       - ipset
       - ntp
-      - python-docker-py #for ansible docker module
+
+
+#for ansible docker module
+  - name: Install required utils for ansible 
+    pip: name=docker state=present
 
 
   - name: Enable ntpd

@@ -25,7 +25,7 @@
 - name: Download the DC/OS update script from the bootstrap web server
   get_url:
     url: "{{hostvars[groups['dcos_bootstrap'][0]]['upgrade_url']}}"
-    dest: /tmp/dcos/dcos_node_upgrade.sh
+    dest: /tmp/dcos_node_upgrade.sh
     force: no #if yes, if it keeps downloading
 
 
@@ -33,7 +33,7 @@
   become: yes
   command: "bash dcos_node_upgrade.sh"
   args:
-    chdir: /tmp/dcos
+    chdir: /tmp
 
 
 - name: Wait for {{svc_name}} running

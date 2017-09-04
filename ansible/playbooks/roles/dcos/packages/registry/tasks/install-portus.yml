@@ -62,7 +62,17 @@
     volumes: "{{ dcos_bootstrap_root_path }}/genconf/serve:/usr/share/nginx/html:ro"
 
 
-- name: Insert crts, key to docker cert directory on each agent
+- name: Update cluster nodes in /etc/hosts
+  blockinfile:
+    path: /etc/hosts
+    block: |
+        {{ hostvars[item]['ansible_' + dcos_nic_name].ipv4.address }} {{ machine_fqdn }}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+  with_inventory_hostnames: 
+    - dcos_slaves:dcos_slaves_public:dcos_bootstrap
+
+
+- name: Create docker crt directory on each agent
   become: yes
   file:
     path: "/etc/docker/certs.d/{{machine_fqdn}}"
@@ -72,7 +82,7 @@
     - dcos_slaves:dcos_slaves_public:dcos_bootstrap
 
 
-- name: Download docker private certificate
+- name:  Insert crt  to docker cert directory on each agent
   become: yes
   get_url:
     url: "http://{{groups['dcos_bootstrap'][0]}}:{{dcos_bootstrap_port}}/auth/secrets/portus.crt"
@@ -81,17 +91,24 @@
   with_inventory_hostnames:
     - dcos_slaves:dcos_slaves_public:dcos_bootstrap
 
-# - name: Copy portus cert to /etc/pki/ca-trust/source/anchors
-#   become: yes
-#   copy:
-#     remote_src: yes
-#     src: "{{auth_root}}/secrets/portus.crt"
-#     dest: /etc/pki/ca-trust/source/anchors/portus.crt
+
+- name: Copy portus cert to /etc/pki/ca-trust/source/anchors
+  become: yes
+  copy:
+    remote_src: yes
+    src: "/etc/docker/certs.d/{{machine_fqdn}}/ca.crt"
+    dest: /etc/pki/ca-trust/source/anchors/portus.crt
+  delegate_to: "{{item}}"
+  with_inventory_hostnames:
+    - dcos_slaves:dcos_slaves_public:dcos_bootstrap
 
 
 # - name: Update CA 
 #   become: yes
 #   command: update-ca-trust
+#   delegate_to: "{{item}}"
+#   with_inventory_hostnames:
+#     - dcos_slaves:dcos_slaves_public:dcos_bootstrap
 
 
 - name: Run docker compose 
