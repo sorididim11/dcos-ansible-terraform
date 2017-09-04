@@ -22,7 +22,7 @@ services:
       - { perm: "dcos:mesos:master:reservation:role:dev", action: create, desc: " " }
       - { perm: "dcos:mesos:master:volume:role:dev", action: create, desc: " " }
     options: 
-      repo: "registry.kin.com"
+      repo: "{{docker_private_url}}"
       image: "marathon-dcos-ee:v1.4.7"
       docker_credential: "{{dcos_bootstrap_url}}/auth/docker.tar.gz"
     

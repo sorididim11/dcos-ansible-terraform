@@ -1,7 +1,7 @@
 ---
 service:
     name: portus-registry
-    machine_fqdn: "registry.kin.com"
+    machine_fqdn: "{{docker_private_url}}"
     admin:
       id: kin
       pwd: 11111111
