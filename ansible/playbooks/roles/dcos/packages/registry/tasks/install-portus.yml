@@ -63,6 +63,7 @@
 
 
 - name: Update cluster nodes in /etc/hosts
+  become: yes
   blockinfile:
     path: /etc/hosts
     block: |
