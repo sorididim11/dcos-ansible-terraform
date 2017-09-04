@@ -32,6 +32,9 @@ resource "null_resource" "provision" {
     command = "echo '[dcos_nodes:children]\ndcos_masters\ndcos_slaves\ndcos_slaves_public' >> ${var.ansible_inventory_home}/hosts"
   }
 
+#  provisioner "local-exec" {
+#     command = "cp ${var.ansible_inventory_home}/ansible.cfg ${var.ansible_inventory_home}/../ansible.cfg"
+#   }
 
   //run ansible
   provisioner "local-exec" {
