@@ -123,4 +123,4 @@
   become: yes
   docker_service:
     project_src: "{{auth_root}}"
-    state: restarted
+    state: present
