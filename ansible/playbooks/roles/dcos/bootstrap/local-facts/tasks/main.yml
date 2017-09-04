@@ -1,2 +1,2 @@
 ---
-- include: facts-{{op_type}}.yml
+- include: "facts-{{op_type}}.yml"
