@@ -113,14 +113,15 @@
     - dcos_slaves:dcos_slaves_public:dcos_bootstrap
 
 
-# - name: Run docker compose 
-#   become: yes
-#   command: docker-compose up -d
-#   args:
-#     chdir: "{{auth_root}}"
-
-- name: Run portus, private registry
+- name: Run docker compose 
   become: yes
-  docker_service:
-    project_src: "{{auth_root}}"
-    state: present
+  command: docker-compose down && docker-compose up -d
+  args:
+    chdir: "{{auth_root}}"
+
+#ansible 2.3.1 & compose 1.16.0 is not working  msg: unable to load docker-compose. Error: cannot import name splitdrive
+# - name: Run portus, private registry
+#   become: yes
+#   docker_service:
+#     project_src: "{{auth_root}}"
+#     state: present
