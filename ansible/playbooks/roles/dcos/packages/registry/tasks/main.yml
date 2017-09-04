@@ -1,5 +1,5 @@
 --- 
-- include: "{{op_type}}{% if registry_package is defined %}-{{registry_package}}{% endif %}.yml"
+- include: "install-{{registry_package}}.yml"
 
 - include: sync-registry.yml
 
