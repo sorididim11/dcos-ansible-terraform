@@ -69,6 +69,7 @@
     block: |
         {{ hostvars[item]['ansible_' + dcos_nic_name].ipv4.address }} {{ machine_fqdn }}
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
+  delegate_to: "{{item}}"
   with_inventory_hostnames: 
     - dcos_slaves:dcos_slaves_public:dcos_bootstrap
 
