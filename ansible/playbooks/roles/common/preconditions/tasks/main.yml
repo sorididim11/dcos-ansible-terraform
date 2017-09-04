@@ -41,7 +41,7 @@
       - curl 
       - ipset
       - ntp
-      - python-pip
+      - python2-pip
 
 
 #for ansible docker module
