@@ -19,7 +19,7 @@
     - dcos_slaves:dcos_slaves_public
 
 
-- name: Restart {{svc_name}} 
+- name: Restart {{item}} 
   become: yes
   systemd: name={{ (item in groups['dcos_slaves']) | ternary('dcos-mesos-slave', 'dcos-mesos-slave-public') }} state=restarted
   delegate_to: "{{item}}"
