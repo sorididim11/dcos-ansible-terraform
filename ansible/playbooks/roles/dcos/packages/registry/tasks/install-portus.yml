@@ -120,6 +120,7 @@
 #     chdir: "{{auth_root}}"
 
 - name: Run portus, private registry
+  become: yes
   docker_service:
     project_src: "{{auth_root}}/docker-compose.yml"
     state: present
