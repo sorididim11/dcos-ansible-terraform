@@ -1,7 +1,7 @@
 
 - include: facts-create.yml
 
-- name: Update config.yml file with new security mode , {{edcos_security_mode}}
+- name: "Update config.yml file with new security mode , {{edcos_security_mode}}"
   local_action:
     lineinfile: 
       dest: "{{inventory_dir}}/group_vars/all.yml"
