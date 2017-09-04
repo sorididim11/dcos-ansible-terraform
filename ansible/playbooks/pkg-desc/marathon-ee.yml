@@ -6,7 +6,7 @@ services:
     user: nobody
     role: 
       principal: "{{edcos_superuser}}"
-      hostname: 10.0.15.31
+      hostname: "{{hostvars[groups['dcos_slaves'][0]]['ansible_' + dcos_nic_name].ipv4.address}}"
       name: dev
       cpus: 1.0
       mem: 500
@@ -31,7 +31,15 @@ services:
     name: marathon-ee-svc
     package: marathon-ee
     user: nobody
-    role: { principal: superman, hostname: 10.0.15.31,  name: svc,  cpus: 1.0, mem: 500, disks: 1000, begin_port: 1025,  end_port: 2180 }
+    role: 
+      principal: "{{edcos_superuser}}"
+      hostname: "{{hostvars[groups['dcos_slaves'][0]]['ansible_' + dcos_nic_name].ipv4.address}}"
+      name: svc
+      cpus: 1.0
+      mem: 500
+      disks: 1000
+      begin_port: 1025
+      end_port: 2180
     permissions: 
       - { perm: "dcos:mesos:master:reservation:principal:marathon-ee-svc", action: delete, desc: " " } 
       - { perm: "dcos:mesos:master:volume:principal:marathon-ee-svc", action: delete, desc: " " }
