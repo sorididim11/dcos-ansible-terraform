@@ -37,10 +37,6 @@ resource "null_resource" "provision" {
 #   }
 
   //run ansible
-  # provisioner "local-exec" {
-  #   command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook  ../ansible/playbooks/util-helion-chores.yml"
-  # }
-
   provisioner "local-exec" {
     command = "ANSIBLE_CONFIG=${var.ansible_inventory_home}/ansible.cfg ansible-playbook  ../ansible/playbooks/step1-deploy-preconditions.yml"
   }
