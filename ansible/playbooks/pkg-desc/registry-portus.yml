@@ -1,0 +1,26 @@
+---
+service:
+    name: portus-registry
+    machine_fqdn: "registry.kin.com"
+    admin:
+      id: kin
+      pwd: 11111111
+    network:
+      registry_port: 5000
+      auth_port: 5001
+    storage: 
+      host_volume_path: /var/lib/portus/registry  # docker registry volume path
+      portus_db_path: /var/lib/portus/mariadb
+    repository: 
+      url: "https://index.docker.io/v1/"
+      id: sorididim11
+      email: sorididim11@gmail.com
+      pwd: !vault |
+            $ANSIBLE_VAULT;1.1;AES256
+            37316131376165643935613032613739366638326539633338376337303339626531313665633432
+            3336343766633365653231323636306237376461326363610a633033333138353531613033356534
+            32313366313336303538383962383565636663393138363462376163303661306533633861383432
+            6434396362393931320a313336613065653932626261383636616438303539643764626638623965
+            6538
+      images: 
+        - { pull: "sorididim11/marathon-dcos-ee:v1.4.7_1.9.8", push: "marathon-dcos-ee:v1.4.7" }
