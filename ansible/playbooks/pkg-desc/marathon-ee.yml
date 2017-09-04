@@ -4,7 +4,15 @@ services:
     name: marathon-ee-dev
     package: marathon-ee
     user: nobody
-    role: { principal: superman, hostname: 10.0.15.31,  name: dev,  cpus: 1.0, mem: 500, disks: 1000, begin_port: 1025,  end_port: 2180 }
+    role: 
+      principal: "{{edcos_superuser}}"
+      hostname: 10.0.15.31
+      name: dev
+      cpus: 1.0
+      mem: 500
+      disks: 1000 
+      begin_port: 1025
+      end_port: 2180
     permissions: 
       - { perm: "dcos:mesos:master:reservation:principal:marathon-ee-dev", action: delete, desc: " " } 
       - { perm: "dcos:mesos:master:volume:principal:marathon-ee-dev", action: delete, desc: " " }
