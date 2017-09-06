@@ -77,7 +77,7 @@
           "port":0,
           "name":"libprocess"
        }
-    ]{% if service.registry.docker_credential is defined and  service.registry.docker_credential != "" $}, 
+    ]{% if service.registry.docker_credential is defined and  service.registry.docker_credential != "" %}, 
     "fetch":[  
        {  
           "uri":"{{service.registry.docker_credential}}"
