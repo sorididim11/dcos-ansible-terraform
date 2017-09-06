@@ -15,7 +15,7 @@
     "container":{  
        "type":"DOCKER",
        "docker":{  
-          "image":"{{service.registry.repo}}/{{service.registry.image}}",
+          "image":"{% if service.registry.repo is defined and service.registry.repo != ""%}{{service.registry.repo}}/{% endif %}{{service.registry.image}}",
           "network":"HOST",
           "privileged":false,
           "parameters":[  
@@ -77,10 +77,11 @@
           "port":0,
           "name":"libprocess"
        }
-    ],
+    ]{% if service.registry.docker_credential is defined and  service.registry.docker_credential != "" $}, 
     "fetch":[  
        {  
           "uri":"{{service.registry.docker_credential}}"
        }
     ]
+    {% endif %}
   }
