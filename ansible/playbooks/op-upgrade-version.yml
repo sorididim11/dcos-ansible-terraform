@@ -1,0 +1,57 @@
+---
+- name: Generate DC/OS upgrade scripts
+  hosts: dcos_bootstrap
+  gather_facts: False
+  tags: ['upgrade-security']
+  roles:
+    - { role: dcos/bootstrap/upgrade , upgrade_op: version}
+    - { role: dcos/bootstrap/boot_web, tags: [ 'upgrade-master' ] }
+  environment: "{{ proxy_env }}"
+
+
+- name: "Upgrade Masters"
+  gather_facts: False
+  hosts: dcos_masters
+  tags: ['upgrade-security']
+  serial: 1
+  roles:
+    - { role: dcos/node/upgrade-node, node_type: master} 
+  environment: "{{ proxy_env }}"
+
+
+- name: "Upgrade Slaves"
+  gather_facts: False
+  hosts: dcos_slaves
+  tags: ['upgrade-security-slave']
+  serial: 1
+  roles:
+    - { role: dcos/node/upgrade-node, node_type: slave, svc_name: dcos-mesos-slave  } 
+  environment: "{{ proxy_env }}"
+
+
+- name: "Upgrade  Slaves public"
+  gather_facts: False
+  hosts: dcos_slaves_public
+  tags: ['upgrade-security']
+  serial: 1
+  roles:
+    - { role: dcos/node/upgrade-node, node_type: slave, svc_name: dcos-mesos-slave-public } 
+  environment: "{{ proxy_env }}"
+
+
+- name: Update group_vars 
+  hosts: dcos_bootstrap
+  gather_facts: False
+  tags: ['upgrade-security', 'update-groupvars']
+  roles:
+    - { role: dcos/bootstrap/local-facts, op_type: update }
+  environment: "{{ proxy_env }}"
+
+
+- name: "Update CLI and Enterprise CLI"
+  hosts: dcos_cli
+  tags: ['pkg']
+  gather_facts: False
+  roles:
+    - dcos/packages/cli
+  environment: "{{ proxy_env }}"
