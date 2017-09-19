@@ -14,20 +14,20 @@ services:
       begin_port: 1025
       end_port: 2180
     permissions: 
-      - { perm: "dcos:mesos:master:reservation:principal:{{services['marathon-ee-dev'].name}}", action: delete, desc: " " } 
-      - { perm: "dcos:mesos:master:volume:principal:{{services['marathon-ee-dev'].name}}", action: delete, desc: " " }
-      - { perm: "dcos:mesos:master:task:user:{{services['marathon-ee-dev'].user}}", action: create, desc: "Allows Linux user nobody to execute tasks" }
+      - { perm: "dcos:mesos:master:reservation:principal:marathon-ee-dev", action: delete, desc: " " } 
+      - { perm: "dcos:mesos:master:volume:principal:marathon-ee-dev", action: delete, desc: " " }
+      - { perm: "dcos:mesos:master:task:user:nobody", action: create, desc: "Allows Linux user nobody to execute tasks" }
       - { perm: "dcos:mesos:master:task:app_id:%252F", action: create, desc: " " }
-      - { perm: "dcos:mesos:master:framework:role:{{services['marathon-ee-dev'].role.name}}", action: create, desc: " " } 
-      - { perm: "dcos:mesos:master:reservation:role:{{services['marathon-ee-dev'].role.name}}", action: create, desc: " " }
-      - { perm: "dcos:mesos:master:volume:role:{{services['marathon-ee-dev'].role.name}}", action: create, desc: " " }
+      - { perm: "dcos:mesos:master:framework:role:dev", action: create, desc: " " } 
+      - { perm: "dcos:mesos:master:reservation:role:dev", action: create, desc: " " }
+      - { perm: "dcos:mesos:master:volume:role:dev", action: create, desc: " " }
     registry: 
       repo: "{{docker_private_url}}"
       image: "marathon-dcos-ee:v1.4.7"
       docker_credential: "{{dcos_bootstrap_url}}/auth/docker.tar.gz"
     
 
-  marathon-ee-svc:
+  marathon-ee-svc:  
     name: marathon-ee-svc
     package: marathon-ee
     user: nobody
