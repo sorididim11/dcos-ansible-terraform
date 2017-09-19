@@ -1,25 +1,27 @@
 --- 
-- name: Copy /usr/bin/docker 
-  become: yes
-  shell: |
-       cp -p /usr/bin/docker /usr/bin/docker-orig
-       cp -p /usr/bin/docker /tmp/docker-wrapper
+# - block: 
+#     - name: Copy /usr/bin/docker 
+#       become: yes
+#       shell: |
+#           cp -p /usr/bin/docker /usr/bin/docker-orig
+#           cp -p /usr/bin/docker /tmp/docker-wrapper
 
 
-- name: Update /usr/bin/docker  
-  become: yes
-  shell:
-    cmd: |
-        tee /tmp/docker-wrapper >/dev/null <<"EOF"
-         #!/usr/bin/env sh
-         unset LD_LIBRARY_PATH
-         /usr/bin/docker-orig "$@"
-        EOF
+#     - name: Update /usr/bin/docker  
+#       become: yes
+#       shell:
+#         cmd: |
+#             tee /tmp/docker-wrapper >/dev/null <<"EOF"
+#             #!/usr/bin/env sh
+#             unset LD_LIBRARY_PATH
+#             /usr/bin/docker-orig "$@"
+#             EOF
 
 
-- name: Move /usr/bin/docker  
-  become: yes
-  shell: sudo mv -f /tmp/docker-wrapper /usr/bin/docker
+#     - name: Move /usr/bin/docker  
+#       become: yes
+#       shell: sudo mv -f /tmp/docker-wrapper /usr/bin/docker
+#   when: upgrade_op == "security"
 
 
 - name: Download the DC/OS update script from the bootstrap web server
@@ -47,25 +49,25 @@
   changed_when: no
 
 
-- name: Verify mertric snapshot of mesos slave
-  uri:
-    url: "https://{{inventory_hostname}}:5051/metrics/snapshot"
-    method: GET
-    return_content: yes
-    validate_certs: False
-    headers: 
-      Authorization: "token={{hostvars[groups['dcos_bootstrap'][0]]['auth_token']}}"
-      Accept: "application/json"   
-  register: is_registered
-  until: (is_registered.content | from_json)['slave/registered'] == 1.0
-  retries: 1000
-  delay: 30
-  changed_when: no
+# only for dcos 1.9
+# - name: Verify mertric snapshot of mesos slave
+#   uri:
+#     url: "https://{{inventory_hostname}}:5051/metrics/snapshot"
+#     method: GET
+#     return_content: yes
+#     validate_certs: False
+#     headers: 
+#       Authorization: "token={{hostvars[groups['dcos_bootstrap'][0]]['auth_token']}}"
+#       Accept: "application/json"   
+#   register: is_registered
+#   until: (is_registered.content | from_json)['slave/registered'] == 1.0
+#   retries: 1000
+#   delay: 30
+#   changed_when: no
+# - debug: msg="{{is_registered.content}}"
 
 
-- debug: msg="{{is_registered.content}}"
-
-
-- name: Move /usr/bin/docker  
-  become: yes
-  shell: mv -f /usr/bin/docker-orig /usr/bin/docker
+# - name: Move /usr/bin/docker  
+#   become: yes
+#   shell: mv -f /usr/bin/docker-orig /usr/bin/docker
+#   when: upgrade_op == "security"
