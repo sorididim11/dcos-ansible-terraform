@@ -2,6 +2,7 @@
 
 
 dcos_version: "1.9"
+dcos_cli_version: "1.10"
 
 # enterprise
 edcos_license: !vault |

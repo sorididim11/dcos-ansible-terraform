@@ -26,7 +26,7 @@
 - name: Download DC/OS client
   become: yes
   get_url:
-    url: "https://downloads.dcos.io/binaries/cli/linux/x86-64/dcos-{{dcos_version}}/dcos"
+    url: "https://downloads.dcos.io/binaries/cli/linux/x86-64/dcos-{{dcos_cli_version}}/dcos"
     dest: /usr/local/bin/dcos
     validate_certs: no
     mode: 0755
