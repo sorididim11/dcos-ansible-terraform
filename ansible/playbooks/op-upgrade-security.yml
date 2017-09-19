@@ -4,7 +4,7 @@
   gather_facts: False
   tags: ['upgrade-security']
   roles:
-    - dcos/bootstrap/upgrade 
+    - { role: dcos/bootstrap/upgrade, upgrade_op: security }
     - { role: dcos/bootstrap/boot_web, tags: [ 'upgrade-master' ] }
   environment: "{{ proxy_env }}"
 

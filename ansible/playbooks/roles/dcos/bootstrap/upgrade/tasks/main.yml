@@ -1,19 +1,22 @@
 --- 
 
-- assert: { that: "ansible_local['bootstrap-config'].security != 'strict'", msg: "What??? you are already in strict mode!! "}
-- debug:  msg="Current security mode, {{ansible_local['bootstrap-config'].security}}"
-
-
 - name: Aquire Auth token 
   shell: dcos config show core.dcos_acs_token
   register: auth_token_data
   changed_when: False
 
 
+- name: Prepare security mode upgrade 
+  block:
+    - assert: { that: "ansible_local['bootstrap-config'].security != 'strict'", msg: "What??? you are already in strict mode!! "}
+    - debug:  msg="Current security mode, {{ansible_local['bootstrap-config'].security}}"
+    - set_fact: 
+        edcos_security_mode: "{{ (ansible_local['bootstrap-config'].security == 'permissive') | ternary('strict', 'permissive')  }}"
+  when: upgrade_op == "security"
+
 
 - name: Update fact, edcos_security_mode  
   set_fact: 
-    edcos_security_mode: "{{ (ansible_local['bootstrap-config'].security == 'permissive') | ternary('strict', 'permissive')  }}"
     dcos_version: "{{ansible_local['dcos-version'].version}}"
     auth_token: "{{ auth_token_data.stdout }}"
 
@@ -47,7 +50,6 @@
     dest: "{{ dcos_bootstrap_root_path }}/genconf/config.yaml"
     regexp: "^security:"
     line: "security: {{edcos_security_mode}}"
-  when: is_config_file.stat.exists == True
 
 
 - name: Stop Bootstrap web server because DC/OS upgrade script lauches bootstrap web
