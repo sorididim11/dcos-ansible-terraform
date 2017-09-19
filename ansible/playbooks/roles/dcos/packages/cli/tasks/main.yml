@@ -35,7 +35,7 @@
 
 
 - name: Set dcos master url to dcos cli 
-  command: "dcos config set core.dcos_url {{ dcos_cluster_url }}"
+  command: "{{ (dcos_cli_version | version_compare('1.10', '>=')) | ternary('dcos cluster setup ', 'dcos config set core.dcos_url ')}} {{ dcos_cluster_url }}"
 
 
 - name: Download root Certificate from master
