@@ -2,7 +2,7 @@
 - name: Generate DC/OS upgrade scripts
   hosts: dcos_bootstrap
   gather_facts: False
-  tags: ['upgrade-security']
+  tags: ['upgrade-version']
   roles:
     - { role: dcos/bootstrap/upgrade , upgrade_op: version}
     - { role: dcos/bootstrap/boot_web, tags: [ 'upgrade-master' ] }
@@ -12,7 +12,7 @@
 - name: "Upgrade Masters"
   gather_facts: False
   hosts: dcos_masters
-  tags: ['upgrade-security']
+  tags: ['upgrade-version']
   serial: 1
   roles:
     - { role: dcos/node/upgrade-node, node_type: master} 
@@ -22,7 +22,7 @@
 - name: "Upgrade Slaves"
   gather_facts: False
   hosts: dcos_slaves
-  tags: ['upgrade-security-slave']
+  tags: ['upgrade-version']
   serial: 1
   roles:
     - { role: dcos/node/upgrade-node, node_type: slave, svc_name: dcos-mesos-slave  } 
@@ -32,7 +32,7 @@
 - name: "Upgrade  Slaves public"
   gather_facts: False
   hosts: dcos_slaves_public
-  tags: ['upgrade-security']
+  tags: ['upgrade-version']
   serial: 1
   roles:
     - { role: dcos/node/upgrade-node, node_type: slave, svc_name: dcos-mesos-slave-public } 
@@ -42,7 +42,7 @@
 - name: Update group_vars 
   hosts: dcos_bootstrap
   gather_facts: False
-  tags: ['upgrade-security', 'update-groupvars']
+  tags: ['upgrade-version', 'update-groupvars']
   roles:
     - { role: dcos/bootstrap/local-facts, op_type: update }
   environment: "{{ proxy_env }}"
