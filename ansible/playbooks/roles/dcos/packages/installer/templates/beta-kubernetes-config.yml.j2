@@ -1,0 +1,19 @@
+{
+    "service": {
+        "name": "{{service.name}}",
+        "service_account": "{{service.name}}",
+        "service_account_secret": "{{service.name}}/{{service.secret_name | default('secret')}}",
+    },
+    "apiserver": {
+        "count": {{ (groups['dcos_slaves'] | length) }}
+    },
+    "controllermanager": {
+        "count": {{ (groups['dcos_slaves'] | length) }}
+    },
+    "etcd": {
+        "count": {{ (groups['dcos_slaves'] | length) }}
+    },
+    "kubernetes": {
+        "node_count": {{ (groups['dcos_slaves'] | length) }}
+    }
+}
