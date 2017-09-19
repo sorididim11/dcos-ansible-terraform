@@ -131,3 +131,26 @@ ansible-playbook -i <inventory file> op-add-quota.yml
 check the state of agents after the reservation 
 dcos node --json
 
+
+## Service account 's permission for custom marathon 
+### Permissions + /users/<service-account>/operation
+dcos:mesos:master:framework:role:<myrole>/users/<service-account-id>/create
+dcos:mesos:master:reservation:role:<myrole>/users/<service-account-id>/create
+dcos:mesos:master:volume:role:<myrole>/users/<service-account-id>/create
+dcos:mesos:master:task:user:nobody/users/<service-account-id>/create
+dcos:mesos:master:reservation:principal:<service-account-id>/users/<service-account-id>/delete
+dcos:mesos:master:task:app_id:%252F/users/<service-account-id>/create
+dcos:mesos:master:volume:principl:<service-account-id>/users/<servic
+
+### Group/User permssions for custom marathon 
+dcos:adminrouter:service:<service-name> full
+dcos:service:marathon:<service-name>:services:/<service-or-group> <action>
+dcos:adminrouter:ops:mesos full
+dcos:adminrouter:ops:slave full
+dcos:mesos:agent:executor:app_id:/<service-or-group> read
+dcos:mesos:agent:framework:role:<myrole> read
+dcos:mesos:agent:sandbox:app_id:/<service-or-group> read
+dcos:mesos:agent:task:app_id:/<service-or-group> read
+dcos:mesos:master:executor:app_id:/<service-or-group> read
+dcos:mesos:master:framework:role:<myrole> read
+dcos:mesos:master:task:app_id:/<service-or-group> read
