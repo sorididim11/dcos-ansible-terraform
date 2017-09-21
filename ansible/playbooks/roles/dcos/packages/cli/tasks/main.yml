@@ -59,7 +59,7 @@
   
 
 - name: Install Enterprise CLI
-  command: dcos package install --cli dcos-enterprise-cli
+  command: dcos package install --cli dcos-enterprise-cli --yes
   when: dcos_is_enterprise
   environment: "{{proxy_env}}"
   
