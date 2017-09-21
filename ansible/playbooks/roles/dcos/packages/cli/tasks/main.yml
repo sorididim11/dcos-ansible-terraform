@@ -42,9 +42,9 @@
     mode: 0755
   when: dcos_is_enterprise
 
-
+# in dcos cli 1.10 option for cert, --ca-certs={{ dcos_bootstrap_root_path }}/dcos-ca.crt is not working 
 - name: Set dcos master url to dcos cli 
-  command: "dcos cluster setup {{ dcos_cluster_url }} --ca-certs={{ dcos_bootstrap_root_path }}/dcos-ca.crt" 
+  command: "dcos cluster setup {{ dcos_cluster_url }} --insecure --username={{edcos_superuser}} --password={{edcos_superuser_pwd}}" 
   #command: "{{ (dcos_cli_version | version_compare('1.10', operator='ge', strict=True)) | ternary('dcos cluster setup ', 'dcos config set core.dcos_url ')}} {{ dcos_cluster_url }}"
 
 
@@ -53,9 +53,9 @@
 #   when: dcos_is_enterprise
 
 
-- name: Login to DC/OS
-  command: dcos auth login --username={{edcos_superuser}} --password={{edcos_superuser_pwd}}
-  when: dcos_is_enterprise
+# - name: Login to DC/OS
+#   command: dcos auth login --username={{edcos_superuser}} --password={{edcos_superuser_pwd}}
+#   when: dcos_is_enterprise
   
 
 - name: Install Enterprise CLI
