@@ -28,7 +28,7 @@ dcos_nic_name: eth1 # for ip-detect - name of network interface card for ip dete
 dcos_nic_pub_name: eth1 # for ip-detect-public
 
 
-dcos_first_master_internal_ip: "{{hostvars[groups['dcos_masters'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}"
+dcos_first_master_internal_ip: "{{hostvars[groups['dcos_masters'][0]]['ansible_' + dcos_nic_name].ipv4.address}}"
 dcos_cluster_url: "{{ (edcos_security_mode == 'disabled') | ternary('http', 'https')}}://{{dcos_first_master_internal_ip}}"
   
 #networking

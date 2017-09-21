@@ -34,10 +34,6 @@
   environment: "{{proxy_env}}" 
 
 
-- name: Set dcos master url to dcos cli 
-  command: "{{ (dcos_cli_version | version_compare('1.10', operator='ge', strict=True)) | ternary('dcos cluster setup ', 'dcos config set core.dcos_url ')}} {{ dcos_cluster_url }}"
-
-
 - name: Download root Certificate from master
   get_url: 
     url: "{{ dcos_cluster_url }}/ca/dcos-ca.crt"
@@ -47,9 +43,14 @@
   when: dcos_is_enterprise
 
 
-- name: Confige dcos with root certificate
-  command: "dcos config set core.ssl_verify {{ dcos_bootstrap_root_path }}/dcos-ca.crt"
-  when: dcos_is_enterprise
+- name: Set dcos master url to dcos cli 
+  command: "dcos cluster setup {{ dcos_cluster_url }} --ca-certs={{ dcos_bootstrap_root_path }}/dcos-ca.crt" 
+  #command: "{{ (dcos_cli_version | version_compare('1.10', operator='ge', strict=True)) | ternary('dcos cluster setup ', 'dcos config set core.dcos_url ')}} {{ dcos_cluster_url }}"
+
+
+# - name: Confige dcos with root certificate
+#   command: "dcos config set core.ssl_verify {{ dcos_bootstrap_root_path }}/dcos-ca.crt"
+#   when: dcos_is_enterprise
 
 
 - name: Login to DC/OS
