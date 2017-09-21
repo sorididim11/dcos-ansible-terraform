@@ -6,7 +6,7 @@ services:
     user: nobody
     role: 
       principal: "{{edcos_superuser}}"
-      hostname: "{{hostvars[groups['dcos_slaves'][0]]['ansible_' + dcos_nic_name].ipv4.address}}"
+      hostname: "172.16.1.120"
       name: dev
       cpus: 1.0
       mem: 500
