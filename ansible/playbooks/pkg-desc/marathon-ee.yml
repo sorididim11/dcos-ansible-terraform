@@ -22,9 +22,10 @@ services:
       - { perm: "dcos:mesos:master:task:user:nobody", action: create, desc: "Allows Linux user nobody to execute tasks" }
       - { perm: "dcos:mesos:master:task:app_id:%252F", action: create, desc: " " }
     registry: 
+     # repo: "{{docker_private_url}}"
       repo: ""
       image: "mesosphere/marathon-dcos-ee:v1.5.0_1.10.0"
-      docker_credential: "{{dcos_bootstrap_url}}/auth/docker.tar.gz"
+      docker_credential: "{{groups['dcos_bootstrap'][0]}}:{{dcos_bootstrap_port}}/auth/docker.tar.gz"
     
 
   marathon-ee-svc:  
@@ -49,7 +50,7 @@ services:
       - { perm: "dcos:mesos:master:reservation:role:svc", action: create, desc: " " }
       - { perm: "dcos:mesos:master:volume:role:svc", action: create, desc: " " }
     registry: 
-      repo: "mesosphere/marathon-dcos-ee:v1.5.0_1.10.0"
-      image: "marathon-dcos-ee:v1.4.7"
-      docker_credential: "http://{{dcos_bootstrap_url}}/auth/docker.tar.gz"
+      repo: ""
+      image: "mesosphere/marathon-dcos-ee:v1.5.0_1.10.0"
+      docker_credential: "{{groups['dcos_bootstrap'][0]}}:{{dcos_bootstrap_port}}/auth/docker.tar.gz"
     
