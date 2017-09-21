@@ -1,6 +1,6 @@
 {
 {% for target in nodes %}
-{% if role_def.hostname == target.hostname %} 
+  {% if target.hostname is defined and role_def.hostname == target.hostname %} 
 
   "type": "{{op_type | upper}}",
   "{{op_type | lower }}": {
