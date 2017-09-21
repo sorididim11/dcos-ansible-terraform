@@ -36,8 +36,8 @@ services:
       principal: "{{edcos_superuser}}"
       hostname: "{{hostvars[groups['dcos_slaves'][0]]['ansible_' + dcos_nic_name].ipv4.address}}"
       name: svc
-      cpus: 1.0
-      mem: 500
+      cpus: 1.5
+      mem: 1000
       disks: 1000
       begin_port: 1025
       end_port: 2180
