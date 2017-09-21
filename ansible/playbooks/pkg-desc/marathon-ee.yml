@@ -39,8 +39,8 @@ services:
       cpus: 1.5
       mem: 1000
       disks: 1000
-      begin_port: 1025
-      end_port: 2180
+      begin_port: 2182
+      end_port: 3887
     permissions: 
       - { perm: "dcos:mesos:master:reservation:principal:marathon-ee-svc", action: delete, desc: " " } 
       - { perm: "dcos:mesos:master:volume:principal:marathon-ee-svc", action: delete, desc: " " }
