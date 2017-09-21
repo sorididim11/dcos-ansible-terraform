@@ -4,7 +4,7 @@
   get_url:
     url: "{{hostvars[groups['dcos_bootstrap'][0]]['upgrade_url']}}"
     dest: /tmp/dcos_node_upgrade.sh
-    force: no #if yes, if it keeps downloading
+    force: yes #if yes, if it keeps downloading
 
 
 - name: Upgrade master node 

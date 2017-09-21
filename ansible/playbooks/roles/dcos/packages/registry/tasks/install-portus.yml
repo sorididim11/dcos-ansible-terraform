@@ -86,6 +86,7 @@
   get_url:
     url: "http://{{groups['dcos_bootstrap'][0]}}:{{dcos_bootstrap_port}}/auth/secrets/portus.crt"
     dest: "/etc/docker/certs.d/{{service.machine_fqdn}}/ca.crt"
+    force: yes
   delegate_to: "{{item}}"
   with_inventory_hostnames:
     - dcos_slaves:dcos_slaves_public:dcos_bootstrap
@@ -97,6 +98,7 @@
     remote_src: yes
     src: "/etc/docker/certs.d/{{service.machine_fqdn}}/ca.crt"
     dest: /etc/pki/ca-trust/source/anchors/portus.crt
+    force: yes
   delegate_to: "{{item}}"
   with_inventory_hostnames:
     - dcos_slaves:dcos_slaves_public:dcos_bootstrap
