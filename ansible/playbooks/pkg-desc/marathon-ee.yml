@@ -8,7 +8,7 @@ services:
       principal: "{{edcos_superuser}}"
       hostname: "{{hostvars[groups['dcos_slaves'][0]]['ansible_' + dcos_nic_name].ipv4.address}}"
       name: dev
-      cpus: 1.5
+      cpus: 1.0
       mem: 1500
       disks: 1000 
       begin_port: 1025
@@ -36,7 +36,7 @@ services:
       principal: "{{edcos_superuser}}"
       hostname: "{{hostvars[groups['dcos_slaves'][0]]['ansible_' + dcos_nic_name].ipv4.address}}"
       name: svc
-      cpus: 1.5
+      cpus: 1.0
       mem: 1000
       disks: 1000
       begin_port: 2182
