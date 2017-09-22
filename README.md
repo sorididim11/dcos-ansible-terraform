@@ -1,3 +1,7 @@
+# ToDo
+1) portus registry to dcos pod
+2) NFS voluems for registry & influxdb
+
 # Features
   
 * Support vagrant, terraform for openstack

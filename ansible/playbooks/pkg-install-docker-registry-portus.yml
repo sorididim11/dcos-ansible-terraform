@@ -1,5 +1,5 @@
 --- 
-- name: "Install docker registry"
+- name: "Install portus docker registry"
   gather_facts: False
   hosts: dcos_cli[0]
   vars_files: 
