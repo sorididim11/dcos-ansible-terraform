@@ -1,4 +1,5 @@
 .vagrant
+.terraform
 *.retry
 .DS_Store
 .pem
