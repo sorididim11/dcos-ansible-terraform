@@ -5,5 +5,5 @@
   vars_files: 
     - pkg-desc/registry-portus.yml
   roles:
-    - { role: dcos/packages/registry, registry_package: portus } #portus or cesanta
+    - { role: dcos/packages/registry, registry_package: portus, image_sync: True } #portus or cesanta
   environment: "{{ proxy_env }}"

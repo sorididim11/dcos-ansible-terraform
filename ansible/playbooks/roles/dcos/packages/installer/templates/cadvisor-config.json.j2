@@ -1,7 +1,7 @@
 {
   "service": {
     "name": "{{service.name}}",
-    "instances": {{ (groups['dcos_slaves'] | length) +  (groups['dcos_slaves_public'] | length) }} ,
+    "instances": {{ (groups['dcos_slaves'] | length) }} ,
     "cpus": 0.1,
     "mem": 128
   },

@@ -11,7 +11,7 @@
 - name: Insert docker token to /etc/mesosphere/docker_credentials file
   become: yes
   copy:
-    content: "{{hostvars[groups['dcos_bootstrap'][0]].docker_token}}"
+    content: "{{hostvars[groups['dcos_bootstrap'][0]].docker_token | to_nice_json}}"
     dest: /etc/mesosphere/docker_credentials
     backup: yes
   delegate_to: "{{item}}"

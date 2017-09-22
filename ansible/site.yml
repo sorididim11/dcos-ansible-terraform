@@ -11,6 +11,8 @@
 
 - include : playbooks/pkg-install-cli.yml
 
-- include : playbooks/pkg-install-docker-registry.yml
+- include : playbooks/pkg-install-marathon-lb.yml
 
 - include : playbooks/pkg-install-monitoring.yml
+
+- include : playbooks/pkg-install-docker-registry.yml

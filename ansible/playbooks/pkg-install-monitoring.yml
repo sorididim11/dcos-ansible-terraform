@@ -1,7 +1,4 @@
 --- 
-
-- include: pkg-install-marathon-lb.yml
-
 - name: Install cadvisor
   gather_facts: False
   hosts: dcos_cli[0]

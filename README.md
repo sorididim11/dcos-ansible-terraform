@@ -1,5 +1,4 @@
 # Features
-dcos config set marathon.url
   
 * Support vagrant, terraform for openstack
 * Install DC/OS cluster based advanced custom installation of DC/OS which is upgradable
@@ -21,23 +20,13 @@ dcos config set marathon.url
 
 ## Test Enviornment
 
+* DC/OS: 1.10 (1.9.* is not supported anymore)
 * OS: Centos above 7.2 (DC/OS requirement)
 * ansible:  2.3.1
 * vagrant: 1.9.7
 * terraform: 0.9.3
 
 ## Private registry 
-1) openssl 
-add  subjectAltName for ip to /etc/pki/tls/openssl.cnf
-[ v3_ca ]
-subjectAltName=IP:172.16.1.70
-
-2) registry
-modify url of registry.yml. or config LDAP in auth_config.yml
-   dest_repo: 
-        url: "172.16.1.51:15000"
-        id: admin
-        pwd: badmin
 
 3) marathon-ee
 modify repo for bootstrap ip
@@ -154,3 +143,32 @@ dcos:mesos:agent:task:app_id:/<service-or-group> read
 dcos:mesos:master:executor:app_id:/<service-or-group> read
 dcos:mesos:master:framework:role:<myrole> read
 dcos:mesos:master:task:app_id:/<service-or-group> read
+
+
+### Private registry 
+#### supported private registry. 
+1) portus (by susue) 
+2) cesante 
+
+##### portus
+portus installed in bootstrap node.  port https(443) is used basically
+###### config 
+1) LDAP integration - default config is not based on LDAP. to integrate LDAP, add LDAP config in role/dcos/packages/registry/templates/config-local.yml.j2 
+2) registry certificate - Command name of certficate 
+  update docker_private_url as domain name you use in group_vars/all.yml
+3) add admin account to playbooks/pkg-des/registry-portus for ID, Password
+
+###### install
+to install portus, execute " ansible-playbook pkg-install-docker-registry-portus.yml"
+
+steps
+1) create certificates for registry 
+2) install portus based on docker-compose
+3) install the cert for docker daemon on each dcos agent
+3) optional - download images from another registry to push them to currently installed portu registry.
+4) update docker credentials for dcos mesos container runtime on each dcos agent
+
+
+###### manaul login 
+
+sudo docker login "<private registyr domain name without port>

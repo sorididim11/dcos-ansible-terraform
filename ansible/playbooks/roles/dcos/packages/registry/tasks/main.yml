@@ -2,5 +2,6 @@
 - include: "install-{{registry_package}}.yml"
 
 - include: sync-registry.yml
+  when: image_sync == True
 
 - include: distro-token.yml
