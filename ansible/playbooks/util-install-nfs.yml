@@ -7,7 +7,6 @@
   environment: "{{ proxy_env }}"
 
 
---- 
 - name: Install NFS client
   hosts: dcos_slaves:dcos_slaves_public
   gather_facts: yes
