@@ -28,17 +28,17 @@
 
 - name: Make sure if NFS mounting point exists
   file: path="{{item.mnt}}" state=directory 
-  with_items: {{nfs_exports}}
+  with_items: "{{nfs_exports}}"
 
 
 - name: Mount Shared folder 
   command: "mount -t {{ ((nfs_version | version_compare("4", "eq")) | ternary('nfs4', 'nfs')) }} {{nfs_base_domain}}:{{nfs_dir}} {{nfs_cli_mnt_point}}"
-  with_items: {{nfs_exports}}
+  with_items: "{{nfs_exports}}"
 
 
 - name: Make it mounted on system boot 
   lineinfile: 'dest=/etc/fstab regexp="^{{nfs_base_domain}}:{{nfs_dir}}" line="{{nfs_server_ip}}:{{item.dir}} {{nfs_cli_mnt_point}} nfs defaults 0 0" state=present create=yes'
-  with_items: {{nfs_exports}}
+  with_items: "{{nfs_exports}}"
 
 
 - name: Remount all 
