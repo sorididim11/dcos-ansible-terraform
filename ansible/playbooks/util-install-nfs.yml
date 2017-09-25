@@ -1,5 +1,6 @@
 --- 
 - name: Install NFS server
+  become: yes
   hosts: dcos_bootstrap
   gather_facts: yes
   roles:
@@ -8,6 +9,7 @@
 
 
 - name: Install NFS client
+  become: yes
   hosts: dcos_slaves:dcos_slaves_public
   gather_facts: yes
   roles:
