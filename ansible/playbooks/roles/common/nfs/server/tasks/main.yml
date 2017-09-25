@@ -6,13 +6,13 @@
 # domain names are very impotant for NFSv4 to work - all clients and server must be in the same base doamin
 - block:
     - name: Update /etc/hosts for NFS 
-    become: yes
-    blockinfile:
+      become: yes
+      blockinfile:
         path: /etc/hosts
         block: |
             {{ hostvars[item]['ansible_' + dcos_nic_name].ipv4.address }} {{ hostvars[item].ansible_hostname }}
         marker: "# {mark} ANSIBLE MANAGED BLOCK"
-    with_inventory_hostnames: 
+      with_inventory_hostnames: 
         - dcos_slaves:dcos_slaves_public:dcos_bootstrap
 
     - name: Mapping user names and group IDs to NFSv4 IDs 
