@@ -1,0 +1,3 @@
+---
+
+- include: "Install-{{node_type}}.yml"

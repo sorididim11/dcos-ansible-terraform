@@ -3,7 +3,7 @@
   hosts: dcos_bootstrap
   gather_facts: yes
   roles:
-    - common/nfs/server
+    - { role: common/nfs, node_type: server }
   environment: "{{ proxy_env }}"
 
 
@@ -11,5 +11,5 @@
   hosts: dcos_slaves:dcos_slaves_public
   gather_facts: yes
   roles:
-    - common/nfs/client
+    - { role: common/nfs, node_type: client }
   environment: "{{ proxy_env }}"
