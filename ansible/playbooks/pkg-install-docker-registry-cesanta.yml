@@ -5,7 +5,7 @@
   vars_files: 
     - pkg-desc/registry-cesanta.yml
   roles:
-    - { role: dcos/packages/installer, custom_type: none, pre_tasks: registry-auth, post_tasks: registry-auth}
+    - { role: dcos/packages/installer, custom_type: none, pre_tasks: cesanta, post_tasks: cesanta }
   environment: "{{ proxy_env }}"
 
 

@@ -1,0 +1,16 @@
+--- 
+- name: Install NFS server
+  hosts: dcos_bootstrap
+  gather_facts: yes
+  roles:
+    - common/nfs/server
+  environment: "{{ proxy_env }}"
+
+
+--- 
+- name: Install NFS client
+  hosts: dcos_slaves:dcos_slaves_public
+  gather_facts: yes
+  roles:
+    - common/nfs/client
+  environment: "{{ proxy_env }}"

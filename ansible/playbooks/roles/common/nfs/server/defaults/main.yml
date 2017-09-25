@@ -1,0 +1,13 @@
+---
+# 4 or 2/3
+nfs_version: 4 
+
+# idmap domain for nfsv4 
+nfs_base_domain: kin.com
+
+nfs_server_ip: 
+
+# allowed target format - hostname, doamin like *.kin.com, address 192.168.1.*
+nfs_exports: 
+  - { dir: /srv/nfs-share, target: 16.202.*,  options: "rw,sync,root_squash", mnt: /mnt/nfs-share }
+

@@ -1,5 +1,14 @@
+# Enviornment
+
+* DC/OS: 1.10 (1.9.* is not supported anymore)
+* OS: Centos above 7.2 (DC/OS requirement)
+* ansible:  2.3.1
+* vagrant: 1.9.7
+* terraform: 0.9.3
+
+
 # ToDo
-1) portus registry to dcos pod
+1) portus registry to dcos pods (but  pods is not suppored in enterprise strict mode)
 2) NFS voluems for registry & influxdb
 
 # Features
@@ -14,21 +23,17 @@
   - Install Open source or Enterprise DC/OS based on group variable of ansible, dcos_is_enterprise(True or False)
 * Enterprise DC/OS
   - Upgrade security mode after installation
+  - version upgrade supported
   - Reserve resources dynamically, create service accout with secret, assign permissions to the service accounts and install packages based on description files called pkg-desc in playbooks with any security mode.
-  - fix DC/OS 1.9 bug in strict mode, when reserving resource dynamically
+  - fix DC/OS 1.9 bug in strict mode, when reserving resource dynamically (offically blocked by DC/OS)
+  - Installing Custom marathon with role, dynamic reservation 
+  - Supported private registry - Portus, cesanta
 * Add/remove nodes after installation. 
 * Install packages 
   - Install dcos cli & enterprise
   - Install secure/insecure docker registy by creating/updating certificate automactically on each node. 
   - Install monitoring platform based on cadvisor, influxdb and grafana
 
-## Test Enviornment
-
-* DC/OS: 1.10 (1.9.* is not supported anymore)
-* OS: Centos above 7.2 (DC/OS requirement)
-* ansible:  2.3.1
-* vagrant: 1.9.7
-* terraform: 0.9.3
 
 ## Private registry 
 

@@ -1,0 +1,45 @@
+---
+- name: Install NFS package 
+  yum: name=nfs-utils state=present
+
+# domain names are very impotant for NFSv4 to work - all clients and server must be in the same base doamin
+- block:
+    - name: Update /etc/hosts for NFS 
+    become: yes
+    blockinfile:
+        path: /etc/hosts
+        block: |
+            {{ hostvars[item]['ansible_' + dcos_nic_name].ipv4.address }} {{ hostvars[item].ansible_hostname }}
+        marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    with_inventory_hostnames: 
+        - dcos_slaves:dcos_slaves_public:dcos_bootstrap
+
+    - name: Mapping user names and group IDs to NFSv4 IDs 
+      lineinfile: 'dest=/etc/idmapd.conf regexp="^DOMAIN =" line="DOMAIN = {{nfs_base_domain}}" state=present create=yes'        
+  when: nfs_version | version_compare('4', operator='eq')
+
+
+- name: Start and Enable rpcbind service 
+  systemd: name=rpc-bind state=restarted enabled=yes daemon_reload=yes
+
+
+- name: Check NFS connection 
+  command: "showmount -e {{nfs_base_domain}}"
+
+- name: Make sure if NFS mounting point exists
+  file: path="{{item.mnt}}" state=directory 
+  with_items: {{nfs_exports}}
+
+
+- name: Mount Shared folder 
+  command: "mount -t {{ (nfs_version | version_compare("4", "eq")) | ternary('nfs4', 'nfs') }} {{nfs_base_domain}}:{{nfs_dir}} {{nfs_cli_mnt_point}}"
+  with_items: {{nfs_exports}}
+
+
+- name: Make it mounted on system boot 
+  lineinfile: 'dest=/etc/fstab regexp="^{{nfs_base_domain}}:{{nfs_dir}}" line="{{nfs_server_ip}}:{{item.dir}} {{nfs_cli_mnt_point}} nfs defaults 0 0" state=present create=yes'
+  with_items: {{nfs_exports}}
+
+
+- name: Remount all 
+  command: "mount -a"
