@@ -40,12 +40,12 @@
 
 
 - name: Ensure if shared directory exists
-  file: "path={{item.dir}} state=/directory"
+  file: "path={{item.dir}} state=directory"
   with_items: "{{nfs_exports}}"
 
 
 - name: Update /etc/exports 
-  lineinfile: dest=/etc/exports regexp="^{{item.dir}}" line="{{item.dir}} {{item.hosts}}({{item.options}}) " state=present create=yes
+  lineinfile: dest=/etc/exports regexp="^{{item.dir}}" line="{{item.dir}} {{item.target}}({{item.options}}) " state=present create=yes
   with_items: "{{nfs_exports}}"
 
 

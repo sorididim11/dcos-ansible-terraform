@@ -9,5 +9,5 @@ nfs_server_ip: "{{hostvars[groups['dcos_bootstrap'][0]]['ansible_' + dcos_nic_na
 
 # allowed target format - hostname, doamin like *.kin.com, address 192.168.1.*
 nfs_exports: 
-  - { dir: /srv/nfs-share, target: 16.202.*,  options: "rw,sync,root_squash", mnt: /mnt/nfs-share }
+  - { dir: /srv/nfs-share, target: *,  options: "rw,sync,root_squash", mnt: /mnt/nfs-share }
 
