@@ -20,15 +20,16 @@
   when: nfs_version | version_compare('4', operator='eq')
 
 
-- name: Open NFS related ports 
-  firewalld:
-    service: "{{item}}"
-    permanent: true
-    state: enabled
-  with_items: 
-    - nfs
-    - mountd
-    - rpc-bind
+# one of DC/OS prerequsites is to turn off firewalld
+# - name: Open NFS related ports 
+#   firewalld:
+#     service: "{{item}}"
+#     permanent: true
+#     state: enabled
+#   with_items: 
+#     - nfs
+#     - mountd
+#     - rpc-bind
 
 
 - name: Start and Enable NFS related services 
