@@ -1,5 +1,6 @@
 ---
 - name: Install NFS package 
+  become: yes
   yum: name=nfs-utils state=present
 
 # domain names are very impotant for NFSv4 to work - all clients and server must be in the same base doamin
@@ -20,23 +21,24 @@
 
  # check if mouting is successful by showmount -e {{nfs_base_domain}}
 - name: Start and Enable rpcbind service 
+  become: yes
   systemd: name=rpcbind state=restarted enabled=yes daemon_reload=yes
+  changed_when: no
 
 
-- name: Make sure if NFS mounting point exists
-  file: "path={{item.mnt}} state=directory  owner={{ ansible_user_id }} group= {{ ansible_user_id }}"
+- block: 
+    - name: Make sure if NFS mounting point exists
+      file: "path={{item.mnt}} state=directory  owner={{ ansible_user_id }} group={{ ansible_user_id }}"
+    
+    - name: Mount Shared folder 
+      command: "mount -t {{ (nfs_version | version_compare('4', 'eq')) | ternary('nfs4', 'nfs') }} {{nfs_server_fqdn}}:{{item.dir}} {{item.mnt}}"
+
+    - name: Make it mounted on system boot 
+      lineinfile: 'dest=/etc/fstab regexp="^{{nfs_server_fqdn}}:{{item.dir}}" line="{{nfs_server_fqdn}}:{{item.dir}} {{item.mnt}} nfs defaults 0 0" state=present create=yes'
   with_items: "{{nfs_exports}}"
-
-
-- name: Mount Shared folder 
-  command: "mount -t {{ (nfs_version | version_compare('4', 'eq')) | ternary('nfs4', 'nfs') }} {{nfs_server_fqdn}}:{{item.dir}} {{item.mnt}}"
-  with_items: "{{nfs_exports}}"
-
-
-- name: Make it mounted on system boot 
-  lineinfile: 'dest=/etc/fstab regexp="^{{nfs_server_fqdn}}:{{item.dir}}" line="{{nfs_server_fqdn}}:{{item.dir}} {{item.mnt}} nfs defaults 0 0" state=present create=yes'
-  with_items: "{{nfs_exports}}"
+  become: yes
 
 
 - name: Remount all 
+  become: yes
   command: "mount -a"

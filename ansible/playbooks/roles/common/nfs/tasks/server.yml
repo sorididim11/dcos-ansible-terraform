@@ -1,5 +1,6 @@
 ---
 - name: Install NFS package 
+  become: yes
   yum: name=nfs-utils state=present
 
 
@@ -34,21 +35,26 @@
 
 
 - name: Start and Enable NFS related services 
+  become: yes
   systemd: "name={{item}} state=restarted enabled=yes daemon_reload=yes"
   with_items:
     - rpcbind
     - nfs-server 
+  changed_when: no
 
 
 - name: Ensure if shared directory exists
+  become: yes
   file: "path={{item.dir}} state=directory"
   with_items: "{{nfs_exports}}"
 
 
 - name: Update /etc/exports 
+  become: yes
   lineinfile: dest=/etc/exports regexp="^{{item.dir}}" line="{{item.dir}} {{item.target}}({{item.options}}) " state=present create=yes
   with_items: "{{nfs_exports}}"
 
 
 - name: Re-export all entries from /etc/exports
+  become: yes
   command: exportfs -ra
