@@ -13,7 +13,7 @@
 
 
 - name: Install NFS client
-  hosts: dcos_slaves:dcos_slaves_public
+  hosts: dcos_bootstrap:dcos_slaves:dcos_slaves_public
   gather_facts: no
   tags: ['nfs-client']
   roles:
