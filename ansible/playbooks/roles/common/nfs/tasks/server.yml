@@ -6,7 +6,6 @@
 # domain names are very impotant for NFSv4 to work - all clients and server must be in the same base doamin
 - block:
     - name: Update /etc/hosts for NFS 
-      become: yes
       blockinfile:
         path: /etc/hosts
         block: |
@@ -18,6 +17,8 @@
     - name: Mapping user names and group IDs to NFSv4 IDs 
       lineinfile: 'dest=/etc/idmapd.conf regexp="^DOMAIN =" line="DOMAIN = {{nfs_base_domain}}" state=present create=yes'        
   when: nfs_version | version_compare('4', operator='eq')
+  become: yes
+
 
 
 # one of DC/OS prerequsites is to turn off firewalld
