@@ -34,7 +34,7 @@
 
 
 - name: Make it mounted on system boot 
-  lineinfile: 'dest=/etc/fstab regexp="^{{nfs_base_domain}}:{{nfs_dir}}" line="{{nfs_server_ip}}:{{item.dir}} {{nfs_cli_mnt_point}} nfs defaults 0 0" state=present create=yes'
+  lineinfile: 'dest=/etc/fstab regexp="^{{nfs_server_fqdn}}:{{item.dir}}" line="{{nfs_server_fqdn}}:{{item.dir}} {{item.mnt}} nfs defaults 0 0" state=present create=yes'
   with_items: "{{nfs_exports}}"
 
 
