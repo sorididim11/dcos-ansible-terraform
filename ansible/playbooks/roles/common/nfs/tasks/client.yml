@@ -26,17 +26,21 @@
   changed_when: no
 
 
-- block: 
-    - name: Make sure if NFS mounting point exists
-      file: "path={{item.mnt}} state=directory  owner={{ ansible_user_id }} group={{ ansible_user_id }}"
-    
-    - name: Mount Shared folder 
-      command: "mount -t {{ (nfs_version | version_compare('4', 'eq')) | ternary('nfs4', 'nfs') }} {{nfs_server_fqdn}}:{{item.dir}} {{item.mnt}}"
-
-    - name: Make it mounted on system boot 
-      lineinfile: 'dest=/etc/fstab regexp="^{{nfs_server_fqdn}}:{{item.dir}}" line="{{nfs_server_fqdn}}:{{item.dir}} {{item.mnt}} nfs defaults 0 0" state=present create=yes'
-  with_items: "{{nfs_exports}}"
+- name: Make sure if NFS mounting point exists
   become: yes
+  file: "path={{item.mnt}} state=directory  owner={{ ansible_user_id }} group={{ ansible_user_id }}"
+  with_items: "{{nfs_exports}}"
+ 
+   
+- name: Mount Shared folder 
+  command: "mount -t {{ (nfs_version | version_compare('4', 'eq')) | ternary('nfs4', 'nfs') }} {{nfs_server_fqdn}}:{{item.dir}} {{item.mnt}}"
+  with_items: "{{nfs_exports}}"
+
+
+- name: Make it mounted on system boot 
+  become: yes
+  lineinfile: 'dest=/etc/fstab regexp="^{{nfs_server_fqdn}}:{{item.dir}}" line="{{nfs_server_fqdn}}:{{item.dir}} {{item.mnt}} nfs defaults 0 0" state=present create=yes'
+  with_items: "{{nfs_exports}}"
 
 
 - name: Remount all 
