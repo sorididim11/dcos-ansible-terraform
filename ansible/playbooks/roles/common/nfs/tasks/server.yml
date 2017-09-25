@@ -1,9 +1,6 @@
 ---
 - name: Install NFS package 
-  yum: "name={{item}} state=present"
-  with_items:
-    - nfs-utils
-    - nfs-utils-lib
+  yum: name=nfs-utils state=present
 
 
 # domain names are very impotant for NFSv4 to work - all clients and server must be in the same base doamin
@@ -38,7 +35,7 @@
 - name: Start and Enable NFS related services 
   systemd: "name={{item}} state=restarted enabled=yes daemon_reload=yes"
   with_items:
-    - rpc-bind
+    - rpcbind
     - nfs-server 
 
 
