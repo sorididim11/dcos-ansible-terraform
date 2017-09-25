@@ -32,7 +32,7 @@
 
 
 - name: Mount Shared folder 
-  command: "mount -t {{ (nfs_version | version_compare("4", "eq")) | ternary('nfs4', 'nfs') }} {{nfs_base_domain}}:{{nfs_dir}} {{nfs_cli_mnt_point}}"
+  command: "mount -t {{ ((nfs_version | version_compare("4", "eq")) | ternary('nfs4', 'nfs')) }} {{nfs_base_domain}}:{{nfs_dir}} {{nfs_cli_mnt_point}}"
   with_items: {{nfs_exports}}
 
 
