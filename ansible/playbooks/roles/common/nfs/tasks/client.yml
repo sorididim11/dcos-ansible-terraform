@@ -33,6 +33,7 @@
  
    
 - name: Mount Shared folder 
+  become: yes
   command: "mount -t {{ (nfs_version | version_compare('4', 'eq')) | ternary('nfs4', 'nfs') }} {{nfs_server_fqdn}}:{{item.dir}} {{item.mnt}}"
   with_items: "{{nfs_exports}}"
 
