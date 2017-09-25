@@ -20,7 +20,7 @@
 
 
 - name: Start and Enable rpcbind service 
-  systemd: name=rpc-bind state=restarted enabled=yes daemon_reload=yes
+  systemd: name=rpcbind state=restarted enabled=yes daemon_reload=yes
 
 
 - name: Check NFS connection 
