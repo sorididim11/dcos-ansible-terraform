@@ -13,9 +13,13 @@
         marker: "# {mark} ANSIBLE MANAGED BLOCK"
       with_inventory_hostnames: 
         - dcos_slaves:dcos_slaves_public:dcos_bootstrap
+
+    - name: Add group, {{nfs_group_name}} for NFS 
+      group: name="{{nfs_group_name}}" gid="{{nfs_group_id}}" state=present
+
     - name: Mapping user names and group IDs to NFSv4 IDs 
       lineinfile: 'dest=/etc/idmapd.conf regexp="^DOMAIN =" line="DOMAIN = {{nfs_base_domain}}" state=present create=yes'        
-  when: nfs_version | version_compare('4', operator='eq')
+  when: nfs_version == 'nfs4'
   become: yes
 
 
@@ -34,13 +38,25 @@
    
 - name: Mount Shared folder 
   become: yes
-  command: "mount -t {{ (nfs_version | version_compare('4', 'eq')) | ternary('nfs4', 'nfs') }} {{nfs_server_fqdn}}:{{item.dir}} {{item.mnt}}"
+  command: "mount -t {{nfs_version}} {{nfs_server_fqdn}}:{{item.dir}} {{item.mnt}}"
   with_items: "{{nfs_exports}}"
 
 
-- name: Make it mounted on system boot 
+# - name: Make it mounted on system boot 
+#   become: yes
+#   lineinfile: 'dest=/etc/fstab regexp="^{{nfs_server_fqdn}}:{{item.dir}}" line="{{nfs_server_fqdn}}:{{item.dir}} {{item.mnt}} nfs defaults 0 0" state=present create=yes'
+#   with_items: "{{nfs_exports}}"
+
+- name:  Make it mounted on system boot
   become: yes
-  lineinfile: 'dest=/etc/fstab regexp="^{{nfs_server_fqdn}}:{{item.dir}}" line="{{nfs_server_fqdn}}:{{item.dir}} {{item.mnt}} nfs defaults 0 0" state=present create=yes'
+  mount:
+    src: "{{nfs_server_fqdn}}:{{item.dir}}"
+    path: "{{item.mnt}}"
+    fstype: "{{nfs_version}} "
+    state: mounted
+    dump: 0
+    passno: 2
+    opts: defaults,nobootwait
   with_items: "{{nfs_exports}}"
 
 

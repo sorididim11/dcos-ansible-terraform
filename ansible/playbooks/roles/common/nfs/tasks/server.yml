@@ -15,9 +15,12 @@
       with_inventory_hostnames: 
         - dcos_slaves:dcos_slaves_public:dcos_bootstrap
 
+    - name: Add group for NFS 
+      group: name="{{nfs_group_name}}" gid="{{nfs_group_id}}" state=present
+
     - name: Mapping user names and group IDs to NFSv4 IDs 
       lineinfile: 'dest=/etc/idmapd.conf regexp="^DOMAIN =" line="DOMAIN = {{nfs_base_domain}}" state=present create=yes'        
-  when: nfs_version | version_compare('4', operator='eq')
+  when: nfs_version == 'nfs4'
   become: yes
 
 

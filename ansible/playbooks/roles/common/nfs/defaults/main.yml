@@ -1,7 +1,10 @@
 ---
-# 4 or 2/3
-nfs_version: 3
+# nfs4
+nfs_version: nfs 
 
+# account 
+nfs_group_name: nfs-share
+nfs_group_id: 50000 
 # idmap domain for nfsv4 
 nfs_base_domain: kin.com
 
