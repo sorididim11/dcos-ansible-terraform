@@ -50,13 +50,10 @@
 - name:  Make it mounted on system boot
   become: yes
   mount:
+    fstype: "{{nfs_version}}"
     src: "{{nfs_server_fqdn}}:{{item.dir}}"
     path: "{{item.mnt}}"
-    fstype: "{{nfs_version}} "
     state: mounted
-    dump: 0
-    passno: 2
-    opts: defaults,nobootwait
   with_items: "{{nfs_exports}}"
 
 
