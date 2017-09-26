@@ -17,7 +17,7 @@ edcos_license: !vault |
 
 edcos_superuser: root          # dcos amdin permission 
 edcos_superuser_pwd: root      # dcos amdin permission 
-edcos_security_mode: permissive  # security type  disabed, permissive, strict 
+edcos_security_mode: strict  # security type  disabed, permissive, strict 
 
 #bootstrap 
 dcos_is_enterprise: True  #Truee or False
