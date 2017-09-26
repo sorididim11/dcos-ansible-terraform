@@ -32,13 +32,13 @@
 
 - name: Make sure if NFS mounting point exists
   become: yes
-  file: "path={{item.mnt}} state=directory  owner={{ ansible_user_id }} group={{ ansible_user_id }}"
+  file: "path={{item.mnt}} state=directory  group={{ nfs_group_name }}"
   with_items: "{{nfs_exports}}"
  
    
 #  mount -t {{nfs_version}} {{nfs_server_fqdn}}:{{item.dir}} {{item.mnt}}
 # and update /etc/fstab
-- name:  Make it mounted on system boot
+- name:  Mount NFS server and Register it to /etc/fstab
   become: yes
   mount:
     fstype: "{{nfs_version}}"
