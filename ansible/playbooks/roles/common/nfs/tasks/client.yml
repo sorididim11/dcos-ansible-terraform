@@ -36,10 +36,10 @@
   with_items: "{{nfs_exports}}"
  
    
-- name: Mount Shared folder 
-  become: yes
-  command: "mount -t {{nfs_version}} {{nfs_server_fqdn}}:{{item.dir}} {{item.mnt}}"
-  with_items: "{{nfs_exports}}"
+# - name: Mount Shared folder 
+#   become: yes
+#   command: "mount -t {{nfs_version}} {{nfs_server_fqdn}}:{{item.dir}} {{item.mnt}}"
+#   with_items: "{{nfs_exports}}"
 
 
 # - name: Make it mounted on system boot 
