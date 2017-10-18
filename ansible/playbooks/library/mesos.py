@@ -179,6 +179,7 @@ def main():
 
 
 if __name__ == '__main__':
+    main()
     # script_dir = os.path.dirname(__file__)
     # node_file = open(script_dir + '/node.json', 'r')
     # role_file = open(script_dir + '/role.json', 'r')
@@ -186,4 +187,4 @@ if __name__ == '__main__':
     # role_json = role_file.read()
     # req = {"nodes_status": node_json, "mesos_role": role_json, "token": "12345", "url": "hello"}
     # handle_dynamic_reservation(req)
-    main()
+    
