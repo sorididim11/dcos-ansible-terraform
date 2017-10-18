@@ -41,8 +41,9 @@ def find_target_host(hostname, nodes):
             return host
     raise Exception('host not found. ' + hostname)
 
-def portRangeToSize(portsRangeStr):
-    range_str = portsRangeStr[1:-1]
+
+def port_range_to_size(port_range_str):
+    range_str = port_range_str[1:-1]
     range_list = range_str.split(',')
 
     ports_size = 0
@@ -51,25 +52,25 @@ def portRangeToSize(portsRangeStr):
         ports_size = ports_size + (int(port_range[1]) - int(port_range[0]))
     return ports_size
 
-def findRangeFromSize(portSize, ports):
-    
+
+def find_range_from_size(port_size, ports):
     range_str = ports[1:-1]
-    portRangeList = range_str.split(',')
+    range_list = range_str.split(',')
     ranges = []
-    for port_str in portRangeList:
+    for port_str in range_list:
         port_range = port_str.split('-')
         low_port, high_port = int(port_range[0]), int(port_range[1])
-          
-        if portSize - (high_port - low_port) > 0:
-            portSize = portSize - (high_port - low_port)
+
+        if port_size - (high_port - low_port) > 0:
+            port_size = port_size - (high_port - low_port)
             ranges.append((low_port, high_port))
         else:
-            ranges.append( (low_port, (low_port + portSize)) )  
+            ranges.append((low_port, (low_port + port_size)))
             break
     return ranges
 
-         
-def devide_into_Requests(role_def, existing_role):
+
+def split_into_reserve_and_unreserve(role_def, existing_role):
     reserve_req = dict(cpus=0.0, disk=0.0, gpus=0.0, mem=1500.0, ports_num=0)
     unreserve_req = {}
     for resource_type in role_def:
@@ -82,49 +83,82 @@ def devide_into_Requests(role_def, existing_role):
             reserve_req[resource_type] = role_def[resource_type] - resource
         else:
             del role_def['ports']
-    
+
     return reserve_req, unreserve_req
 
 
-def validate_request(req, unreserved):
-    ranges = [] 
-    for resource_type in req:
+def check_if_possible_to_reserve(reserve, unreserved):
+    ranges = []
+    for resource_type in reserve:
         if resource_type == 'ports_num':
-            portsNum = portRangeToSize(unreserved.get("ports"))
-            if req[resource_type] > portsNum: 
-                raise Exception('no more space')
-            ranges = findRangeFromSize(req['ports_num'], unreserved['ports'])
-            
-
-        elif unreserved[resource_type] < req[resource_type]:
-            raise Exception(resource_type + ' not enough resource')
+            unreserved_size = port_range_to_size(unreserved.get("ports"))
+            if reserve[resource_type] > unreserved_size:
+                raise Exception('request exceeds unreserved capacity' + resource_type)
+            ranges = find_range_from_size(reserve['ports_num'], unreserved['ports'])
+        elif unreserved[resource_type] < reserve[resource_type]:
+            raise Exception('request exceeds unreserved capacity' + resource_type)
     if ranges:
-        req['ranges'] = ranges
-        del req['ports_num']
-    return req
+        reserve['ranges'] = ranges
+        del reserve['ports_num']
+    return reserve
+
+
+def to_reqest(op_type, op, host_id, role_def):
+    request = {}
+    request['type'] = op_type
+    request[op_type] = dict(agent_id=dict(value=host_id))
+    request['resources'] = []
+
+    for resource_type in op:
+        res = {}
+        is_scala = True if resource_type != 'ranges' else False
+        res['type'] = "RANGES" if is_scala else "SCALAR"
+        res['name'] = resource_type
+        res['reservation'] = dict(principal=role_def['principal'])
+        res['role'] = role_def['name']
+
+        if is_scala:
+            res['scalar'] = dict(value=op[resource_type])
+        else:
+            res['ranges'] = dict(range=[])
+            for pair in op['ranges']:
+                res['ranges']['range'].append(dict(begin=pair[0], end=pair[1]))
+
+        request['resources'].append(res)
+    return request
 
 
 def convert_role_to_requests(role_def, nodes):
-
     host = find_target_host(role_def['hostname'], nodes)
 
-    # already is there reserved role? 
+    # already is there reserved role?
     existing_role = host['reserved_resources'].get(role_def['name'])
 
     reserve, unreserve = role_def, {}
     if existing_role:
-        existing_role['ports_num'] = portRangeToSize(existing_role['ports'])
-        reserve, unreserve = devide_into_Requests(role_def, existing_role)
-    
-    
-    unreservedRes = host['unreserved_resources']
+        existing_role['ports_num'] = port_range_to_size(existing_role['ports'])
+        reserve, unreserve = split_into_reserve_and_unreserve(role_def, existing_role)
+    unreserved_resources = host['unreserved_resources']
     if reserve:
-        reserve = validate_request(reserve, unreservedRes)
-  
-    if unreserve.get('ports_num'):
-        unreserve['ranges'] = findRangeFromSize(unreserve['ports_num'], host['reserved_resources']['ports'])
+        check_if_possible_to_reserve(reserve, unreserved_resources)
 
-    return reserve, unreserve
+    if unreserve.get('ports_num'):
+        unreserve['ranges'] = find_range_from_size(unreserve['ports_num'], host['reserved_resources']['ports'])
+
+    reserve_req = to_reqest('reserve_resources', reserve, host['id'], role_def)
+    unreserve_req = to_reqest('unreserve_resources', unreserve, host['id'], role_def)
+    return reserve_req, unreserve_req
+
+
+def send_request(token, mesos_url, req):
+    headers = {
+        "Authorization": "token {}".format(token),
+        "Accept": "application/json"
+    }
+
+    url = "{}{}".format(mesos_url, '/mesos/api/v1')
+    result = requests.post(url, json.dumps(req), headers=headers)
+    return result
 
 
 def handle_dynamic_reservation(req):
@@ -134,27 +168,23 @@ def handle_dynamic_reservation(req):
     token = req['token']
     mesos_url = req['url']
 
-    reserveReq, unreserveReq = convert_role_to_requests(role_def, nodes)
+    reserve_req, unreserve_req = convert_role_to_requests(role_def, nodes)
 
+    if not reserve_req and not unreserve_req:
+        return False, dict(status=0)
 
-    headers = {
-        "Authorization": "token {}".format(token),
-        "Accept": "application/json"
-    }
-
-    url = "{}{}".format(mesos_url, '/mesos/api/v1')
-    result = requests.post(url, json.dumps(req['role_def']), headers=headers)
-
-
-    if result.status_code == 201:
-        return False, True, result.json()
-    if result.status_code == 422:
-        return False, False, result.json()
+    if reserve_req:
+        result1 = send_request(token, mesos_url, reserve_req)
+        if result1.status_code != 202:
+            raise Exception(result1.json())
+    if unreserve_req:
+        result2 = send_request(token, mesos_url, unreserve_req)
+        if result2.status_code != 202:
+            raise Exception(result2.json())
 
     # default: something went wrong
-    meta = {"status": result.status_code, 'response': result.json()}
-    return True,  meta
-
+    meta = {"status": 202}
+    return True, meta
 
 
 def main():
@@ -187,4 +217,3 @@ if __name__ == '__main__':
     # role_json = role_file.read()
     # req = {"nodes_status": node_json, "mesos_role": role_json, "token": "12345", "url": "hello"}
     # handle_dynamic_reservation(req)
-    

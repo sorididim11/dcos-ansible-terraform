@@ -18,7 +18,7 @@
 
 - name: Do operaiton 
   mesos_dynamic_reserve:
-    url: "{{dcos_cluster_url}}/mesos/api/v1"
+    url: "{{dcos_cluster_url}}"
     token: "{{auth_token.stdout}}"
     mesos_role: "{{role_def}}"
     nodes_status: "{{nodes}}"
