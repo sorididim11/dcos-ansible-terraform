@@ -4,6 +4,7 @@
 .DS_Store
 .pem
 .osrc
+.vscode
 ansible_dcos_hosts
 ihos.osrc
 terraform.tfstate*
@@ -12,3 +13,4 @@ dcos_generate_config.ee.sh
 dciaauto001-ihos.pem
 ansible/ansible.cfg
 hosts
+node.json

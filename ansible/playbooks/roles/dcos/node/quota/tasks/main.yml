@@ -16,6 +16,15 @@
     nodes: "{{nodes_json.stdout | from_json }}"
 
 
+# - name: Do operaiton 
+#   mesos_dynamic_reserve:
+#     operation: reserve
+#     url: "{{dcos_cluster_url}}"
+#     token: "{{auth_token.stdout}}"
+#     role_def: "{{role_def}}"
+#     nodes_status: "{{nodes}}"
+
+
 - name: Do operation
   uri:
     url: "{{dcos_cluster_url}}/mesos/api/v1"

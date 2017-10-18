@@ -1,0 +1,11 @@
+{
+    "role": {
+        "principal": "superman",
+        "hostname": "172.16.1.154",
+        "name": "dev",
+        "cpus": 2.0,
+        "mem": 1000,
+        "disk": 2500,
+        "ports_num": 3000
+    } 
+} 
