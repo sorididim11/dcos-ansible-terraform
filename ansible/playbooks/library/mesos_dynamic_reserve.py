@@ -153,7 +153,7 @@ def handle_dynamic_reservation(req):
 
     # default: something went wrong
     meta = {"status": result.status_code, 'response': result.json()}
-    return True, False, meta
+    return True,  meta
 
 
 
@@ -170,12 +170,12 @@ def main():
    # fields is spec , module.params is input, meta is output of module
     module = AnsibleModule(argument_spec={fields})
     try:
-        has_chanaged, whatIsIt, ret = handle_dynamic_reservation(module.params)
+        has_chanaged, ret = handle_dynamic_reservation(module.params)
     except Exception as e:
         ret['message'] = e
         module.fail_json(msg=e, **ret)
 
-    module.exit_json(changed=has_chanaged, meta=ret.meta)
+    module.exit_json(changed=has_chanaged, meta=ret)
 
 
 if __name__ == '__main__':

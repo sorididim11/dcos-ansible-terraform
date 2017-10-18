@@ -16,24 +16,23 @@
     nodes: "{{nodes_json.stdout | from_json }}"
 
 
-# - name: Do operaiton 
-#   mesos_dynamic_reserve:
-#     operation: reserve
-#     url: "{{dcos_cluster_url}}"
-#     token: "{{auth_token.stdout}}"
-#     role_def: "{{role_def}}"
-#     nodes_status: "{{nodes}}"
-
-
-- name: Do operation
-  uri:
+- name: Do operaiton 
+  mesos_dynamic_reserve:
     url: "{{dcos_cluster_url}}/mesos/api/v1"
-    method: POST
-    validate_certs: False
-    headers: 
-      Authorization: "token={{auth_token.stdout}}"
-      Accept: "application/json" 
-    body_format: json
-    body: "{{ lookup('template', 'reserve-request.json.j2') }}"
-    status_code: 202, 409
-  when: role_def.name != '*'
+    token: "{{auth_token.stdout}}"
+    mesos_role: "{{role_def}}"
+    nodes_status: "{{nodes}}"
+
+
+# - name: Do operation
+#   uri:
+#     url: "{{dcos_cluster_url}}/mesos/api/v1"
+#     method: POST
+#     validate_certs: False
+#     headers: 
+#       Authorization: "token={{auth_token.stdout}}"
+#       Accept: "application/json" 
+#     body_format: json
+#     body: "{{ lookup('template', 'reserve-request.json.j2') }}"
+#     status_code: 202, 409
+#   when: role_def.name != '*'
