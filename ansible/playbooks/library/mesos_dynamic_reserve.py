@@ -64,11 +64,11 @@ def find_range_from_size(port_size, ports):
         port_range = port_str.split('-')
         low_port, high_port = int(port_range[0]), int(port_range[1])
 
-        if port_size - (high_port - (low_port + 1)) > 0:
-            port_size = port_size - (high_port - (low_port + 1))
-            ranges.append((low_port + 1, high_port -1))
+        if port_size - (high_port - low_port) > 0:
+            port_size = port_size - (high_port - low_port)
+            ranges.append((low_port, high_port))
         else:
-            ranges.append((low_port + 1, (low_port + port_size - 1)))
+            ranges.append((low_port, (low_port + port_size)))
             break
     return ranges
 
