@@ -88,6 +88,10 @@ def split_into_reserve_and_unreserve(role_def, existing_role):
 def check_if_possible_to_reserve(reserve, unreserved):
     ranges = []
     for resource_type in reserve:
+        resource = unreserved.get(resource_type)
+        if resource is None:
+            continue
+
         if resource_type == 'ports_num':
             unreserved_size = port_range_to_size(unreserved.get("ports"))
             if reserve[resource_type] > unreserved_size:
