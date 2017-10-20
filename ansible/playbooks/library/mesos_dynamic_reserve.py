@@ -154,7 +154,7 @@ def convert_role_to_requests(role_def, nodes):
 
 def send_request(token, mesos_url, req):
     headers = {
-        "Authorization": "token={}".format(token),
+        "Authorization": "token {}".format(token),
         "Accept": "application/json"
     }
     with open('/dcos/abc.json', 'wb') as fp:
