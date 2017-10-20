@@ -70,34 +70,31 @@ def find_range_from_size(port_size, ports):
     return ranges
 
 
-def split_into_reserve_and_unreserve(role_def, existing_role):
-    reserve_req = dict(cpus=0.0, disk=0.0, gpus=0.0, mem=1500.0, ports_num=0)
-    unreserve_req = {}
-    resources = role_def['resources']
+def split_into_reserve_and_unreserve(resources, existing_role):
+    res_op = dict(cpus=0.0, disk=0.0, gpus=0.0, mem=1500.0, ports_num=0)
+    unres_op = {}
     for resource_type in resources:
         amount = existing_role.get(resource_type)
         if amount is None:
             continue
         if amount > resources[resource_type]:
-            unreserve_req[resource_type] = amount - resources[resource_type]
+            unres_op[resource_type] = amount - resources[resource_type]
         elif amount < resources[resource_type]:
-            reserve_req[resource_type] = resources[resource_type] - amount
+            res_op[resource_type] = resources[resource_type] - amount
 
-    return reserve_req, unreserve_req
+    return res_op, unres_op
 
 
 def check_if_possible_to_reserve(reserve, unreserved):
     ranges = []
     for resource_type in reserve:
-        resource = unreserved.get(resource_type)
-        if resource is None:
-            continue
-
         if resource_type == 'ports_num':
             unreserved_size = port_range_to_size(unreserved.get("ports"))
             if reserve[resource_type] > unreserved_size:
                 raise Exception('request exceeds unreserved capacity' + resource_type)
             ranges = find_range_from_size(reserve['ports_num'], unreserved['ports'])
+        elif unreserved.get(resource_type) is None:
+            continue
         elif unreserved[resource_type] < reserve[resource_type]:
             raise Exception('request exceeds unreserved capacity' + resource_type)
     if ranges:
@@ -139,10 +136,10 @@ def convert_role_to_requests(role_def, nodes):
     reserve, unreserve = role_def['resources'], {}
     if existing_role:
         existing_role['ports_num'] = port_range_to_size(existing_role['ports'])
-        reserve, unreserve = split_into_reserve_and_unreserve(role_def, existing_role)
-    unreserved_resources = host['unreserved_resources']
+        reserve, unreserve = split_into_reserve_and_unreserve(reserve, existing_role) 
+
     if reserve:
-        check_if_possible_to_reserve(reserve, unreserved_resources)
+        check_if_possible_to_reserve(reserve, host['unreserved_resources'])
     
     if unreserve.get('ports_num'):
         unreserve['ranges'] = find_range_from_size(unreserve['ports_num'], host['reserved_resources']['ports'])
