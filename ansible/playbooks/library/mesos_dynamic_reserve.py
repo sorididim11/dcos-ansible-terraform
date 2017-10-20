@@ -108,7 +108,7 @@ def check_if_possible_to_reserve(resources, unreserved):
 
 def to_reqest(op_type, op, host_id, role_def):
     request = collections.OrderedDict()
-    request['type'] = op_type
+    request['type'] = op_type.upper()
     request[op_type] = dict(agent_id=dict(value=host_id))
     request['resources'] = []
 
