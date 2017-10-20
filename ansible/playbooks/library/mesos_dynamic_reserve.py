@@ -163,7 +163,7 @@ def send_request(token, mesos_url, req):
 def handle_dynamic_reservation(req):
     #nodes = json.loads(req.nodes_status, object_hook=lambda d: Namespace(**d))
     nodes = req['nodes_status']
-    role_def = req['mesos_role']
+    role_def = req['mesos_role']['role']
     token = req['token']
     mesos_url = req['url']
 
