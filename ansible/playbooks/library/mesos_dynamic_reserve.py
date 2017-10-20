@@ -182,10 +182,10 @@ def handle_dynamic_reservation(req):
         result1 = send_request(token, mesos_url, reserve_req)
         # if result1.status_code != 202:
         #     raise Exception(result1.json())
-    if unreserve_req:
-        result2 = send_request(token, mesos_url, unreserve_req)
-        if result2.status_code != 202:
-            raise Exception(result2.json())
+    # if unreserve_req:
+    #     result2 = send_request(token, mesos_url, unreserve_req)
+    #     if result2.status_code != 202:
+    #         raise Exception(result2.json())
 
     # default: something went wrong
     meta = {"status": 202}
