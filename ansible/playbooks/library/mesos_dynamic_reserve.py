@@ -156,7 +156,7 @@ def send_request(token, mesos_url, req):
         "Authorization": "token {}".format(token),
         "Accept": "application/json"
     }
-
+    print(json.dumps(req))
     url = "{}{}".format(mesos_url, '/mesos/api/v1')
     result = requests.post(url, json.dumps(req), headers=headers, verify=False) 
     return result
