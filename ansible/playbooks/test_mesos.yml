@@ -2,15 +2,16 @@
 - name: Test module
   connection: local
   hosts: localhost
-  gather_facts: False
+  gather_facts: True
+  vars_files: 
+     - pkg-desc/marathon-ee.yml
   vars: 
     nodes: "{{ lookup('file','library/node.json') | from_json }}"
-    role_def: "{{ lookup('file','library/role.json') | from_json }}"
   tasks:
   - name: test mesos 
     mesos_dynamic_reserve:
       url: http://hello
       token: 12345
-      mesos_role: "{{role_def.role}}"
+      mesos_role: "{{services['marathon-ee-dev'].role}}"
       nodes_status: "{{nodes}}"
  
