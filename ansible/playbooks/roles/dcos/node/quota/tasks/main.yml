@@ -23,6 +23,10 @@
 #     mesos_role: "{{role_def}}"
 #     nodes_status: "{{nodes}}"
 
+- template:
+    src: reserve-request.json.j2
+    dest: "/dcos/quota/reserve.json
+    "
 
 - name: Do operation
   uri:
