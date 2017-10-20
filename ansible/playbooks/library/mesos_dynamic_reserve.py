@@ -110,7 +110,7 @@ def to_reqest(op_type, op, host_id, role_def):
     request = collections.OrderedDict()
     request['type'] = op_type.upper()
     request[op_type] = dict(agent_id=dict(value=host_id))
-    request['resources'] = []
+    request[op_type]['resources'] = []
 
     for resource_type in op:
         res = {}
@@ -127,7 +127,7 @@ def to_reqest(op_type, op, host_id, role_def):
             for pair in op['ranges']:
                 res['ranges']['range'].append(dict(begin=pair[0], end=pair[1]))
 
-        request['resources'].append(res)
+        request[op_type]['resources'].append(res)
     return request
 
 
