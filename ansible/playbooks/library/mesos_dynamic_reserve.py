@@ -6,6 +6,9 @@ import requests
 import json
 import commands
 
+import collections
+ 
+
 DOCUMENTATION = '''
 ---
 module: mesos_dyanmic_reserve  
@@ -104,7 +107,7 @@ def check_if_possible_to_reserve(resources, unreserved):
 
 
 def to_reqest(op_type, op, host_id, role_def):
-    request = {}
+    request = collections.OrderedDict()
     request['type'] = op_type
     request[op_type] = dict(agent_id=dict(value=host_id))
     request['resources'] = []
