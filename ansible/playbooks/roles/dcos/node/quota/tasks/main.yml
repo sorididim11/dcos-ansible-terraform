@@ -24,15 +24,15 @@
     nodes_status: "{{nodes}}"
 
 
-# - name: Do operation
-#   uri:
-#     url: "{{dcos_cluster_url}}/mesos/api/v1"
-#     method: POST
-#     validate_certs: False
-#     headers: 
-#       Authorization: "token={{auth_token.stdout}}"
-#       Accept: "application/json" 
-#     body_format: json
-#     body: "{{ lookup('template', 'reserve-request.json.j2') }}"
-#     status_code: 202, 409
-#   when: role_def.name != '*'
+- name: Do operation
+  uri:
+    url: "{{dcos_cluster_url}}/mesos/api/v1"
+    method: POST
+    validate_certs: False
+    headers: 
+      Authorization: "token={{auth_token.stdout}}"
+      Accept: "application/json" 
+    body_format: json
+    body: "{{ lookup('file', '/dcos/abc.json') }}"
+    status_code: 202, 409
+  # when: role_def.name != '*'
