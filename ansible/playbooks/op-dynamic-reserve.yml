@@ -2,7 +2,7 @@
 - name: "Reserve dynamic resources based on roles"
   hosts: dcos_cli[0]
   vars_files:
-    - pkg-desc/dev-role.yml 
+    - pkg-desc/marathon-ee.yml 
   roles:
-    - { role: dcos/node/quota, op_type: reserve_resources, role_def: "{{ role }}" } 
+    - { role: dcos/node/quota, op_type: reserve_resources, role_def: "{{ services['marathon-ee-dev'].role }}" } 
   environment: "{{ proxy_env }}"

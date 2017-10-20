@@ -11,8 +11,7 @@ services:
       cpus: 1.0
       mem: 1500
       disks: 1000 
-      begin_port: 1025
-      end_port: 2180
+      ports_num: 3000
     permissions: 
       - { perm: "dcos:mesos:master:framework:role:dev", action: create, desc: " " } 
       - { perm: "dcos:mesos:master:reservation:role:dev", action: create, desc: " " }
