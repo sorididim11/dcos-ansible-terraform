@@ -116,7 +116,7 @@ def to_reqest(op_type, op, host_id, role_def):
         res = {}
         is_scala = True if resource_type != 'ranges' else False
         res['type'] = "SCALAR" if is_scala else "RANGES"
-        res['name'] = resource_type
+        res['name'] = resource_type if not is_scala else 'ports'
         res['reservation'] = dict(principal=role_def['principal'])
         res['role'] = role_def['name']
 
