@@ -73,14 +73,15 @@ def find_range_from_size(port_size, ports):
 def split_into_reserve_and_unreserve(role_def, existing_role):
     reserve_req = dict(cpus=0.0, disk=0.0, gpus=0.0, mem=1500.0, ports_num=0)
     unreserve_req = {}
-    for resource_type in role_def:
-        resource = existing_role.get(resource_type)
-        if resource is None:
+    resources = role_def['resources']
+    for resource_type in resources:
+        amount = existing_role.get(resource_type)
+        if amount is None:
             continue
-        if resource > role_def[resource_type]:
-            unreserve_req[resource_type] = resource - role_def[resource_type]
-        elif resource < role_def[resource_type]:
-            reserve_req[resource_type] = role_def[resource_type] - resource
+        if amount > resources[resource_type]:
+            unreserve_req[resource_type] = amount - resources[resource_type]
+        elif amount < resources[resource_type]:
+            reserve_req[resource_type] = resources[resource_type] - amount
 
     return reserve_req, unreserve_req
 
@@ -135,7 +136,7 @@ def convert_role_to_requests(role_def, nodes):
     # already is there reserved role?
     existing_role = host['reserved_resources'].get(role_def['name'])
 
-    reserve, unreserve = role_def, {}
+    reserve, unreserve = role_def['resources'], {}
     if existing_role:
         existing_role['ports_num'] = port_range_to_size(existing_role['ports'])
         reserve, unreserve = split_into_reserve_and_unreserve(role_def, existing_role)
