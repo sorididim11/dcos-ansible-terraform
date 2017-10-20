@@ -66,9 +66,9 @@ def find_range_from_size(port_size, ports):
 
         if port_size - (high_port - (low_port + 1)) > 0:
             port_size = port_size - (high_port - (low_port + 1))
-            ranges.append((low_port + 1, high_port))
+            ranges.append((low_port + 1, high_port -1))
         else:
-            ranges.append((low_port + 1, (low_port + port_size)))
+            ranges.append((low_port + 1, (low_port + port_size - 1)))
             break
     return ranges
 
