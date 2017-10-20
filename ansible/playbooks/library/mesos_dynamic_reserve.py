@@ -158,8 +158,10 @@ def send_request(token, mesos_url, req):
         "Accept": "application/json"
     }
     body = "\{ %s \}" % json.dumps(req)
+    print(body)
+
     url = "{}{}".format(mesos_url, '/mesos/api/v1')
-    result = requests.post(url, json.dumps(req), headers=headers, verify=False) 
+    result = requests.post(url, body, headers=headers, verify=False) 
 
     print('return code: {}'.format(result.status_code))
     return result
