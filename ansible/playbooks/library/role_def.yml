@@ -1,0 +1,15 @@
+
+
+services: 
+  marathon-ee-dev:
+    name: marathon-ee-dev
+    package: marathon-ee
+    user: nobody
+    role: 
+      principal: root
+      hostname: "172.16.1.154"
+      name: dev
+      cpus: 1.0
+      mem: 1500
+      disks: 1000 
+      ports_num: 3000
