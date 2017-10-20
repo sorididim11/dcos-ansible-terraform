@@ -130,7 +130,6 @@ def to_reqest(op_type, op, host_id, role_def):
 
 def convert_role_to_requests(role_def, nodes):
     host = find_target_host(role_def['hostname'], nodes)
-
     # already is there reserved role?
     existing_role = host['reserved_resources'].get(role_def['name'])
 
@@ -141,7 +140,7 @@ def convert_role_to_requests(role_def, nodes):
     unreserved_resources = host['unreserved_resources']
     if reserve:
         check_if_possible_to_reserve(reserve, unreserved_resources)
-
+    
     if unreserve.get('ports_num'):
         unreserve['ranges'] = find_range_from_size(unreserve['ports_num'], host['reserved_resources']['ports'])
 
@@ -163,8 +162,8 @@ def send_request(token, mesos_url, req):
 
 def handle_dynamic_reservation(req):
     #nodes = json.loads(req.nodes_status, object_hook=lambda d: Namespace(**d))
-    nodes = json.loads(req['nodes_status'])
-    role_def = json.loads(req['mesos_role'])['role']
+    nodes = req['nodes_status']
+    role_def = req['mesos_role']['role']
     token = req['token']
     mesos_url = req['url']
 
@@ -189,19 +188,19 @@ def handle_dynamic_reservation(req):
 
 def main():
     # type can str, bool, dict, list,
-    fields = {
-        "url": {"required": True, "type": "str"},
-        "token": {"required": True, "type": "str"},
-        "mesos_role": {"required": True, "type": "str"},
-        "nodes_status": {"required": True, "type": "str"}
-    }
+    fields = dict(
+        url=dict(type='str', required=True),
+        token=dict(type='str', required=True),
+        mesos_role=dict(type='dict', required=True),
+        nodes_status=dict(type='list', required=True))
 
     ret = {}
    # fields is spec , module.params is input, meta is output of module
-    module = AnsibleModule(argument_spec={fields})
+    module = AnsibleModule(argument_spec=fields)
     try:
         has_chanaged, ret = handle_dynamic_reservation(module.params)
     except Exception as e:
+        print('Error on line {}'.format(sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
         ret['message'] = e
         module.fail_json(msg=e, **ret)
 
