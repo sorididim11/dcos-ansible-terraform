@@ -85,22 +85,22 @@ def split_into_reserve_and_unreserve(resources, existing_role):
     return res_op, unres_op
 
 
-def check_if_possible_to_reserve(reserve, unreserved):
+def check_if_possible_to_reserve(resources, unreserved):
     ranges = []
-    for resource_type in reserve:
+    for resource_type in resources:
         if resource_type == 'ports_num':
             unreserved_size = port_range_to_size(unreserved.get("ports"))
-            if reserve[resource_type] > unreserved_size:
+            if resources[resource_type] > unreserved_size:
                 raise Exception('request exceeds unreserved capacity' + resource_type)
-            ranges = find_range_from_size(reserve['ports_num'], unreserved['ports'])
+            ranges = find_range_from_size(resources['ports_num'], unreserved['ports'])
         elif unreserved.get(resource_type) is None:
             continue
-        elif unreserved[resource_type] < reserve[resource_type]:
+        elif unreserved[resource_type] < resources[resource_type]:
             raise Exception('request exceeds unreserved capacity' + resource_type)
     if ranges:
-        reserve['ranges'] = ranges
-        del reserve['ports_num']
-    return reserve
+        resources['ranges'] = ranges
+        del resources['ports_num']
+    return resources
 
 
 def to_reqest(op_type, op, host_id, role_def):
@@ -112,7 +112,7 @@ def to_reqest(op_type, op, host_id, role_def):
     for resource_type in op:
         res = {}
         is_scala = True if resource_type != 'ranges' else False
-        res['type'] = "RANGES" if is_scala else "SCALAR"
+        res['type'] = "SCALAR" if is_scala else "RANGES"
         res['name'] = resource_type
         res['reservation'] = dict(principal=role_def['principal'])
         res['role'] = role_def['name']
