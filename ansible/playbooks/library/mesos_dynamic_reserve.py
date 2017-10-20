@@ -169,16 +169,6 @@ def handle_dynamic_reservation(req):
     token = req['token']
     mesos_url = req['url']
 
-    print('parameters!!!!!!!!!!!!!')
-    print(type(nodes))
-    print(type(role_def))
-    print(nodes)
-    print(role_def)
-    print('end of parameters!!!!!!!!!!!!!')
-
-
-
-
     reserve_req, unreserve_req = convert_role_to_requests(role_def, nodes)
 
     if not reserve_req and not unreserve_req:
