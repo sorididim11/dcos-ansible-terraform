@@ -81,8 +81,6 @@ def split_into_reserve_and_unreserve(role_def, existing_role):
             unreserve_req[resource_type] = resource - role_def[resource_type]
         elif resource < role_def[resource_type]:
             reserve_req[resource_type] = role_def[resource_type] - resource
-        else:
-            del role_def['ports']
 
     return reserve_req, unreserve_req
 
@@ -210,7 +208,7 @@ def main():
     try:
         has_chanaged, ret = handle_dynamic_reservation(module.params)
     except Exception as e:
-        print('Error on line {}'.format(sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
+        traceback.print_exc(file=sys.stdout)
         ret['message'] = e
         module.fail_json(msg=e, **ret)
 

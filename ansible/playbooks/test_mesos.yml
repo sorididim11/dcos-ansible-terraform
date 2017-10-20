@@ -2,9 +2,9 @@
 - name: Test module
   connection: local
   hosts: localhost
-  gather_facts: True
+  gather_facts: False
   vars_files: 
-     - pkg-desc/marathon-ee.yml
+     - library/role_def.yml
   vars: 
     nodes: "{{ lookup('file','library/node.json') | from_json }}"
   tasks:
