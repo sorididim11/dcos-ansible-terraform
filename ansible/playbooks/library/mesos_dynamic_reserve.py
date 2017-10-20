@@ -162,7 +162,7 @@ def send_request(token, mesos_url, req):
 
     url = "{}{}".format(mesos_url, '/mesos/api/v1')
     # result = requests.post(url, json.dumps(req), headers=headers, verify=False) 
-    result={statu_code=202}
+    result=dict(statu_code=202)
     print('return code: {}'.format(result.status_code))
     return result
 
