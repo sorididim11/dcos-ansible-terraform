@@ -209,7 +209,7 @@ def main():
     except Exception as e:
         traceback.print_exc(file=sys.stdout)
         ret['message'] = e
-        module.fail_json(msg=e, **ret)
+        module.fail_json(msg=e)
 
     module.exit_json(changed=has_chanaged, meta=ret)
 
