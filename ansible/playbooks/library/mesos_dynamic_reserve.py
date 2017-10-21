@@ -162,6 +162,8 @@ def send_request(token, mesos_url, req):
 
     url = "{}{}".format(mesos_url, '/mesos/api/v1')
     result = requests.post(url, json.dumps(req), headers=headers, verify=False) 
+
+    print('status code: %d' result.status_code)
     return result
 
 
