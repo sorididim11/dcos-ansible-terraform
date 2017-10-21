@@ -193,8 +193,15 @@ def handle_dynamic_reservation(req):
 
     json.dumps(ret)
     # default: something went wrong
-    meta = {"status": 202, 'payloads': ret}
-    return True, meta
+
+    result = dict(
+        changed=True,
+        original_message='status 202',
+        state=ret
+        message=''
+    )
+    
+    return True, result
 
 
 def main():
@@ -205,17 +212,15 @@ def main():
         mesos_role=dict(type='dict', required=True),
         nodes_status=dict(type='list', required=True))
 
-    ret = {}
    # fields is spec , module.params is input, meta is output of module
     module = AnsibleModule(argument_spec=fields)
     try:
         has_chanaged, ret = handle_dynamic_reservation(module.params)
     except Exception as e:
         traceback.print_exc(file=sys.stdout)
-        ret['message'] = e
         module.fail_json(msg=e)
 
-    module.exit_json(changed=has_chanaged, meta=ret)
+    module.exit_json(ret)
 
 
 if __name__ == '__main__':
