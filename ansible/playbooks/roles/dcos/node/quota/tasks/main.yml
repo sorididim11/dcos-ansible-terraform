@@ -24,6 +24,8 @@
     nodes_status: "{{nodes}}"
   register: body_json
 
+- debug:
+     msg: "{{body_json}}"
 - set_fact: 
     payloads: "{{ body_json.payloads | from_json }}" 
 
