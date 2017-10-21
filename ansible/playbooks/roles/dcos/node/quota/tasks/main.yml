@@ -13,7 +13,7 @@
 
 - name: Convert node states to variable
   set_fact: 
-    nodes: "{{nodes_json.msg.state | from_json }}"
+    nodes: "{{nodes_json.stdout | from_json }}"
 
 
 - name: Create Dynamic reserve requests
@@ -26,9 +26,9 @@
 
 - debug:
      msg: "{{body_json}}"
-
+     
 - set_fact: 
-    payloads: "{{ body_json.stdout | from_json }}" 
+    payloads: "{{ body_json.msg.state | from_json }}" 
 
 - template:
     src: reserve-request.json.j2
