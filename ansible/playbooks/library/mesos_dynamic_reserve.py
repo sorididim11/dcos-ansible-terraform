@@ -138,7 +138,7 @@ def convert_role_to_requests(role_def, nodes):
 
     reserve, unreserve = role_def['resources'], {}
     if existing_role:
-        existing_role['ports_num'] = port_range_to_size(existing_role['ports'])
+        existing_role['ports_num'] = port_range_to_size(existing_role['ports']) if existing_role.get('ports') else 0
         reserve, unreserve = split_into_reserve_and_unreserve(reserve, existing_role) 
 
     if reserve:
