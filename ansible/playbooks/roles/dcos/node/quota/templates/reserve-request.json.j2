@@ -16,7 +16,7 @@
         },
         "role": "{{role_def.name}}",
         "scalar": {
-          "value": {{ role_def.cpus | default(0.0) }}
+          "value": {{ role_def.resources.cpus | default(0.0) }}
         }
       },
       {
@@ -27,7 +27,7 @@
         },
         "role": "{{role_def.name}}",
         "scalar": {
-          "value": {{ role_def.gpus | default(0.0) }}
+          "value": {{ role_def.resources.gpus | default(0.0) }}
         }
       },
   {% if role_def.begin_port is defined %}
@@ -41,8 +41,8 @@
         "ranges": {
           "range": [
             {
-              "begin": {{ role_def.begin_port }},
-              "end": {{ role_def.end_port }}
+              "begin": {{ role_def.resources.begin_port }},
+              "end": {{ role_def.resources.end_port }}
             }
           ]
         }
@@ -56,7 +56,7 @@
         },
         "role": "{{role_def.name}}",
         "scalar": {
-          "value": {{ role_def.mem | default(0) }}
+          "value": {{ role_def.resources.mem | default(0) }}
         }
       }
     ]
