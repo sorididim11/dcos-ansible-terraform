@@ -27,7 +27,7 @@
 - debug:
      msg: "{{body_json}}"
 - set_fact: 
-    payloads: "{{ body_json.payloads | from_json }}" 
+    payloads: "{{ body_json.meta.payloads | from_json }}" 
 
 - template:
     src: reserve-request.json.j2
