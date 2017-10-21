@@ -216,11 +216,11 @@ def main():
     module = AnsibleModule(argument_spec=fields)
     try:
         has_chanaged, ret = handle_dynamic_reservation(module.params)
+        module.exit_json(ret)
     except Exception as e:
         traceback.print_exc(file=sys.stdout)
         module.fail_json(msg=e)
 
-    module.exit_json(ret)
 
 
 if __name__ == '__main__':
