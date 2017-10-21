@@ -16,12 +16,16 @@
     nodes: "{{nodes_json.stdout | from_json }}"
 
 
-- name: Do operaiton 
+- name: Create Dynamic reserve requests
   mesos_dynamic_reserve:
     url: "{{dcos_cluster_url}}"
     token: "{{auth_token.stdout}}"
     mesos_role: "{{role_def}}"
     nodes_status: "{{nodes}}"
+  register: body_json
+
+- set_fact: 
+    budyList: "{{body_json.req | from_json"}} 
 
 - template:
     src: reserve-request.json.j2
