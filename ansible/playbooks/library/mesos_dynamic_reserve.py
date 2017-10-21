@@ -197,7 +197,7 @@ def handle_dynamic_reservation(req):
     result = dict(
         changed=True,
         original_message='status 202',
-        state=ret
+        state=ret,
         message=''
     )
     
