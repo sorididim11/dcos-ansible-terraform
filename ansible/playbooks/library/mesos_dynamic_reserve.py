@@ -201,7 +201,7 @@ def handle_dynamic_reservation(req):
         message=''
     )
     
-    return True, result
+    return result
 
 
 def main():
@@ -215,8 +215,8 @@ def main():
    # fields is spec , module.params is input, meta is output of module
     module = AnsibleModule(argument_spec=fields)
     try:
-        has_chanaged, ret = handle_dynamic_reservation(module.params)
-        module.exit_json(ret)
+        ret = handle_dynamic_reservation(module.params)
+        module.exit_json(**ret)
     except Exception as e:
         traceback.print_exc(file=sys.stdout)
         module.fail_json(msg=e)
