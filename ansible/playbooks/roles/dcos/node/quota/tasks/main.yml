@@ -43,7 +43,7 @@
       Authorization: "token={{auth_token.stdout}}"
       Accept: "application/json" 
     body_format: json
-    body: "{{ payloads }}"
+    body: "{{ item }}"
     status_code: 202, 409
-  with_items: "{{payloads}}
+  with_items: "{{payloads}}"
   # when: role_def.name != '*'
