@@ -21,6 +21,17 @@
       },
       {
         "type": "SCALAR",
+        "name": "disk",
+        "reservation": {
+          "principal": "{{role_def.principal}}"
+        },
+        "role": "{{role_def.name}}",
+        "scalar": {
+          "value": {{ role_def.resources.disk | default(0.0) }}
+        }
+      },
+      {
+        "type": "SCALAR",
         "name": "gpus",
         "reservation": {
           "principal": "{{role_def.principal}}"

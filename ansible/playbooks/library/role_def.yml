@@ -12,5 +12,5 @@ services:
       resources:
         cpus: 1.0
         mem: 1500
-        disks: 1000 
+        disk: 1000 
         ports_num: 3000
