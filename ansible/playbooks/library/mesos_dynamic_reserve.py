@@ -191,6 +191,7 @@ def handle_dynamic_reservation(req):
             raise Exception('Status code {}'.format(status_code))
         ret.append(unreserve_req)
 
+    json.dumps(ret)
     # default: something went wrong
     meta = {"status": 202, 'payloads': ret}
     return True, meta
