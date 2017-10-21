@@ -157,14 +157,14 @@ def send_request(token, mesos_url, req):
         "Authorization": "token={}".format(token),
         "Accept": "application/json"
     }
-    with open('/dcos/abc.json', 'wb') as fp:
+    with open('/dcos/abc.json', 'w') as fp:
         json.dump(req, fp)
 
-    url = "{}{}".format(mesos_url, '/mesos/api/v1')
-    result = requests.post(url, json.dumps(req), headers=headers, verify=False) 
-
-    print('status code: {}'.format(result.status_code))
-    return result
+    # url = "{}{}".format(mesos_url, '/mesos/api/v1')
+    # result = requests.post(url, json.dumps(req), headers=headers, verify=False) 
+    # print('status code: {}'.format(result.status_code))
+    #return result
+    return 202
 
 
 def handle_dynamic_reservation(req):
@@ -179,17 +179,20 @@ def handle_dynamic_reservation(req):
     if not reserve_req and not unreserve_req:
         return False, dict(status=0)
 
+    ret = []
     if reserve_req:
-        result1 = send_request(token, mesos_url, reserve_req)
-        if result1.status_code != 202:
-            raise Exception('Status code {}'.format(result1.status_code))
+        status_code = send_request(token, mesos_url, reserve_req)
+        if status_code != 202:
+            raise Exception('Status code {}'.format(status_code))
+        ret.append(reserve_req)
     if unreserve_req:
-        result2 = send_request(token, mesos_url, unreserve_req)
-        if result2.status_code != 202:
-            raise Exception(result2.json())
+        status_code = send_request(token, mesos_url, unreserve_req)
+        if status_code != 202:
+            raise Exception('Status code {}'.format(status_code))
+        ret.append(unreserve_req)
 
     # default: something went wrong
-    meta = {"status": 202}
+    meta = {"status": 202, 'reqs': ret}
     return True, meta
 
 
