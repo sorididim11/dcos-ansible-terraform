@@ -74,7 +74,7 @@ def find_range_from_size(port_size, ports):
 
 
 def split_into_reserve_and_unreserve(resources, existing_role):
-    res_op = dict(cpus=0.0, disk=0.0, gpus=0.0, mem=1500.0, ports_num=0)
+    res_op = dict(cpus=0.0, disk=0.0, gpus=0.0, mem=0.0, ports_num=0)
     unres_op = {}
     for resource_type in resources:
         amount = existing_role.get(resource_type)
@@ -154,7 +154,7 @@ def convert_role_to_requests(role_def, nodes):
 
 def send_request(token, mesos_url, req):
     headers = {
-        "Authorization": "token={}".format(token),
+        "Authorization": "token {}".format(token),
         "Accept": "application/json"
     }
     with open('/dcos/abc.json', 'wb') as fp:
