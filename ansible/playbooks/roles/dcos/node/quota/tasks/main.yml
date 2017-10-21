@@ -43,5 +43,5 @@
     body_format: json
     body: "{{ item }}"
     status_code: 202, 409
-  with_items: "{{payloads}}"
+  with_items: "{{state}}"
   # when: role_def.name != '*'
