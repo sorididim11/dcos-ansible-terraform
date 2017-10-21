@@ -192,7 +192,7 @@ def handle_dynamic_reservation(req):
         ret.append(unreserve_req)
 
     # default: something went wrong
-    meta = {"status": 202, 'reqs': ret}
+    meta = {"status": 202, 'payloads': ret}
     return True, meta
 
 

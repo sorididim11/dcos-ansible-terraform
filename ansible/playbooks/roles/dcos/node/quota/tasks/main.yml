@@ -25,7 +25,7 @@
   register: body_json
 
 - set_fact: 
-    budyList: "{{body_json.req | from_json"}} 
+    payloads: "{{body_json.payloads | from_json"}} 
 
 - template:
     src: reserve-request.json.j2
@@ -40,6 +40,6 @@
       Authorization: "token={{auth_token.stdout}}"
       Accept: "application/json" 
     body_format: json
-    body: "{{ lookup('template', 'reserve-request.json.j2') }}"
+    body: "{{ payloads }}"
     status_code: 202, 409
   # when: role_def.name != '*'
