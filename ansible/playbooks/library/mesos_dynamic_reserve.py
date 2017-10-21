@@ -113,7 +113,7 @@ def to_reqest(op_type, op, host_id, role_def):
     request[op_type]['resources'] = []
 
     for resource_type in op:
-        res = {}
+        res = collections.OrderedDict()
         is_scala = True if resource_type != 'ranges' else False
         res['type'] = "SCALAR" if is_scala else "RANGES"
         res['name'] = resource_type if  is_scala else 'ports'
@@ -154,7 +154,7 @@ def convert_role_to_requests(role_def, nodes):
 
 def send_request(token, mesos_url, req):
     headers = {
-        "Authorization": "token={}".format(token),
+        "Authorization": "token {}".format(token),
         "Accept": "application/json"
     }
     with open('/dcos/abc.json', 'wb') as fp:
