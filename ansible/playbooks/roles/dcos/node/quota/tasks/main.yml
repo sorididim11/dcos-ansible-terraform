@@ -28,7 +28,7 @@
      msg: "{{body_json}}"
      
 - set_fact: 
-    payloads: "{{ body_json.msg.state | from_json }}" 
+    payloads: "{{ body_json.state | from_json }}" 
 
 - template:
     src: reserve-request.json.j2
