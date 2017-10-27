@@ -39,6 +39,9 @@ EXAMPLES = '''
 
 # extract only slaves which have field, hostname
 def find_target_host(hostname, nodes):
+    '''
+    find target from result of command 'dcos node --json'
+    '''
     for host in nodes:
         if host['type'] == 'agent' and host['hostname'] == hostname:
             return host
@@ -46,6 +49,10 @@ def find_target_host(hostname, nodes):
 
 
 def port_range_to_size(port_range_str):
+    ''' 
+    return size of port ranges
+    '''
+
     range_str = port_range_str[1:-1]
     range_list = range_str.split(',')
 
@@ -58,6 +65,9 @@ def port_range_to_size(port_range_str):
 
 
 def find_range_from_size(port_size, ports):
+    '''
+    return part of given port ranges as the given size
+    '''
     range_str = ports[1:-1]
     range_list = range_str.split(',')
     ranges = []
@@ -76,6 +86,9 @@ def find_range_from_size(port_size, ports):
 
 
 def split_into_reserve_and_unreserve(new_role, existing_role):
+    '''
+    convert ansible parameters to reserve, unreserve operations
+    '''
     res_op = dict(cpus=0.0, disk=0.0, gpus=0.0, mem=0.0, ports_num=0)
     unres_op = {}
     for resource_type in new_role:
@@ -92,6 +105,9 @@ def split_into_reserve_and_unreserve(new_role, existing_role):
 
 
 def check_if_possible_to_reserve(reserve_op, available_res):
+    '''
+    verify if given reserve operation is valid by comparing with unreserved resrouces of cluster
+    '''
     for resource_type in reserve_op:
         if resource_type == 'ports_num':
             unreserved_size = port_range_to_size(available_res['ports'])
@@ -109,6 +125,10 @@ def check_if_possible_to_reserve(reserve_op, available_res):
 
 
 def to_reqest(op_type, op, host_id, role_def):
+    '''
+    append mesos resource reservation part to requested resource 
+    '''
+    
     request = collections.OrderedDict()
     request['type'] = op_type.upper()
     request[op_type] = dict(agent_id=dict(value=host_id))
@@ -134,6 +154,11 @@ def to_reqest(op_type, op, host_id, role_def):
 
 
 def convert_role_to_requests(role_def, nodes):
+    ''' 
+    convert ansible params to mesos reserve/unreserve operations by comparing with values of exisiting role 
+    with given values, operations can be just reserve, or unreserve op, both 
+    '''
+
     host = find_target_host(role_def['hostname'], nodes)
     # already is there reserved role?
     existing_role = host['reserved_resources'].get(role_def['name'])
@@ -174,7 +199,18 @@ def send_request(token, mesos_url, req):
 
 
 def handle_dynamic_reservation(req):
-    #nodes = json.loads(req.nodes_status, object_hook=lambda d: Namespace(**d))
+    ''' The highest level method of mesos dynamic reservation 
+    this method defines general step of dynamic reservation for both reserve/unreserve operation
+    the steps below 
+    1) Get params from ansible parameters 
+    2) convert params to reservve/unreserve operations. 
+        if param 's value  is hight then exisiting value, the param will be part of reserve OP
+        if param 's value is lower then existiing value, the param will be part of unreserve op
+        as a result, some params are higher and some params are lower than existing. both operations are created
+    3) verify the created operations by comparing it with unreserved resources of the mesos cluster 
+    4) return the operations in list object with name, state 
+    '''
+
     nodes = req['nodes_status']
     role_def = req['mesos_role']
     token = req['token']
