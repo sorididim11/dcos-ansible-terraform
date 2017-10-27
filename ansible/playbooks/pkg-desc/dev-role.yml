@@ -1,9 +1,0 @@
-role: 
-  principal: root
-  hostname: 10.0.15.31
-  name: dev
-  cpus: 1.0
-  mem: 500
-  disks: 1000
-  begin_port: 1025
-  end_port: 2180

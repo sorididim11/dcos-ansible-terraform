@@ -1,6 +1,0 @@
-[
-    {% for host in groups['maintenance'] %}
-    { "ip" : {{ ip }} }
-    {% "," if not loop.last %} {% endif %}   
-    {% endfor %}
-]
