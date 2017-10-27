@@ -12,20 +12,45 @@ import collections
 DOCUMENTATION = '''
 ---
 module: mesos_dyanmic_reserve  
-short_description: Manage your repos on Github  
+short_description: this method defines general step of dynamic reservation for both reserve/unreserve operation
+rule of dynamic reservation
+1) reserve 
+even if you only reserve parts of all resources, all params in json format are required with value of 0
+2) unreserve opration
+provide only unreseved params of the resources 
+
+role definition 
+
+resources:
+    cpus: 1.0
+    mem: 1500
+    gpus: 2.0
+    disk: 1000 
+    ports_num: 3000
 '''
 
 EXAMPLES = '''
-- name: Create a github Repo
-  github_repo:
-    github_auth_key: "..."
-    name: "Hello-World"
-    description: "This is your first repository"
-    private: yes
-    has_issues: no
-    has_wiki: no
-    has_downloads: no
-  register: result
+- name: Create Dynamic reserve requests
+  mesos_dynamic_reserve:
+    url: http://dcos_cluster_url
+    token: dcos_token
+    mesos_role: role_definition
+    nodes_status: result_of_command_dcos_node_json
+  register: body_json
+
+- name: Do operation
+  uri:
+    url: "http://dcos_cluster_url/mesos/api/v1"
+    method: POST
+    validate_certs: False
+    headers: 
+      Authorization: "token=dcos_token"
+      Accept: "application/json" 
+    body_format: json
+    body: "{{ item }}"
+    status_code: 202, 409
+  with_items: "{{body_json.state}}"
+
 '''
 
 
@@ -42,6 +67,7 @@ def find_target_host(hostname, nodes):
     '''
     find target from result of command 'dcos node --json'
     '''
+
     for host in nodes:
         if host['type'] == 'agent' and host['hostname'] == hostname:
             return host
@@ -68,6 +94,7 @@ def find_range_from_size(port_size, ports):
     '''
     return part of given port ranges as the given size
     '''
+
     range_str = ports[1:-1]
     range_list = range_str.split(',')
     ranges = []
@@ -89,6 +116,7 @@ def split_into_reserve_and_unreserve(new_role, existing_role):
     '''
     convert ansible parameters to reserve, unreserve operations
     '''
+
     res_op = dict(cpus=0.0, disk=0.0, gpus=0.0, mem=0.0, ports_num=0)
     unres_op = {}
     for resource_type in new_role:
@@ -128,7 +156,7 @@ def to_reqest(op_type, op, host_id, role_def):
     '''
     append mesos resource reservation part to requested resource 
     '''
-    
+
     request = collections.OrderedDict()
     request['type'] = op_type.upper()
     request[op_type] = dict(agent_id=dict(value=host_id))
