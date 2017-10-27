@@ -152,6 +152,7 @@ def convert_role_to_requests(role_def, nodes):
     if unreserve_op:
         if 'ports_num' in unreserve_op:
             unreserve_op['ranges'] = find_range_from_size(unreserve_op['ports_num'], existing_role['ports'])
+            del unreserve_op['port_num']
         unreserve_req = to_reqest('unreserve_resources', unreserve_op, host['id'], role_def)
 
     return reserve_req, unreserve_req
