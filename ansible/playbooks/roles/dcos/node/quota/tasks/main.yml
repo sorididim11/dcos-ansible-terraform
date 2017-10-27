@@ -42,6 +42,6 @@
       Accept: "application/json" 
     body_format: json
     body: "{{ item }}"
-    status_code: 202, 409
+    status_code: 202
   with_items: "{{body_json.state}}"
   # when: role_def.name != '*'
