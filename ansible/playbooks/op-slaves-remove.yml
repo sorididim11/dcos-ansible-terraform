@@ -1,9 +1,0 @@
---- 
-
-- name: "Remove nodes from the cluster"
-  gather_facts: False
-  hosts: maintenance
-  become: yes
-  roles:
-    - { role: dcos/node, op: "remove", service_name: dcos-mesos-slave } 
-  environment: "{{ proxy_env }}"

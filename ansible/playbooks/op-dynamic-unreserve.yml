@@ -1,8 +1,0 @@
-- name: "Unreserve dynamic resources based on roles"
-  hosts: dcos_cli[0]
-  become: yes
-  vars_files:
-    - pkg-desc/dev-role.yml 
-  roles:
-    - { role: dcos/node/quota, op_type: unreserve_resources, role_def: "{{ role }}" } 
-  environment: "{{ proxy_env }}"
