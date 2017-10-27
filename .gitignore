@@ -14,3 +14,5 @@ dciaauto001-ihos.pem
 ansible/ansible.cfg
 hosts
 node.json
+*.pyc
+object.data

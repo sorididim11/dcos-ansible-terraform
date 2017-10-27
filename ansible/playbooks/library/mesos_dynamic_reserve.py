@@ -53,6 +53,7 @@ def port_range_to_size(port_range_str):
     for ports_str in range_list:
         port_range = ports_str.split('-')
         ports_size = ports_size + (int(port_range[1]) - int(port_range[0]))
+
     return ports_size
 
 
@@ -70,40 +71,41 @@ def find_range_from_size(port_size, ports):
         else:
             ranges.append((low_port, (low_port + port_size)))
             break
+
     return ranges
 
 
-def split_into_reserve_and_unreserve(resources, existing_role):
+def split_into_reserve_and_unreserve(new_role, existing_role):
     res_op = dict(cpus=0.0, disk=0.0, gpus=0.0, mem=0.0, ports_num=0)
     unres_op = {}
-    for resource_type in resources:
+    for resource_type in new_role:
         amount = existing_role.get(resource_type)
+        # it means this type of resource is not reserved in the existing role before 
         if amount is None:
-            continue
-        if amount > resources[resource_type]:
-            unres_op[resource_type] = amount - resources[resource_type]
-        elif amount < resources[resource_type]:
-            res_op[resource_type] = resources[resource_type] - amount
+            res_op[resource_type] = new_role[resource_type]
+        elif amount < new_role[resource_type]:
+            res_op[resource_type] = new_role[resource_type] - amount
+        elif amount > new_role[resource_type]:
+            unres_op[resource_type] = amount - new_role[resource_type]
 
-    return res_op, unres_op
+    return (res_op if not all(value == 0 for value in res_op.values()) else None) , (unres_op if unres_op else None) 
 
 
-def check_if_possible_to_reserve(resources, unreserved):
-    ranges = []
-    for resource_type in resources:
+def check_if_possible_to_reserve(reserve_op, available_res):
+    for resource_type in reserve_op:
         if resource_type == 'ports_num':
-            unreserved_size = port_range_to_size(unreserved.get("ports"))
-            if resources[resource_type] > unreserved_size:
+            unreserved_size = port_range_to_size(available_res['ports'])
+            if reserve_op[resource_type] > unreserved_size:
                 raise Exception('request exceeds unreserved capacity' + resource_type)
-            ranges = find_range_from_size(resources['ports_num'], unreserved['ports'])
-        elif unreserved.get(resource_type) is None:
-            continue
-        elif unreserved[resource_type] < resources[resource_type]:
-            raise Exception('request exceeds unreserved capacity' + resource_type)
+            ranges = find_range_from_size(reserve_op['ports_num'], available_res['ports'])
+        elif available_res.get(resource_type) is None:
+            raise Exception('{} is not available'.format(resource_type))
+        elif available_res[resource_type] < reserve_op[resource_type]:
+            raise Exception('{} is not enough to reserve '.format(resource_type))
     if ranges:
-        resources['ranges'] = ranges
-        del resources['ports_num']
-    return resources
+        reserve_op['ranges'] = ranges
+        del reserve_op['ports_num']
+    return reserve_op
 
 
 def to_reqest(op_type, op, host_id, role_def):
@@ -136,19 +138,22 @@ def convert_role_to_requests(role_def, nodes):
     # already is there reserved role?
     existing_role = host['reserved_resources'].get(role_def['name'])
 
-    reserve, unreserve = role_def['resources'], {}
     if existing_role:
-        existing_role['ports_num'] = port_range_to_size(existing_role['ports']) if existing_role.get('ports') else 0
-        reserve, unreserve = split_into_reserve_and_unreserve(reserve, existing_role) 
-
-    if reserve:
-        check_if_possible_to_reserve(reserve, host['unreserved_resources'])
+        existing_role['ports_num'] = port_range_to_size(existing_role['ports']) if 'ports' in existing_role else 0
+        reserve_op, unreserve_op = split_into_reserve_and_unreserve(role_def['resources'], existing_role) 
+    else:
+        reserve_op, unreserve_op = role_def['resources'], None
     
-    if unreserve.get('ports_num'):
-        unreserve['ranges'] = find_range_from_size(unreserve['ports_num'], host['reserved_resources']['ports'])
+    reserve_req = unreserve_req = None
+    if reserve_op:
+        check_if_possible_to_reserve(reserve_op, host['unreserved_resources'])
+        reserve_req = to_reqest('reserve_resources', reserve_op, host['id'], role_def)
+    
+    if unreserve_op:
+        if 'ports_num' in unreserve_op:
+            unreserve_op['ranges'] = find_range_from_size(unreserve_op['ports_num'], existing_role['ports'])
+        unreserve_req = to_reqest('unreserve_resources', unreserve_op, host['id'], role_def)
 
-    reserve_req = to_reqest('reserve_resources', reserve, host['id'], role_def)
-    unreserve_req = to_reqest('unreserve_resources', unreserve, host['id'], role_def)
     return reserve_req, unreserve_req
 
 
@@ -176,30 +181,16 @@ def handle_dynamic_reservation(req):
 
     reserve_req, unreserve_req = convert_role_to_requests(role_def, nodes)
 
-    if not reserve_req and not unreserve_req:
-        return False, dict(status=0)
-
-    ret = []
+    payloads = []
     if reserve_req:
-        status_code = send_request(token, mesos_url, reserve_req)
-        if status_code != 202:
-            raise Exception('Status code {}'.format(status_code))
-        ret.append(reserve_req)
-    if unreserve_req:
-        status_code = send_request(token, mesos_url, unreserve_req)
-        if status_code != 202:
-            raise Exception('Status code {}'.format(status_code))
-        ret.append(unreserve_req)
-
-    json.dumps(ret)
-    # default: something went wrong
-
-    result = dict(
-        changed=True,
-        original_message='status 202',
-        state=ret,
-        message=''
-    )
+        payloads.append(reserve_req)
+    if unreserve_req: 
+        payloads.append(unreserve_req)
+    
+    if not payloads:
+        result = dict(changed=False, message='status')
+    else:
+        result = dict(changed=True, original_message='status 202', state=payloads, message='')
     
     return result
 
@@ -224,11 +215,11 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
-    # script_dir = os.path.dirname(__file__)
-    # node_file = open(script_dir + '/node.json', 'r')
-    # role_file = open(script_dir + '/role.json', 'r')
-    # node_json = node_file.read()
-    # role_json = role_file.read()
-    # req = {"nodes_status": node_json, "mesos_role": role_json, "token": "12345", "url": "hello"}
-    # handle_dynamic_reservation(req)
+   # main()
+    script_dir = os.path.dirname(__file__)
+    node_file = open(script_dir + '/node.json', 'r')
+    role_file = open(script_dir + '/role_def.yml', 'r')
+    node_json = json.loads(node_file.read())
+    role_json = role_file.read()
+    req = {"nodes_status": node_json, "mesos_role": role_json, "token": "12345", "url": "hello"}
+    handle_dynamic_reservation(req)

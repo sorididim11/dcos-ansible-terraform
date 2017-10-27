@@ -35,11 +35,11 @@ services:
       principal: "{{edcos_superuser}}"
       hostname: "{{hostvars[groups['dcos_slaves'][0]]['ansible_' + dcos_nic_name].ipv4.address}}"
       name: svc
-      cpus: 1.0
-      mem: 1000
-      disk: 1000
-      begin_port: 2182
-      end_port: 3887
+      resources:
+        cpus: 1.0
+        mem: 1000
+        disk: 1000
+        ports_num: 1000
     permissions: 
       - { perm: "dcos:mesos:master:reservation:principal:marathon-ee-svc", action: delete, desc: " " } 
       - { perm: "dcos:mesos:master:volume:principal:marathon-ee-svc", action: delete, desc: " " }
