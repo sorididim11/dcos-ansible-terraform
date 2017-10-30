@@ -1,32 +1,54 @@
 #!/usr/bin/python
 
-
-from ansible.module_utils.basic import *
+import collections
+import sys
+import traceback
 import requests
 import json
 import commands
-
-import collections
- 
+from ansible.module_utils.basic import AnsibleModule
 
 DOCUMENTATION = '''
 ---
 module: mesos_dyanmic_reserve  
-short_description: this method defines general step of dynamic reservation for both reserve/unreserve operation
+
+short_description: mesos dynamic reservation for both reserve/unreserve operation
 rule of dynamic reservation
-1) reserve 
-even if you only reserve parts of all resources, all params in json format are required with value of 0
-2) unreserve opration
-provide only unreseved params of the resources 
 
-role definition 
+version_added: "2.3"
 
-resources:
-    cpus: 1.0
-    mem: 1500
-    gpus: 2.0
-    disk: 1000 
-    ports_num: 3000
+description: with givien parameters, 
+this module figures out reserve part and unreserve part and requests both operation respectfully
+operation:
+  description:
+    - reserve: even if you only reserve parts of all resources, all params in json format are required with value of 0
+    - unreserve: provide only unreseved params of the resources 
+  role definition 
+    resources:
+      cpus: 1.0
+      mem: 1500
+      gpus: 2.0
+      disk: 1000 
+      ports_num: 3000
+
+options:
+    url: 
+        description: 
+          - Adminrouter url of DC/OS 
+    token:
+        description
+          - DC/OS request token 
+
+    mesos_role: 
+        description:
+          - role_definition check out below.
+
+    nodes_status: 
+        description: 
+          - result of command, "dcos node --json" 
+
+author: 
+    - jonggun kim
 '''
 
 EXAMPLES = '''
@@ -53,6 +75,14 @@ EXAMPLES = '''
 
 '''
 
+RETURN = '''
+state:
+    description: body of mesos dynamic reservation in list
+    type: list
+'''
+
+
+
 
 # try:
 #     from types import SimpleNamespace as Namespace
@@ -75,7 +105,7 @@ def find_target_host(hostname, nodes):
 
 
 def port_range_to_size(port_range_str):
-    ''' 
+    '''
     return size of port ranges
     '''
 
@@ -136,6 +166,7 @@ def check_if_possible_to_reserve(reserve_op, available_res):
     '''
     verify if given reserve operation is valid by comparing with unreserved resrouces of cluster
     '''
+
     for resource_type in reserve_op:
         if resource_type == 'ports_num':
             unreserved_size = port_range_to_size(available_res['ports'])
@@ -154,7 +185,7 @@ def check_if_possible_to_reserve(reserve_op, available_res):
 
 def to_reqest(op_type, op, host_id, role_def):
     '''
-    append mesos resource reservation part to requested resource 
+    append mesos resource reservation part to requested resource
     '''
 
     request = collections.OrderedDict()
@@ -211,16 +242,14 @@ def convert_role_to_requests(role_def, nodes):
     return reserve_req, unreserve_req
 
 
-def send_request(token, mesos_url, req):
+def send_request(token, mesos_url, payload):
     headers = {
         "Authorization": "token={}".format(token),
         "Accept": "application/json"
     }
-    with open('/dcos/abc.json', 'w') as fp:
-        json.dump(req, fp)
-
-    # url = "{}{}".format(mesos_url, '/mesos/api/v1')
-    # result = requests.post(url, json.dumps(req), headers=headers, verify=False) 
+  
+    url = "{}{}".format(mesos_url, '/mesos/api/v1')
+    result = requests.post(url, json=payload, headers=headers, verify=False) 
     # print('status code: {}'.format(result.status_code))
     #return result
     return 202
@@ -280,4 +309,4 @@ def main():
 
 
 if __name__ == '__main__':
-   main()
+    main()
