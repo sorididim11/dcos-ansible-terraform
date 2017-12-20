@@ -1,11 +1,11 @@
 #!/usr/bin/python
 
-import collections
+from collections import OrderedDict
 import sys
 import traceback
-import requests
 import json
 import commands
+import requests
 from ansible.module_utils.basic import AnsibleModule
 
 DOCUMENTATION = '''
@@ -188,13 +188,13 @@ def to_reqest(op_type, op, host_id, role_def):
     append mesos resource reservation part to requested resource
     '''
 
-    request = collections.OrderedDict()
+    request = OrderedDict()
     request['type'] = op_type.upper()
     request[op_type] = dict(agent_id=dict(value=host_id))
     request[op_type]['resources'] = []
 
     for resource_type in op:
-        res = collections.OrderedDict()
+        res = OrderedDict()
         is_scala = True if resource_type != 'ranges' else False
         res['type'] = "SCALAR" if is_scala else "RANGES"
         res['name'] = resource_type if  is_scala else 'ports'
@@ -249,7 +249,9 @@ def send_request(token, mesos_url, payload):
     }
   
     url = "{}{}".format(mesos_url, '/mesos/api/v1')
-    result = requests.post(url, json=payload, headers=headers, verify=False) 
+    result = requests.post(url, json=payload, headers=headers, verify=False)
+    print result.text
+
     # print('status code: {}'.format(result.status_code))
     #return result
     return 202

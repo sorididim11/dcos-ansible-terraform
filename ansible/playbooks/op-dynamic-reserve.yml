@@ -7,5 +7,5 @@
   vars_files:
     - pkg-desc/marathon-ee.yml 
   roles:
-    - { role: dcos/node/quota, op_type: reserve_resources, role_def: "{{ services['marathon-ee-dev'].role }}" } 
+    - { role: dcos/node/quota,  role_def: "{{ services['marathon-ee-dev'].role }}" } 
   environment: "{{ proxy_env }}"
