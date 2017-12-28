@@ -1,0 +1,14 @@
+---
+- include: util-dcos-bugfix.yml
+  when: edcos_security_mode == "strict"
+  
+- name: Install Distributed Tensorflow
+  hosts: dcos_cli[0]
+  vars_files: 
+    - pkg-desc/tensorflow.yml   
+  roles:
+    # - { role: dcos/node/quota, op_type: reserve_resources } 
+    - { role: dcos/packages/service-account } 
+    - { role: dcos/packages/installer }
+  environment: "{{ proxy_env }}"
+

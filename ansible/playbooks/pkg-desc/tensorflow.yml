@@ -1,0 +1,12 @@
+
+service:
+    name: tensorflow-dev
+    package: beta-tensorflow
+    user: root
+    # role: { principal: root, hostname: 10.0.15.31,  name: spark-dev,  cpus: 1.0, mem: 500, disks: 1000, begin_port: 1025, end_port: 2180 }
+    role: { name: "*" }
+    # At this time, Spark tasks other than the dispatcher must run under the root user.
+    permissions: 
+      - { perm: "dcos:mesos:master:task:user:nobody", action: create, desc: "Allows Linux user nobody to execute tasks" }
+      - { perm: "dcos:mesos:master:task:user:root", action: create, desc: "Allows Linux user nobody to execute tasks" }
+      - { perm: "dcos:mesos:master:framework:role:tensorflow-dev", action: create, desc: " " } 
