@@ -7,7 +7,7 @@
   vars_files: 
     - pkg-desc/tensorflow.yml   
   roles:
-    # - { role: dcos/node/quota, op_type: reserve_resources } 
+    # - { role: dcos/node/quota } 
     - { role: dcos/packages/service-account } 
     - { role: dcos/packages/installer }
   environment: "{{ proxy_env }}"

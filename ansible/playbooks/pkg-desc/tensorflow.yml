@@ -9,4 +9,6 @@ service:
     permissions: 
       - { perm: "dcos:mesos:master:task:user:nobody", action: create, desc: "Allows Linux user nobody to execute tasks" }
       - { perm: "dcos:mesos:master:task:user:root", action: create, desc: "Allows Linux user nobody to execute tasks" }
-      - { perm: "dcos:mesos:master:framework:role:tensorflow-dev", action: create, desc: " " } 
+      - { perm: "dcos:mesos:master:framework:role:*", action: create, desc: " " } 
+      - { perm: "dcos:mesos:master:task:app_id:%252F", action: create, desc: " " }
+
