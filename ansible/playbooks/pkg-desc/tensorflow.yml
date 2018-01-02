@@ -9,6 +9,10 @@ service:
     permissions: 
       - { perm: "dcos:mesos:master:task:user:nobody", action: create, desc: "Allows Linux user nobody to execute tasks" }
       - { perm: "dcos:mesos:master:task:user:root", action: create, desc: "Allows Linux user nobody to execute tasks" }
-      - { perm: "dcos:mesos:master:framework:role:*", action: create, desc: " " } 
+      - { perm: "dcos:mesos:master:framework:role:tensorflow-dev-role", action: create, desc: " " } 
       - { perm: "dcos:mesos:master:task:app_id:%252F", action: create, desc: " " }
-
+    job:
+      url: "https://downloads.mesosphere.com/tensorflow-dcos/examples/v0/dcos-tensorflow-tools-master.zip"
+      path: "dcos-tensorflow-tools-master/examples/source/mnist"
+      name: "mnist"
+      context: "{\"learning_rate\":0.5,\"num_training_steps\":1000000}"
