@@ -1,6 +1,6 @@
 ---
 
-docker_version: 17.03
+docker_version: 17.03.1.ce
 docker_type: engine
 docker_package_name: docker-engine
 

@@ -54,4 +54,4 @@ selinux_mode: permissive
 docker_compose_version: 1.16
 docker_private_url: registry.kin.com
 docker_volume_fs: overlay
-docker_version: 17.03
+docker_version: 17.03.1.ce

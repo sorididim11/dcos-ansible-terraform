@@ -1,7 +1,8 @@
 # Enviornment
 
 * DC/OS: 1.10 (1.9.* is not supported anymore)
-* OS: Centos above 7.2 (DC/OS requirement)
+* Docker: 17.03 (for beta-kubernetes on DC/OS)
+* OS: Centos above 7.4 (DC/OS requirement)
 * ansible:  2.3.1
 * vagrant: 1.9.7
 * terraform: 0.9.3
@@ -42,6 +43,16 @@ modify repo for bootstrap ip
 repo: "cluster-registry.marathon.l4lb.thisdcos.directory:5000",
 
 ## Getting started
+### vagrant
+1) Clone the project
+2) Modify vagrantConf.yml to configure the number of nodes such as masters, slaves, slave_public(defulat 3 masters, 3 slaves, 1 slave public)
+  - start with 'm' is master.
+  - start with 's' is slave.
+  - start with 'sp' is slave_public
+  - boot is bootstrap node
+3) create password file for license.
+4) run - vagrant up
+
 ### terraform 
 1) Clone the project 
 2) install terraform 
