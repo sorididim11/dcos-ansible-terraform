@@ -2,7 +2,7 @@
 
   - name: debug home dir 
     debug: 
-      msg: "{{ ansible_user_dir }}"
+      msg: "{{ ansible_user_dir }}, host: {{ansible_host}}"
   
 
   - name: Check NIC name for DC/OS ip-detect
