@@ -54,7 +54,7 @@ Vagrant.configure('2') do |config|
     config.proxy.http = 'http://web-proxy.corp.hp.com:8080'
     config.proxy.https = 'http://web-proxy.corp.hp.com:8080'
 
-    no_proxy = 'localhost,127.0.0.1,' + settings.map{|k,v| "#{v['ip']},#{v['name']}" } .join(',')
+    no_proxy = 'localhost,127.0.0.1,' + settings.map{|k,v| "#{v['ip']},#{v['name']}" }.join(',')
     UI.info "no proxies: #{no_proxy}"
     config.proxy.no_proxy = no_proxy
   end

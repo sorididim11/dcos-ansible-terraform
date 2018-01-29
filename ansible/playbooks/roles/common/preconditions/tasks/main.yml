@@ -36,11 +36,13 @@
   #   args:
   #     warn: no
 
+  - name: Install EPEL Repo
+    yum: name=epel-release state=present update_cache=yes
+
 
   - name: Install required utils 
     yum: name={{item}} state=present update_cache=yes
     with_items:
-      - epel-release
       - tar
       - xz
       - unzip
