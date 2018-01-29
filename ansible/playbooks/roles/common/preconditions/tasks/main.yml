@@ -7,7 +7,7 @@
 
   - name: Check NIC name 
     assert:
-      that:  hostvars[inventory_hostname]['ansible_' + dcos_nic_name].ipv4.address }} == inventory_hostname
+      that:  hostvars[inventory_hostname]['ansible_' + dcos_nic_name].ipv4.address == inventory_hostname
       msg: "Check out NIC card name..."
 
 
