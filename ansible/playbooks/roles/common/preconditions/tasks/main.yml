@@ -5,9 +5,9 @@
       msg: "{{ ansible_user_dir }}"
   
 
-  - name: Check NIC name 
+  - name: Check NIC name for DC/OS ip-detect
     assert:
-      that:  hostvars[inventory_hostname]['ansible_' + dcos_nic_name].ipv4.address == inventory_hostname
+      that: hostvars[inventory_hostname]['ansible_' + dcos_nic_name].ipv4.address == ansible_host
       msg: "Check out NIC card name..."
 
 
