@@ -15,4 +15,4 @@
 
 - include : playbooks/pkg-install-monitoring.yml
 
-- include : playbooks/pkg-install-docker-registry.yml
+- include : playbooks/pkg-install-docker-registry-portus.yml

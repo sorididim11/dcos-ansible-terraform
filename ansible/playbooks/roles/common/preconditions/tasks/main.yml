@@ -5,6 +5,12 @@
       msg: "{{ ansible_user_dir }}"
   
 
+  - name: Check NIC name 
+    assert:
+      that:  hostvars[inventory_hostname]['ansible_' + dcos_nic_name].ipv4.address }} == inventory_hostname
+      msg: "Check out NIC card name..."
+
+
   - name: Allow 'wheel' group to have passwordless sudo
     lineinfile:
       dest: /etc/sudoers
