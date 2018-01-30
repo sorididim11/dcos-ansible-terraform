@@ -1,4 +1,9 @@
 ---
+- assert:
+    that: dcos_is_enterprise == True
+    msg: Only Enterprise version supports Marathon-ee 
+
+
 - include: util-dcos-bugfix.yml
   when: edcos_security_mode == "strict"
 

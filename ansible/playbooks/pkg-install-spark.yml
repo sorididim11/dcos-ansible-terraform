@@ -8,7 +8,7 @@
     - pkg-desc/spark.yml   
   roles:
     - { role: dcos/node/quota, op_type: reserve_resources } 
-    - { role: dcos/packages/service-account } 
+    - { role: dcos/packages/service-account, when: dcos_is_enterprise == True  } 
     - { role: dcos/packages/installer }
   environment: "{{ proxy_env }}"
 

@@ -5,7 +5,7 @@
   vars_files: 
     - pkg-desc/kubernetes.yml   
   roles:
-    - { role: dcos/packages/service-account, service:  "{{services['kube-dev']}}" } 
+    - { role: dcos/packages/service-account, service:  "{{services['kube-dev']}}" , when: dcos_is_enterprise == True } 
     - { role: dcos/packages/installer, service: "{{services['kube-dev']}}", tags: kube }
   environment: "{{ proxy_env }}"
 
