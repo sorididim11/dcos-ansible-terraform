@@ -16,3 +16,4 @@ hosts
 node.json
 *.pyc
 object.data
+dcos
