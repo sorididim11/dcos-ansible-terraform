@@ -88,7 +88,7 @@ Vagrant.configure('2') do |config|
         if dcos_config['dcos_is_enterprise']
           UI.info 'Install DC/OS enterprise version? yes', bold: true
           if !File.exist?('password')
-            print 'Ansible vault password: '
+            echo 'Input Ansible vault password: '
             password = STDIN.gets.chomp
             File.open('password', 'w').write(password)
           else
