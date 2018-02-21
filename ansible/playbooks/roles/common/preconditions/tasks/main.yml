@@ -7,7 +7,7 @@
 
   - name: Set up ENV, PRIVATE_IP for ip detect 
     lineinfile:
-      dest: /etc/enviornment
+      dest: /etc/environment
       state: present
       regexp: '^DCOS_PRIVATE_IP'
       line: "^DCOS_PRIVATE_IP={{ansible_host}}"
