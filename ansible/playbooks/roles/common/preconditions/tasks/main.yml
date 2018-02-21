@@ -3,12 +3,31 @@
   - name: debug home dir 
     debug: 
       msg: "{{ ansible_user_dir }}, host: {{ansible_host}}"
-  
 
-  - name: Check NIC name for DC/OS ip-detect
-    assert:
-      that: hostvars[inventory_hostname]['ansible_' + dcos_nic_name].ipv4.address == ansible_host
-      msg: "Check out NIC card name..."
+
+  - name: Set up ENV, PRIVATE_IP for ip detect 
+    lineinfile:
+      dest: /etc/enviornment
+      state: present
+      regexp: '^DCOS_PRIVATE_IP'
+      line: "^DCOS_PRIVATE_IP=inventory_hostname"
+
+
+  - name: Find prviate IP matched with ansible host 
+    set_fact: 
+      nic_name: "{{item}}"
+    when: hostvars[inventory_hostname]['ansible_' + item].ipv4.address == ansible_host
+    with_items: "{{ hostvars[inventory_hostname]['ansible_interfaces'] }}"
+  
+  
+  - block:
+      - name: Change NIC name if it is diffrent from dcos_nic_name 
+    
+      - name: Check NIC name for DC/OS ip-detect
+        assert:
+          that: hostvars[inventory_hostname]['ansible_' + dcos_nic_name].ipv4.address == ansible_host
+          msg: "Check out NIC card name..."
+    when: nic_name != dcos_nic_name
 
 
   - name: Allow 'wheel' group to have passwordless sudo
