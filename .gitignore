@@ -12,7 +12,6 @@ password
 dcos_generate_config.ee.sh
 dciaauto001-ihos.pem
 ansible/ansible.cfg
-hosts
 node.json
 *.pyc
 object.data
