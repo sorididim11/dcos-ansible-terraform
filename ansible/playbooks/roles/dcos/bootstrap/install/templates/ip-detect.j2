@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 set -o nounset -o errexit
-export PATH=/usr/sbin:/usr/bin:$PATH
-echo $(ip addr show {{ dcos_nic_name }} | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
+echo $DCOS_PRIVATE_IP

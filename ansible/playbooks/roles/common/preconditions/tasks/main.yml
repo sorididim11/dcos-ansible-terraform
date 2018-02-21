@@ -13,11 +13,11 @@
       line: "DCOS_PRIVATE_IP={{ansible_host}}"
 
 
-  - name: Find prviate IP matched with ansible host 
-    set_fact: 
-      nic_name: "{{item}}"
-    when: hostvars[inventory_hostname]['ansible_' + item].ipv4.address == ansible_host
-    with_items: "{{ hostvars[inventory_hostname]['ansible_interfaces'] }}"
+  # - name: Find prviate IP matched with ansible host 
+  #   set_fact: 
+  #     nic_name: "{{item}}"
+  #   when: hostvars[inventory_hostname]['ansible_' + item].ipv4.address == ansible_host
+  #   with_items: "{{ hostvars[inventory_hostname]['ansible_interfaces'] }}"
   
 
   - name: Allow 'wheel' group to have passwordless sudo
