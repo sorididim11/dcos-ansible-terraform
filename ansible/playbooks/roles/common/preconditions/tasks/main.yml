@@ -19,16 +19,6 @@
     when: hostvars[inventory_hostname]['ansible_' + item].ipv4.address == ansible_host
     with_items: "{{ hostvars[inventory_hostname]['ansible_interfaces'] }}"
   
-  
-  - block:
-      - name: Change NIC name if it is diffrent from dcos_nic_name 
-    
-      - name: Check NIC name for DC/OS ip-detect
-        assert:
-          that: hostvars[inventory_hostname]['ansible_' + dcos_nic_name].ipv4.address == ansible_host
-          msg: "Check out NIC card name..."
-    when: nic_name != dcos_nic_name
-
 
   - name: Allow 'wheel' group to have passwordless sudo
     lineinfile:
