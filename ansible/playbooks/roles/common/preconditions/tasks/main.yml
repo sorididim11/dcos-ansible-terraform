@@ -10,7 +10,7 @@
       dest: /etc/enviornment
       state: present
       regexp: '^DCOS_PRIVATE_IP'
-      line: "^DCOS_PRIVATE_IP=inventory_hostname"
+      line: "^DCOS_PRIVATE_IP={{ansible_host}}"
 
 
   - name: Find prviate IP matched with ansible host 
