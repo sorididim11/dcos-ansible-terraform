@@ -7,7 +7,7 @@ services:
     role: 
       name: dev
       principal: "{{edcos_superuser}}"
-      hostname: "{{hostvars[groups['dcos_slaves'][0]]['ansible_' + dcos_nic_name].ipv4.address}}"
+      hostname: "{{hostvars[groups['dcos_slaves'][0]].ansible_host}}"
       resources:
         cpus: 1.0
         mem: 1500
@@ -33,7 +33,7 @@ services:
     user: nobody
     role: 
       principal: "{{edcos_superuser}}"
-      hostname: "{{hostvars[groups['dcos_slaves'][0]]['ansible_' + dcos_nic_name].ipv4.address}}"
+      hostname: "{{hostvars[groups['dcos_slaves'][0]].ansible_host}}"
       name: svc
       resources:
         cpus: 1.0

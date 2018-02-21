@@ -15,7 +15,7 @@
       blockinfile:
         path: /etc/hosts
         block: |
-            {{ hostvars[item]['ansible_' + dcos_nic_name].ipv4.address }} {{ hostvars[item].ansible_hostname }}
+            {{ hostvars[item].ansible_host }} {{ hostvars[item].ansible_hostname }}
         marker: "# {mark} ANSIBLE MANAGED BLOCK"
       with_inventory_hostnames: 
         - dcos_slaves:dcos_slaves_public:dcos_bootstrap

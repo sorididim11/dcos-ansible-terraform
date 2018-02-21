@@ -10,7 +10,19 @@
       dest: /etc/environment
       state: present
       regexp: '^DCOS_PRIVATE_IP'
-      line: "DCOS_PRIVATE_IP={{ansible_host}}"
+      line: "{{item}}={{ansible_host}}"
+    with_items:
+      - DCOS_PRIVATE_IP
+      - DCOS_PUBLIC_IP
+
+
+  - name: Set up ENV, DCOS_PUBLIC_IP for ip detect 
+    lineinfile:
+      dest: /etc/environment
+      state: present
+      regexp: '^DCOS_PRIVATE_IP'
+      line: "DCOS_PUBLIC_IP={{hostvars[inventory_hostname].dcos_public_ip}}"
+    when: hostvars[inventory_hostname].dcos_public_ip is defined
 
 
   # - name: Find prviate IP matched with ansible host 

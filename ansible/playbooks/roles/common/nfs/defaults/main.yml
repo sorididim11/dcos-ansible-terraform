@@ -8,7 +8,7 @@ nfs_group_id: 50000
 # idmap domain for nfsv4 
 nfs_base_domain: kin.com
 
-nfs_server_fqdn: "{{hostvars[groups['dcos_bootstrap'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}"
+nfs_server_fqdn: "{{hostvars[groups['dcos_bootstrap'][0]].ansible_host}}"
 
 # allowed target format - hostname, doamin like *.kin.com, address 192.168.1.*
 nfs_exports: 

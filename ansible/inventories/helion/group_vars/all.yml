@@ -28,7 +28,7 @@ dcos_nic_name: eth0 # for ip-detect - name of network interface card for ip dete
 dcos_nic_pub_name: eth0 # for ip-detect-public
 
 
-dcos_first_master_internal_ip: "{{hostvars[groups['dcos_masters'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}"
+dcos_first_master_internal_ip: "{{hostvars[groups['dcos_masters'][0]].ansible_host}}"
 dcos_cluster_url: "{{ (edcos_security_mode == 'disabled') | ternary('http', 'https')}}://{{dcos_first_master_internal_ip}}"
   
 #networking
@@ -38,7 +38,7 @@ proxy_env:
   dummy: dummy
   http_proxy: http://web-proxy.corp.hp.com:8080
   https_proxy: http://web-proxy.corp.hp.com:8080
-  no_proxy: ".mesos,.thisdcos.directory,.dcos.directory,.zk,127.0.0.1,localhost,{{ groups['all'] | map('extract', hostvars, ['ansible_' + dcos_nic_name, 'ipv4', 'address']) | join(',') }}"
+  no_proxy: ".mesos,.thisdcos.directory,.dcos.directory,.zk,127.0.0.1,localhost,{{ groups['all'] | map('extract', hostvars, ['ansible_host', 'ipv4', 'address']) | join(',') }}"
 
 dcos_resolver1: 16.110.135.51
 dcos_resolver2: 16.110.135.52
