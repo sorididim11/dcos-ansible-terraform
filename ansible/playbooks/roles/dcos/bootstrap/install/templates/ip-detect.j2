@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
 set -o nounset -o errexit
+set -o allexport
+source /etc/environment
+set +o allexport
+
 echo $DCOS_PRIVATE_IP
