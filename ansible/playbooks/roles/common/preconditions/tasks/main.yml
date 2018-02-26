@@ -20,7 +20,7 @@
     lineinfile:
       dest: /etc/environment
       state: present
-      regexp: '^DCOS_PRIVATE_IP'
+      regexp: '^DCOS_PUBLIC_IP'
       line: "DCOS_PUBLIC_IP={{hostvars[inventory_hostname].dcos_public_ip}}"
     when: hostvars[inventory_hostname].dcos_public_ip is defined
 
