@@ -1,6 +1,6 @@
 ---
 
-- name: Add the YUM Docker repository.
+- name: Add the YUM Docker repository in CentOS
   yum_repository:
     name: dockerrepo
     description: Docker Repository.
@@ -8,6 +8,16 @@
     enabled: yes
     gpgcheck: yes
     gpgkey:  http://yum.dockerproject.org/gpg
+  when: ansible_distribution == "CentOS"
+
+
+- name: Add extras of redhat repository in redhat
+  command: "subscription-manager repos --enable=rhel-7-{{ item }}"
+  with_items:
+    - server-rpms
+    - server-extras-rpms
+    - server-optional-rpms
+  when: ansible_distribution == "RedHat"
 
 
 - name: Create docker.service dropin directroy
