@@ -31,10 +31,7 @@
 
 # makecache is added whenever update_cache: yes
 - name: Install Docker Engine & Selinux 
-  yum: name={{item}} state=present update_cache=yes
-  with_items:
-    - "{{docker_pkg_name}}-{{ docker_version }}"
-    - "{{docker_pkg_name}}-selinux-{{ docker_version }}"
+  yum: name={{docker_pkg_name}}-{{ docker_version }} state=present update_cache=yes
 
 
 # from ansible version 2.2
