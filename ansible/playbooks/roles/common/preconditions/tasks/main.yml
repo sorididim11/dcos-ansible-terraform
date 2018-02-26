@@ -9,7 +9,7 @@
     lineinfile:
       dest: /etc/environment
       state: present
-      regexp: '^DCOS_PRIVATE_IP'
+      regexp: "^{{item}}"
       line: "{{item}}={{ansible_host}}"
     with_items:
       - DCOS_PRIVATE_IP
