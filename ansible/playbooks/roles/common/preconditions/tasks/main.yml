@@ -5,6 +5,13 @@
       msg: "{{ ansible_user_dir }}, host: {{ansible_host}}"
 
 
+  - name: Check Operation System disto, version
+    assert:
+      that: (ansible_distribution == "CentOS" and ansible_distribution_major_version == "7") or
+          (ansible_distribution == "RedHat" and ansible_distribution_major_version == "7")
+      msg: DC/OS supports only RedHat, CentOS
+
+
   - name: Set up ENV, DCOS_PRIVATE_IP for ip detect 
     lineinfile:
       dest: /etc/environment
