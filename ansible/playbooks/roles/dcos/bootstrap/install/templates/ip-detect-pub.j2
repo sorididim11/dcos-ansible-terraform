@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
-set -o nounset -o errexit
-set -o allexport
-source /etc/environment
-set +o allexport
+
+if [ -e /etc/environment ]
+then  
+  set -o nounset -o errexit
+  set -o allexport
+  source /etc/environment
+  set +o allexport
+fi
+    
+function get_default_ip() {
+  ipv4=$(ip route get 8.8.8.8 | awk '{print $7; exit}')
+  echo ${ipv4}
+}
 
 echo $DCOS_PUBLIC_IP
