@@ -1,11 +1,4 @@
 ---
 
-
-docker_cs_yum_repo: "https://packages.docker.com/{{ docker_version }}/yum/repo/main/centos/7"
-docker_open_yum_repo: http://yum.dockerproject.org/repo/main/centos/7  #"https://yum.dockerproject.org/repo/main/centos/7/"
-
-# conditional op
-#docker_yum_repo "{{ docker_cs_yum_repo if is_csengine else docker_open_yum_repo}}"
-docker_cs_pubkey: "https://sks-keyservers.net/pks/lookup?op=get&search=0xee6d536cf7dc86e2d7d56f59a178ac6c6238f52e"
-docker_repo: "{{ (is_csengine) | ternary( docker_cs_yum_repo, docker_open_yum_repo ) }}"
 docker_py_package: docker-py
+docker_pkg_name: docker-engine
