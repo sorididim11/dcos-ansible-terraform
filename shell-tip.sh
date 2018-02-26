@@ -131,3 +131,83 @@ unset arr
 echo "배열 전체 출력: ${arr[@]}"
 
 # 변수 타입 지정(Variables Revisited)
+# 읽기 전용
+# readonly string_variable="hello world" 문법과 동일 함
+declare -r string_variable
+
+# 정수
+# number_variable=10 문법과 동일 함
+declare -i number_variable=10
+
+# 배열
+# array_variable=() 문법과 동일 함
+declare -a array_variable
+
+# 환경 변수
+# export export_variable="hello world" 문법과 동일 함
+declare -x export_variable="hello world"
+
+# 현재 스크립트의 전체 함수 출력
+declare -f
+
+# 현재 스크립트에서 지정한 함수만 출력
+declare -f 함수이름
+
+
+# 반복문 
+echo "반복문"
+for str in "hello" "world" "..."
+do
+  echo ${str}
+done
+
+
+for i in {1..5}
+do
+  echo "index: ${i}"
+done 
+
+
+count=0
+while [ ${count} -le 5 ]
+do
+  echo ${count}
+  count=$(( ${count} + 1 ))
+done
+
+
+# 조건문
+echo "conditional statement"
+str1="hello"
+str2="world"
+
+if [ ${str1} == ${str2} ]
+then
+  echo "first"
+elif [ $str2 == $str1 ]
+then 
+  echo "second"
+else
+  echo "third"
+fi
+echo ""
+
+# switch
+echo "switch case statment"
+for str in "HELLO" "WORLD" "hello" "world" "s" "start" "end" "etc"
+do
+  case ${str} in
+    hello|HELLO)
+      echo "${str} hello 또는 HELLO"
+      ;;
+    wo*)
+      echo "${str} wo로 시작"
+      ;;
+    s|h)
+      echo "${str} s또는 h로 시작"
+      ;;
+    *)
+      echo "${str} 기타"
+      ;;
+  esac
+done
