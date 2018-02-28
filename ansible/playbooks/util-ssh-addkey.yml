@@ -4,7 +4,7 @@
   gather_facts: False
   tasks:
   - name: Generate ssh key for ansible 
-    command: 'ssh-keygen -b 2048 -t rsa -f ~/.ssh/dcos -q -N ""'
+    command: ssh-keygen -b 2048 -t rsa -f ~/.ssh/dcos -q -N "" creates=yes
 
 - hosts: all
   gather_facts: False
