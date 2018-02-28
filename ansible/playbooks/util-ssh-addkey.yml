@@ -7,9 +7,9 @@
   gather_facts: False
   tasks:
   - name: Generate ssh key for ansible 
-    command: 'ssh-keygen -b 2048 -t rsa -f {{private_key_file}} -q -N ""'
+    command: 'ssh-keygen -b 2048 -t rsa -f {{ansible_key_file}} -q -N ""'
     args: 
-      creates: "{{private_key_file}}"
+      creates: "{{ansible_key_file}}"
 
 
 - hosts: all
@@ -18,5 +18,5 @@
   - name: Install ssh pub key to authorized_key
     authorized_key:
      user: "{{ansible_user_id}}" 
-     key: "{{ lookup('file', private_key_file + '.pub')}}" 
+     key: "{{ lookup('file', ansible_key_file + '.pub')}}" 
      state: present
