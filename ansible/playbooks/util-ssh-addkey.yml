@@ -18,5 +18,5 @@
   - name: Install ssh pub key to authorized_key
     authorized_key:
      user: "{{ansible_user_id}}" 
-     key: "{{ lookup('file', ansible_key_file+'.pub')}}" 
+     key: "{{ lookup('file', ansible_key_file + '.pub')}}" 
      state: present
