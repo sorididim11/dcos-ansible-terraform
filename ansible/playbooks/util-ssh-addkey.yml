@@ -1,5 +1,8 @@
 ---
 
+#  target hosts 의 /etc/ssh/sshd_config 에서 PasswordAuthentication: yes 로 되어있어야함 
+# 실행 시 --ask-pass를 명령에 추가하여 실행 -> ansible-playbook playbooks/util-ssh-key.yml --ask-pass
+
 - hosts: dcos_bootstrap
   gather_facts: False
   tasks:
@@ -7,6 +10,7 @@
     command: ssh-keygen -b 2048 -t rsa -f ~/.ssh/dcos -q -N ""
     args: 
       creates: ~/.ssh/dcos
+
 
 - hosts: all
   gather_facts: True
