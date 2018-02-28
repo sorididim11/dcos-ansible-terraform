@@ -1,6 +1,13 @@
 ---
+
 - hosts: dcos_bootstrap
   gather_facts: False
   tasks:
+  - name: Generate ssh key for ansible 
+    command: ssh-keygen -b 2048 -t rsa -f ~/.ssh/dcos -q -N ""
+
+- hosts: all
+  gather_facts: False
+  tasks:
   - name: Install ssh pub key to authorized_key
-    authorized_key: key="{{ lookup('file', '/home/vagrant/.ssh/id_rsa.pub')}}" state=present
+    authorized_key: user="{{ansible_user_id}}" key="{{ lookup('file', '~/.ssh/dcos.pub')}}" state=present

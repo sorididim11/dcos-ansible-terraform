@@ -10,15 +10,14 @@
 
 # ToDo
 1) portus registry to dcos pods (but  pods is not suppored in enterprise strict mode)
-2) NFS voluems for registry & influxdb
 
 # Features
   
 * Support vagrant, terraform for openstack
-* Install DC/OS cluster based advanced custom installation of DC/OS which is upgradable
+* Install DC/OS cluster based on advanced custom installation of DC/OS which is upgradable
   - Install/configure prerequisites of DC/OS including docker
   - Generate config.yml file
-  - Generate ip detec file 
+  - Generate ip detec files 
   - Deploy DC/OS cluster 
 * Support both Enterprise and Commmunity  DC/OS 
   - Install Open source or Enterprise DC/OS based on group variable of ansible, dcos_is_enterprise(True or False)
@@ -43,6 +42,13 @@ modify repo for bootstrap ip
 repo: "cluster-registry.marathon.l4lb.thisdcos.directory:5000",
 
 ## Getting started
+### General options 
+1) update ansible host file when not using vagrant or terrraform. check out <project-dir>/ansible/inventories/dev/hosts file.
+2) (Enterprise only) Modify dcos_is_enterprise: True or False - enterprise dcos or open source(default: True)
+3) (Enterprise only) Input dcos_license
+4) (Enterprise only) Select edcos_security_mode: permissive  # security type  disabed, permissive, strict (default: strict)
+
+
 ### vagrant
 1) Clone the project
 2) Modify vagrantConf.yml to configure the number of nodes such as masters, slaves, slave_public(defulat 3 masters, 3 slaves, 1 slave public)
@@ -102,8 +108,8 @@ repo: "cluster-registry.marathon.l4lb.thisdcos.directory:5000",
 
 ## One-touch Install  
 
-* install all prerequistes, docker, DC/OS cluster, CLI, Enterprise CLI, docker private registry, monitoring platform 
-    * ansible-playbook -i <inventory file> deploy-dcos.yml 
+* in <project-dir>/ansible directory, install all prerequistes, docker, DC/OS cluster, CLI, Enterprise CLI, docker private registry, monitoring platform 
+    * ansible-playbook -i  playbooks/site.yml 
 
 
 ## Manual Install 
