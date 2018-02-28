@@ -10,4 +10,7 @@
   gather_facts: False
   tasks:
   - name: Install ssh pub key to authorized_key
-    authorized_key: user="{{ansible_user_id}}" key="{{ lookup('file', '~/.ssh/dcos.pub')}}" state=present
+    authorized_key:
+     user: "{{ansible_user_id}}" 
+     key: "{{ lookup('file', '~/.ssh/dcos.pub')}}" 
+     state: present
