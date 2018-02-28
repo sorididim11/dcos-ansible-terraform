@@ -43,6 +43,8 @@ repo: "cluster-registry.marathon.l4lb.thisdcos.directory:5000",
 
 ## Getting started
 ### General options 
+0) generate ssh-key - input path of  private-key in ansible.cfg (default: ~/.ssh/dcos, dcos.pub) 
+0) distributed keys to authorized_key on each node using "ansible-playbook playbooks/util-ssh-key.yml"
 1) update ansible host file when not using vagrant or terrraform. check out <project-dir>/ansible/inventories/dev/hosts file.
 2) (Enterprise only) Modify dcos_is_enterprise: True or False - enterprise dcos or open source(default: True)
 3) (Enterprise only) Input dcos_license
