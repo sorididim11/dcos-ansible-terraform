@@ -9,9 +9,10 @@
       creates: ~/.ssh/dcos
 
 - hosts: all
-  gather_facts: False
+  gather_facts: True
   tasks:
   - name: Install ssh pub key to authorized_key
     authorized_key:
+     user: "{{ansible_user_id}}" 
      key: "{{ lookup('file', '~/.ssh/dcos.pub')}}" 
      state: present
