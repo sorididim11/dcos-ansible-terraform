@@ -1,0 +1,67 @@
+--- 
+
+- name: "Download universe package"
+  hosts: dcos_bootstrap
+  gather_facts: False
+  tasks:
+    - name: Download Universe related files 
+      get_url:
+        url: "{{ item }}"
+        dest: "{{ dcos_bootstrap_root_path }}/packages"
+        validate_certs: false
+      with_items:
+        - https://raw.githubusercontent.com/mesosphere/universe/version-3.x/docker/local-universe/dcos-local-universe-http.service
+        - https://raw.githubusercontent.com/mesosphere/universe/version-3.x/docker/local-universe/dcos-local-universe-registry.service
+        - https://downloads.mesosphere.com/universe/public/local-universe.tar.gz
+  environment: "{{ proxy_env }}"
+
+
+
+- name: "Install universe to all masters "
+  gather_facts: False
+  hosts: dcos_masters
+  serial: 1
+  environment: "{{ proxy_env }}"
+  tasks:
+    - name: Copy universe package to master
+      copy:
+        src: "{{ dcos_bootstrap_root_path }}/packages/{{ item }}"
+        dest: "{{ /etc/systemd/system }}"
+      with_items:
+        - dcos-local-universe-http.service
+        - dcos-local-universe-registry.service 
+
+
+    - name: Load universe package 
+      command: "docker load < local-universe.tar.gz"
+      args:
+        chdir: "{{ dcos_bootstrap_root_path }}/packages"
+      
+
+  # from ansible version 2.2
+    - name: Reload systemd and restat universe services
+      systemd: name={{item}} state=restarted enabled=yes daemon_reload=yes
+      with_items:
+        - dcos-local-universe
+        - dcos-local-universe-registry
+      changed_when: false
+
+
+- name: "Update repo list with new local repo to dcos CLI"
+  hosts: dcos_bootstrap
+  gather_facts: False
+  tasks:
+    - name: Add new local repo
+      command: dcos package repo add local-universe http://master.mesos:8082/repo
+  environment: "{{ proxy_env }}"
+
+
+- name: Insert crts, key to docker cert directory and restart docker engine in each agent
+  become: yes
+  shell: |
+          mkdir -p /etc/docker/certs.d/master.mesos:5000 &&
+          curl -o /etc/docker/certs.d/master.mesos:5000/ca.crt http://master.mesos:8082/certs/domain.crt && 
+          systemctl restart docker.service
+  delegate_to: "{{item}}"
+  with_inventory_hostnames: 
+    - dcos_slaves:dcos_slaves_public

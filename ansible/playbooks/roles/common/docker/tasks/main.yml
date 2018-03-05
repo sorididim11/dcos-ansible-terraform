@@ -2,9 +2,26 @@
 
 # Variables setup
 
+- include_vars: "{{ 'CentOS.yml' if not is_csengine or ansible_distriubtion == 'CentOS' else 'Redhat.yml' }}"
+
+- name: Add the YUM Docker repository in CentOS
+  yum_repository:
+    name: dockerrepo
+    description: Docker Repository.
+    baseurl: "{{ docker_repo }}"
+    enabled: yes
+    gpgcheck: yes
+    gpgkey:  http://yum.dockerproject.org/gpg
+  when: is_csengine == False
 
 
-- include_vars: "{{ ansible_distribution }}.yml"
+- name: Add extras of redhat repository in redhat
+  command: "subscription-manager repos --enable=rhel-7-{{ item }}"
+  with_items:
+    - server-rpms
+    - server-extras-rpms
+    - server-optional-rpms
+  when: is_csengine == True and ansible_distribution == "Redhat"   
 
 - debug:
     msg: "is csengine? {{ is_csengine }}, version: {{ docker_version }}, repo:  {{ docker_repo }}"

@@ -1,4 +1,4 @@
 ---
 
 docker_py_package: docker-py
-docker_pkg_name: docker-engine
+docker_pkg_name: docker
