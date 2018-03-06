@@ -28,7 +28,7 @@
     - server-rpms
     - server-extras-rpms
     - server-optional-rpms
-  when: is_csengine == True and ansible_distribution == "Redhat"   
+  when: is_csengine == True and ansible_distribution == "RedHat"   
 
 - debug:
     msg: "is csengine? {{ is_csengine }}, version: {{ docker_version }}, repo:  {{ docker_repo }}"
