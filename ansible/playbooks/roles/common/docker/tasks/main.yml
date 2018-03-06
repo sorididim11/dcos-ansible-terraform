@@ -2,7 +2,11 @@
 
 # Variables setup
 
-- include_vars: "{{ 'CentOS.yml' if not is_csengine or ansible_distriubtion == 'CentOS' else 'Redhat.yml' }}"
+- set_fact:
+    docker_distro: "{{ 'CentOS.yml' if not is_csengine or ansible_distribution == 'CentOS' else 'Redhat.yml' }}"
+
+# something wrong with include_vars, if i use expresseion above directly here so. use variable using set_fact
+- include_vars: "{{ docker_distro }}"
 
 - name: Add the YUM Docker repository in CentOS
   yum_repository:
