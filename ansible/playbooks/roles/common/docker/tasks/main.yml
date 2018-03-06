@@ -3,7 +3,7 @@
 # Variables setup
 
 - debug:
-    msg: "is csengine? {{ is_csengine }}, linux distro: {{ansible_distribution}}"
+    msg: "is csengine? {{ is_csengine }}, linux distro: {{ansible_distribution}}, docker ver: {{docker_version}}"
 
 - set_fact:
     docker_distro: "{{ 'CentOS.yml' if not is_csengine or ansible_distribution == 'CentOS' else 'RedHat.yml' }}"
@@ -30,8 +30,6 @@
     - server-optional-rpms
   when: is_csengine == True and ansible_distribution == "RedHat"   
 
-- debug:
-    msg: "is csengine? {{ is_csengine }}, version: {{ docker_version }}"
-
+  
 - include: "install_engine.yml"
   
