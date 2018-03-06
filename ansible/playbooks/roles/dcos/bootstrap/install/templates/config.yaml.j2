@@ -27,20 +27,20 @@ process_timeout: 600
 
 agent_list:
 {% for slave_ip in groups['dcos_slaves'] %}
-- {{ hostvars[slave_ip]['ansible_' + dcos_nic_name]['ipv4']['address'] }}
+- {{slave_ip}}
 {% endfor %}
 
 
 {% if (groups['dcos_slaves_public'] | length) > 0 %}
 public_agent_list:
 {% for slave_public_ip in groups['dcos_slaves_public'] %}
-- {{ hostvars[slave_public_ip]['ansible_' + dcos_nic_name]['ipv4']['address'] }}
+- {{slave_public_ip}}
 {% endfor %}
 {% endif %}
 
 master_list:
 {% for master_ip in groups['dcos_masters'] %}
-- {{ hostvars[master_ip]['ansible_' + dcos_nic_name]['ipv4']['address'] }}
+- {{master_ip}}}
 {% endfor %}
 
 
