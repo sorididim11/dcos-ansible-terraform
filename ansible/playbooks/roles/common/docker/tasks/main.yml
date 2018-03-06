@@ -2,6 +2,9 @@
 
 # Variables setup
 
+- debug:
+    msg: "is csengine? {{ is_csengine }}, linux distro: {{ansible_distribution}}"
+
 - set_fact:
     docker_distro: "{{ 'CentOS.yml' if not is_csengine or ansible_distribution == 'CentOS' else 'RedHat.yml' }}"
 
