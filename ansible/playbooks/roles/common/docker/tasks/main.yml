@@ -3,7 +3,7 @@
 # Variables setup
 
 - set_fact:
-    docker_distro: "{{ 'CentOS.yml' if not is_csengine or ansible_distribution == 'CentOS' else 'Redhat.yml' }}"
+    docker_distro: "{{ 'CentOS.yml' if not is_csengine or ansible_distribution == 'CentOS' else 'RedHat.yml' }}"
 
 # something wrong with include_vars, if i use expresseion above directly here so. use variable using set_fact
 - include_vars: "{{ docker_distro }}"
