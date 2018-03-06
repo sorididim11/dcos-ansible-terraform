@@ -40,7 +40,7 @@ public_agent_list:
 
 master_list:
 {% for master_ip in groups['dcos_masters'] %}
-- {{master_ip}}}
+- {{master_ip}}
 {% endfor %}
 
 
