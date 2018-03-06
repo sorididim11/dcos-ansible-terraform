@@ -31,7 +31,7 @@
   when: is_csengine == True and ansible_distribution == "RedHat"   
 
 - debug:
-    msg: "is csengine? {{ is_csengine }}, version: {{ docker_version }}, repo:  {{ docker_repo }}"
+    msg: "is csengine? {{ is_csengine }}, version: {{ docker_version }}"
 
 - include: "install_engine.yml"
   
