@@ -19,7 +19,7 @@
     enabled: yes
     gpgcheck: yes
     gpgkey:  http://yum.dockerproject.org/gpg
-  when: is_csengine == False
+  when: is_csengine == False or ansible_distribution == "CentOS"
 
 
 - name: Add extras of redhat repository in redhat
