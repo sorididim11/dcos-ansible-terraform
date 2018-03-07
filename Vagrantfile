@@ -63,6 +63,10 @@ Vagrant.configure('2') do |config|
     config.vm.define name do |node|
       node.vm.hostname = machine_info['name']
       node.vm.network :private_network, ip: machine_info['ip']
+      if defined?(machine_info['box']) != nil
+        node.vm.box = machine_info['box']
+      end
+
       node.vm.provider 'virtualbox' do |vb|
         vb.linked_clone = true
         vb.cpus = machine_info['cpus']
