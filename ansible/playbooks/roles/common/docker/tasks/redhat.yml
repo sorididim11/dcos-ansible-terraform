@@ -8,15 +8,6 @@
     docker_pkg_name: docker
 
 
-- name: Register Redhat subscription and attach automatically
-  redhat_subscription:
-    state: present
-    username: "{{redhat_subscription_user}}"
-    password: "{{redhat_subscription_pwd}}"
-    autosubscribe: true
-  when: redhat_subscription_user is defined
-
-
 - name: Add extras of redhat repository in redhat
   command: "subscription-manager repos --enable=rhel-7-{{ item }}"
   with_items:
