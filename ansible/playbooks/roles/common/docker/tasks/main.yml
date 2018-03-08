@@ -3,33 +3,9 @@
 # Variables setup
 
 - debug:
-    msg: "is csengine? {{ is_csengine }}, linux distro: {{ansible_distribution}}, docker ver: {{docker_version}}"
-
-- set_fact:
-    docker_distro: "{{ 'CentOS.yml' if not is_csengine or ansible_distribution == 'CentOS' else 'RedHat.yml' }}"
+    msg: "docker package? {{ docker_type }}, linux distro: {{ansible_distribution}}, docker ver: {{docker_version}}"
 
 # something wrong with include_vars, if i use expresseion above directly here so. use variable using set_fact
-- include_vars: "{{ docker_distro }}"
-
-- name: Add the YUM Docker repository in CentOS
-  yum_repository:
-    name: dockerrepo
-    description: Docker Repository.
-    baseurl: "{{ docker_repo }}"
-    enabled: yes
-    gpgcheck: yes
-    gpgkey:  http://yum.dockerproject.org/gpg
-  when: is_csengine == False or ansible_distribution == "CentOS"
-
-
-- name: Add extras of redhat repository in redhat
-  command: "subscription-manager repos --enable=rhel-7-{{ item }}"
-  with_items:
-    - server-rpms
-    - server-extras-rpms
-    - server-optional-rpms
-  when: is_csengine == True and ansible_distribution == "RedHat"   
-
+- include: "{{docker_type}}.yml"
   
 - include: "install_engine.yml"
-  

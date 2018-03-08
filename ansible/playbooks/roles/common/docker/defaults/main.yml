@@ -1,7 +1,8 @@
 ---
 
-docker_version: 17.03.1.ce
-docker_type: engine
-docker_package_name: docker-engine
-
-is_csengine: "{{ docker_type == 'csengine' }}"
+# docker 
+docker_type: community #community or enterprise or redhat 
+docker_version: 17.05.0.ce 
+docker_volume_fs: overlay
+docker_compose_version: 1.16
+docker_private_url: registry.kin.com

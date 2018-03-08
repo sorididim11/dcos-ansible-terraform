@@ -104,13 +104,17 @@
     when: inventory_hostname not in groups['dcos_bootstrap']
 
 
-  - name : Set DC/OS loacle, LANG=en_US.utf-8
+  - name: Set DC/OS loacle, LANG=en_US.utf-8
     command: localectl set-locale LANG=en_US.utf-8 
     
   
-  - name : Set DC/OS loacle, LC_ALL=en_US.utf-8
+  - name: Set DC/OS loacle, LC_ALL=en_US.utf-8
     lineinfile: dest=/etc/locale.conf line='LC_ALL=en_US.utf-8' state=present create=yes
 
+
+  - name: Modify kernal param, kernel.watchdog_thresh to extend threshhold
+    lineinfile: dest=/etc/sysctl.d/kernel.watchdog_thresh.conf line='kernel.watchdog_thresh=60' state=present create=yes
+    when: watchdog_thresh is defined
 
   # - name: reboot for preconditions like overlay, selinux, locale 
   #   command: systemctl reboot
