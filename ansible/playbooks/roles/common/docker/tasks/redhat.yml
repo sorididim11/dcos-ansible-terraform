@@ -1,5 +1,10 @@
 ---
 
+- assert:
+    that: ansible_distribution == "RedHat" 
+    msg: Redhat docker_type only support in RHEL 
+
+
 - name: Register Redhat subscription and attach automatically
   redhat_subscription:
     state: present
