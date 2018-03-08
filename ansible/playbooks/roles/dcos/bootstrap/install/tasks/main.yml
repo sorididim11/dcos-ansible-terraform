@@ -27,6 +27,11 @@
     src: config.yaml.j2
     dest: "{{ dcos_bootstrap_root_path }}/genconf/config.yaml"
 
+- name: Generate DC/OS license file
+  template:
+    src: license.txt.j2
+    dest: "{{ dcos_bootstrap_root_path }}/genconf/license.txt"
+
 
 # write hashed pwd  to config.yml
 - name: Store hashed password to config.yaml
