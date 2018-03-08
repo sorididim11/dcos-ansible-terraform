@@ -1,0 +1,8 @@
+---
+
+- name: Add extras of redhat repository in redhat
+  command: "subscription-manager repos --enable=rhel-7-{{ item }}"
+  with_items:
+    - server-rpms
+    - server-extras-rpms
+    - server-optional-rpms
