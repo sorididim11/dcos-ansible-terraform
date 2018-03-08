@@ -15,7 +15,7 @@
 10.0.15.11
 
 [dcos_bootstrap]
-10.0.15.11
+10.0.15.11 ansible_connection=local
 
 [dcos_nodes:children]
 dcos_masters
