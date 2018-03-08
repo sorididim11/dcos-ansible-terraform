@@ -7,5 +7,3 @@ docker_open_yum_repo: http://yum.dockerproject.org/repo/main/centos/7  #"https:/
 # conditional op
 docker_cs_pubkey: "https://sks-keyservers.net/pks/lookup?op=get&search=0xee6d536cf7dc86e2d7d56f59a178ac6c6238f52e"
 docker_repo: "{{ (docker_type == 'community') | ternary( docker_cs_yum_repo, docker_open_yum_repo ) }}"
-docker_py_package: docker-py
-docker_pkg_name: docker-engine

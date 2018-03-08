@@ -4,6 +4,9 @@
 # something wrong with include_vars, if i use expresseion above directly here so. use variable using set_fact
 - include_vars: CentOS.yml
 
+- set_fact:
+    docker_pkg_name: "{{ 'docker-engine' if docker_type == 'community' else 'docker-ee'}}"
+
 - name: Add the YUM Docker repository in CentOS
   yum_repository:
     name: dockerrepo
