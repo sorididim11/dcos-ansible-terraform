@@ -23,7 +23,7 @@ master_discovery: {{ dcos_master_discovery_type }}
 cluster_docker_registry_url = {{ dcos_docker_registry_url }}
 {% endif %}
 process_timeout: 600
-
+fault_domain_enabled: false
 
 agent_list:
 {% for slave_ip in groups['dcos_slaves'] %}
