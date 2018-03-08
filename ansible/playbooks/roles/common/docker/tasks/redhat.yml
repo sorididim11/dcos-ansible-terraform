@@ -11,6 +11,7 @@
     username: "{{redhat_subscription_user}}"
     password: "{{redhat_subscription_pwd}}"
     autosubscribe: true
+  when: redhat_subscription_user is defined
 
 
 - name: Add extras of redhat repository in redhat
