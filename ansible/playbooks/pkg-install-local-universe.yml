@@ -35,8 +35,6 @@
 
     - name: Load universe package 
       command: "docker load < local-universe.tar.gz"
-      args:
-        chdir: "/tmp"
       
 
   # from ansible version 2.2
