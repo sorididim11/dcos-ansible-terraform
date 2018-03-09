@@ -123,7 +123,7 @@
 
 
   - name: Modify kernal param, kernel.watchdog_thresh to extend threshhold
-    lineinfile: dest=/etc/sysctl.d/kernel.watchdog_thresh.conf line='kernel.watchdog_thresh=60' state=present create=yes
+    lineinfile: dest=/etc/sysctl.d/kernel.watchdog_thresh.conf line='kernel.watchdog_thresh={{watchdog_thresh}}' state=present create=yes
     when: watchdog_thresh is defined
 
   # - name: reboot for preconditions like overlay, selinux, locale 

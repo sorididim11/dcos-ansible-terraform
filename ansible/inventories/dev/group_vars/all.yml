@@ -55,3 +55,6 @@ docker_private_url: registry.kin.com
 
 # redhat_subscription_user: 
 # redhat_subscription_pwd
+
+
+watchdog_thresh: 60 #sec
