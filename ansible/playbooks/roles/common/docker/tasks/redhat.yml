@@ -14,3 +14,9 @@
     - server-rpms
     - server-extras-rpms
     - server-optional-rpms
+
+
+- name: Add Docker group 
+  group:
+    name: docker
+    state: present
