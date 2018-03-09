@@ -10,7 +10,7 @@
         dest: "{{ dcos_bootstrap_root_path }}/packages/{{item.name}}"
         validate_certs: false
       with_items:
-        - { name: 'local-universe-http.service', url: 'https://raw.githubusercontent.com/mesosphere/universe/version-3.x/docker/local-universe/dcos-local-universe-http.service' }
+        - { name: 'dcos-local-universe-http.service', url: 'https://raw.githubusercontent.com/mesosphere/universe/version-3.x/docker/local-universe/dcos-local-universe-http.service' }
         - { name: 'dcos-local-universe-registry.service', url: 'https://raw.githubusercontent.com/mesosphere/universe/version-3.x/docker/local-universe/dcos-local-universe-registry.service' }
         - { name: 'local-universe.tar.gz', url: 'https://downloads.mesosphere.com/universe/public/local-universe.tar.gz' }
   environment: "{{ proxy_env }}"
