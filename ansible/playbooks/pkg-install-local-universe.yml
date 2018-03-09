@@ -57,12 +57,19 @@
   environment: "{{ proxy_env }}"
 
 
-- name: Insert crts, key to docker cert directory and restart docker engine in each agent
-  become: yes
-  shell: |
+
+- name: "upcate crt on each slave node"
+  gather_facts: False
+  hosts: dcos_masters
+  serial: 1
+  environment: "{{ proxy_env }}"
+  tasks:
+    - name: Insert crts, key to docker cert directory and restart docker engine in each agent
+      become: yes
+      shell: |
           mkdir -p /etc/docker/certs.d/master.mesos:5000 &&
           curl -o /etc/docker/certs.d/master.mesos:5000/ca.crt http://master.mesos:8082/certs/domain.crt && 
           systemctl restart docker.service
-  delegate_to: "{{item}}"
-  with_inventory_hostnames: 
-    - dcos_slaves:dcos_slaves_public
+      delegate_to: "{{item}}"
+      with_inventory_hostnames: 
+        - dcos_slaves:dcos_slaves_public
