@@ -6,13 +6,13 @@
   tasks:
     - name: Download Universe related files 
       get_url:
-        url: "{{ item }}"
-        dest: "{{ dcos_bootstrap_root_path }}/packages"
+        url: "{{ item.value }}"
+        dest: "{{ dcos_bootstrap_root_path }}/packages/{{item.key}}"
         validate_certs: false
-      with_items:
-        - https://raw.githubusercontent.com/mesosphere/universe/version-3.x/docker/local-universe/dcos-local-universe-http.service
-        - https://raw.githubusercontent.com/mesosphere/universe/version-3.x/docker/local-universe/dcos-local-universe-registry.service
-        - https://downloads.mesosphere.com/universe/public/local-universe.tar.gz
+      with_dict:
+        - local-universe-http.service: https://raw.githubusercontent.com/mesosphere/universe/version-3.x/docker/local-universe/dcos-local-universe-http.service
+        - dcos-local-universe-registry.service: https://raw.githubusercontent.com/mesosphere/universe/version-3.x/docker/local-universe/dcos-local-universe-registry.service
+        - local-universe.tar.gz: https://downloads.mesosphere.com/universe/public/local-universe.tar.gz
   environment: "{{ proxy_env }}"
 
 
