@@ -20,7 +20,7 @@
 - name: "Install universe to all masters "
   gather_facts: False
   hosts: dcos_masters
-  serial: 1
+  become: yes
   environment: "{{ proxy_env }}"
   tasks:
     - name: Copy universe package to master
@@ -61,7 +61,7 @@
 - name: "upcate crt on each slave node"
   gather_facts: False
   hosts: dcos_masters
-  serial: 1
+  become: yes
   environment: "{{ proxy_env }}"
   tasks:
     - name: Insert crts, key to docker cert directory and restart docker engine in each agent
