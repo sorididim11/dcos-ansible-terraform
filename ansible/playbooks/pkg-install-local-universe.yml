@@ -30,11 +30,11 @@
       with_items:
         - { name: 'dcos-local-universe-http.service', dest: '/etc/systemd/system' }
         - { name: 'dcos-local-universe-registry.service' , dest: '/etc/systemd/system' }
-        - { name: 'local-universe.tar.gz' , dest: '~/' }
+        - { name: 'local-universe.tar.gz' , dest: '/tmp' }
 
 
     - name: Load universe package 
-      command: "docker load < local-universe.tar.gz"
+      command: "docker load < /tmp/local-universe.tar.gz"
       
 
   # from ansible version 2.2
