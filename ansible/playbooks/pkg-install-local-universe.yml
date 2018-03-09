@@ -7,7 +7,7 @@
     - name: Download Universe related files 
       get_url:
         url: "{{ item.url }}"
-        dest: "{{ dcos_bootstrap_root_path }}/packages/{{item.url}}"
+        dest: "{{ dcos_bootstrap_root_path }}/packages/{{item.name}}"
         validate_certs: false
       with_items:
         - { name: 'local-universe-http.service', url: 'https://raw.githubusercontent.com/mesosphere/universe/version-3.x/docker/local-universe/dcos-local-universe-http.service' }
