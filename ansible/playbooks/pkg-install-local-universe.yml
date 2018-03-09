@@ -30,7 +30,7 @@
       with_items:
         - { name: 'dcos-local-universe-http.service', dest: '/etc/systemd/system' }
         - { name: 'dcos-local-universe-registry.service' , dest: '/etc/systemd/system' }
-        - { name: 'local-universe.tar.gz' , dest: '/tmp' }
+        - { name: 'local-universe.tar.gz' , dest: '~/' }
 
 
     - name: Load universe package 
