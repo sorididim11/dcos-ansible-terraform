@@ -27,7 +27,7 @@ dcos_bootstrap_root_path: /dcos # root dir for boostraping
 dcos_bootstrap_port: 9000         # home dir for installation
 
 
-dcos_first_master_internal_ip: "{{hostvars[groups['dcos_masters'][0]]['ansible_' + dcos_nic_name].ipv4.address}}"
+dcos_first_master_internal_ip: "{{groups['dcos_masters'][0]}}"
 dcos_cluster_url: "{{ (edcos_security_mode == 'disabled') | ternary('http', 'https')}}://{{dcos_first_master_internal_ip}}"
   
 #networking

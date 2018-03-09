@@ -83,7 +83,7 @@
       "REGISTRY_HTTP_TLS_KEY": "/mnt/mesos/sandbox/{{service.name}}.key",
       "REGISTRY_HTTP_TLS_CERTIFICATE": "/mnt/mesos/sandbox/{{service.name}}.crt",
       "REGISTRY_AUTH": "token", 
-      "REGISTRY_AUTH_TOKEN_REALM": "https://{{hostvars[groups['dcos_bootstrap'][0]]['ansible_' + dcos_nic_name]['ipv4']['address']}}:{{service.auth.external_port}}/auth",
+      "REGISTRY_AUTH_TOKEN_REALM": "https://{{groups['dcos_bootstrap'][0]]}}:{{service.auth.external_port}}/auth",
       "REGISTRY_AUTH_TOKEN_SERVICE": "Docker registry",
       "REGISTRY_AUTH_TOKEN_ISSUER": "Auth Service",
       "REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE": "/mnt/mesos/sandbox/{{service.name}}.crt",

@@ -12,8 +12,6 @@ edcos_audit_logging: 'true'  # 'true' or 'false'  -  mesos, marathon and jobs lo
 dcos_is_enterprise: False #Ture or False
 dcos_bootstrap_root_path: /dcos # root dir for boostraping 
 dcos_bootstrap_port: 80         # home dir for installation
-dcos_nic_name: eno1 # for ip-detect - name of network interface card for ip detection  of all nodes
-dcos_nic_pub_name: eno1 # for ip-detect-public
 ssh_superuser: root # ansible become_user permission
 dcos_ssh_user: root
 dcos_ssh_port: 22

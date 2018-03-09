@@ -55,7 +55,7 @@ services:
     restart: on-failure
     command: ["/bin/sh", "/etc/docker/registry/init"]
     extra_hosts:
-      - "{{service.machine_fqdn}}:{{hostvars[groups['dcos_bootstrap'][0]]['ansible_' + dcos_nic_name].ipv4.address }}"
+      - "{{service.machine_fqdn}}:{{groups['dcos_bootstrap'][0] }}"
     environment:
       REGISTRY_AUTH_TOKEN_REALM: https://${MACHINE_FQDN}/v2/token
       REGISTRY_AUTH_TOKEN_SERVICE: ${MACHINE_FQDN}

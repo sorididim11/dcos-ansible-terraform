@@ -24,8 +24,7 @@ dcos_is_enterprise: True  #Truee or False
 dcos_cluster_name: dcos
 dcos_bootstrap_root_path: /dcos # root dir for boostraping 
 dcos_bootstrap_port: 9000         # home dir for installation
-dcos_nic_name: eth0 # for ip-detect - name of network interface card for ip detection  of all nodes
-dcos_nic_pub_name: eth0 # for ip-detect-public
+
 
 
 dcos_first_master_internal_ip: "{{hostvars[groups['dcos_masters'][0]].ansible_host}}"

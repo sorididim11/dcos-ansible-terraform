@@ -2,7 +2,7 @@
 
   - name: debug home dir 
     debug: 
-      msg: "{{ ansible_user_dir }}, host: {{ansible_host}}"
+      msg: "{{ ansible_user_dir }}, host: {{ansible_host}}, ip: {{groups['dcos_masters'][0]}}"
 
 
   - name: Check Operation System disto, version

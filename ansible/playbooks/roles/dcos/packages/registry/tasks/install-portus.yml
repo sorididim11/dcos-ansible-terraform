@@ -64,7 +64,7 @@
   blockinfile:
     path: /etc/hosts
     block: |
-        {{ hostvars[groups['dcos_bootstrap'][0]]['ansible_' + dcos_nic_name].ipv4.address }} {{ service.machine_fqdn }}
+        {{ groups['dcos_bootstrap'][0] }} {{ service.machine_fqdn }}
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
   delegate_to: "{{item}}"
   with_inventory_hostnames: 

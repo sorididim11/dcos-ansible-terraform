@@ -78,8 +78,6 @@ repo: "cluster-registry.marathon.l4lb.thisdcos.directory:5000",
 * dcos_cluster_name:               - user-defined cluster name
 * dcos_bootstrap_root_path: /dcos  - bootstrap installation home   
 * docs_boostrap_port: 9000         - bootstrap web server port for distributing installer files 
-* dcos_nic_name: eno1              - change Network Inferface card for private ip detection 
-* dcos_nic_pub_name: eno1          - change Network Inferface card for public ip detection 
 * dcos_is_use_proxy: false         - define when proxy is used 
 * dcos_resolver1:                  - dns1 ex) 8.8.8.8
 * dcos_resolver2:                  - dns2 
