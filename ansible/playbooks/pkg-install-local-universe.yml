@@ -34,7 +34,7 @@
 
 
     - name: Load universe package 
-      command: "sudo docker load < /tmp/local-universe.tar.gz"
+      shell: docker load < /tmp/local-universe.tar.gz
       
 
   # from ansible version 2.2
