@@ -25,12 +25,12 @@
   tasks:
     - name: Copy universe package to master
       copy:
-        src: "{{ dcos_bootstrap_root_path }}/packages/{{ item.key }}"
-        dest: "{{ item.value }}"
-      with_dict:
-        - { src: dcos-local-universe-http.service, dest: /etc/systemd/system }
-        - { src: dcos-local-universe-registry.service , dest: /etc/systemd/system }
-        - { src: local-universe.tar.gz , dest: /tmp }
+        src: "{{ dcos_bootstrap_root_path }}/packages/{{ item.src }}"
+        dest: "{{ item.dest }}"
+      with_items:
+        - { src: 'dcos-local-universe-http.service', dest: '/etc/systemd/system' }
+        - { src: 'dcos-local-universe-registry.service' , dest: '/etc/systemd/system' }
+        - { src: 'local-universe.tar.gz' , dest: '/tmp' }
 
 
     - name: Load universe package 
