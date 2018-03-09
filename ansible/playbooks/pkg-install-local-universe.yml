@@ -27,15 +27,16 @@
       copy:
         src: "{{ dcos_bootstrap_root_path }}/packages/{{ item }}"
         dest: "{{ /etc/systemd/system }}"
-      with_items:
-        - dcos-local-universe-http.service
-        - dcos-local-universe-registry.service 
+      with_dist:
+        - { src: dcos-local-universe-http.service, dest: /etc/systemd/system }
+        - { src: dcos-local-universe-registry.service , dest: /etc/systemd/system }
+        - { src: local-universe.tar.gz , dest: /tmp }
 
 
     - name: Load universe package 
       command: "docker load < local-universe.tar.gz"
       args:
-        chdir: "{{ dcos_bootstrap_root_path }}/packages"
+        chdir: "/tmp"
       
 
   # from ansible version 2.2
