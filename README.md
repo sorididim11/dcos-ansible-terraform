@@ -7,9 +7,17 @@
 * vagrant: 1.9.7
 * terraform: 0.9.3
 
+# DC/OS infra consideration 
+dns_search - add local dns servers to config
+public IP - moidfy detect-ip-pub. default is the same ip with private ip
+use proxy - change dcos_is_use_proxy to true and add proxy config ex) proxy_env.http_proxy
+docker_credentials 
+docker_registyr_url
+custom ca cert
 
 # ToDo
-1) portus registry to dcos pods (but  pods is not suppored in enterprise strict mode)
+1) portus registry to dcos pods (but  pods is not suppored in  strict mode)
+
 
 # Features
   
