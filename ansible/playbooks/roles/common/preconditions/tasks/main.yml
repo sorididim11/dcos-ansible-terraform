@@ -57,12 +57,15 @@
       line: '%wheel ALL=(ALL) NOPASSWD: ALL'
 
 
-  - name: Disable firewalld. known issue of docker
+  - name: Disable dnsmasq, firewalld(known issue of docker)
     service:
-      name: firewalld.service
+      name: "{{item}}"
       state: stopped
       enabled: no
     ignore_errors: yes
+    with_items:
+      - firewalld.service
+      - dnsmasq.service      
 
     
   - name: Add nogroup, docker to group 
