@@ -68,7 +68,7 @@
       - dnsmasq.service
     failed_when: 
       - service_ret | failed 
-      - 'Count not find' not in service_ret.msg
+      - "Count not find" not in service_ret.msg
 
     
   - name: Add nogroup, docker to group 
