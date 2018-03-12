@@ -43,7 +43,7 @@
 
 
 - name: Generate self-signed certificate for both auth and registry with common name, boostrap node IP address
-  local_action: command: >
+  command: >
           openssl req -x509  -newkey rsa:4096 -nodes -sha256 -days 365
             -keyout portus.key   -out portus.crt
             -config {{auth_root}}/secrets/openssl.conf
