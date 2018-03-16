@@ -49,8 +49,6 @@ services:
       PORTUS_KEY_PATH: /certificates/portus.key
       PORTUS_PASSWORD: ${PORTUS_PASSWORD}
 
-      PORTUS_BACKGROUND: true
-
     links:
       - db
     volumes:
@@ -81,6 +79,7 @@ services:
       # SSL
       REGISTRY_HTTP_TLS_CERTIFICATE: /secrets/portus.crt
       REGISTRY_HTTP_TLS_KEY: /secrets/portus.key
+
       REGISTRY_NOTIFICATIONS_ENDPOINTS: >
         - name: portus
           url: https://${MACHINE_FQDN}/v2/webhooks/events
