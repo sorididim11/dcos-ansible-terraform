@@ -49,6 +49,7 @@ services:
       PORTUS_KEY_PATH: /certificates/portus.key
       PORTUS_PASSWORD: ${PORTUS_PASSWORD}
 
+      PORTUS_BACKGROUND: true
     links:
       - db
     volumes:
