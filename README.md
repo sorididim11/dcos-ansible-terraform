@@ -189,7 +189,7 @@ portus installed in bootstrap node.  port https(443) is used basically
 ###### config 
 1) LDAP integration - default config is not based on LDAP. to integrate LDAP, add LDAP config in role/dcos/packages/registry/templates/config-local.yml.j2 
 2) registry certificate - Command name of certficate 
-  update docker_private_url as domain name you use in group_vars/all.yml
+  update docker_registry_url as domain name you use in group_vars/all.yml
 3) add admin account to playbooks/pkg-des/registry-portus for ID, Password
 
 ###### install
