@@ -34,6 +34,8 @@ services:
   background:
     image: opensuse/portus:head
     restart: on-failure
+    extra_hosts:
+      - "{{service.machine_fqdn}}:{{groups['dcos_bootstrap'][0] }}"
     environment:
       PORTUS_MACHINE_FQDN_VALUE: ${MACHINE_FQDN}
       CCONFIG_PREFIX: PORTUS
