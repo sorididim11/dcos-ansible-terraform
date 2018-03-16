@@ -2,7 +2,7 @@ version: "2"
 
 services:
   portus:
-    image: opensuse/portus:2.2
+    image: opensuse/portus:head
     restart: on-failure
     environment:
       PORTUS_MACHINE_FQDN_VALUE: ${MACHINE_FQDN}
@@ -32,7 +32,7 @@ services:
       - static:/srv/Portus/public
 
   background:
-    image: opensuse/portus:2.2
+    image: opensuse/portus:head
     restart: on-failure
     environment:
       PORTUS_MACHINE_FQDN_VALUE: ${MACHINE_FQDN}
