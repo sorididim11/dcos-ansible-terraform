@@ -37,7 +37,7 @@ proxy_env:
   dummy: dummy
 
 
-dco_resolvers:
+dcos_resolvers:
   - 8.8.8.8
   - 10.0.2.3
 
