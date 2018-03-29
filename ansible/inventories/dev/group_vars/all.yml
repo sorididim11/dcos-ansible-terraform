@@ -37,9 +37,9 @@ proxy_env:
   dummy: dummy
 
 
-dcos_resolver1: 8.8.8.8
-dcos_resolver2: 8.8.4.4
-
+dcos_resolvers:
+  - 8.8.8.8
+  - 10.0.2.3
 
 # precondition 
 selinux_mode: permissive

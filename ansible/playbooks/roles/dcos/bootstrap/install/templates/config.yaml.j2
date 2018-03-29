@@ -58,8 +58,9 @@ master_list:
 
 
 resolvers:
-- {{ dcos_resolver1 }} 
-- {{ dcos_resolver2 }}
+{% for ip in dcos_resolvers %}
+- {{ ip }} 
+{% endfor %}
 
 
 {% if (dcos_is_use_proxy is defined) and dcos_is_use_proxy == true %}
