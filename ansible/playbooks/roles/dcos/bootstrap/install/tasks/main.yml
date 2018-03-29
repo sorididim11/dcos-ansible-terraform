@@ -44,7 +44,7 @@
 
 - name: Copy ip-detect, ip-detect-public
   copy:
-    src: "{{item}}.j2"
+    src: "{{item}}"
     dest: "{{ dcos_bootstrap_root_path }}/genconf/{{item}}"
   with_items:
     - ip-detect
