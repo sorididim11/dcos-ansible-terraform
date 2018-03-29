@@ -42,16 +42,13 @@
   when: dcos_is_enterprise
 
 
-- name: Generate ip-detect
+- name: Generate ip-detect, ip-detect-public
   template:
-    src: ip-detect.j2
-    dest: "{{ dcos_bootstrap_root_path }}/genconf/ip-detect"
-
-
-- name: Generate ip-detect-public
-  template:
-    src: ip-detect-pub.j2
-    dest: "{{ dcos_bootstrap_root_path }}/genconf/ip-detect-public"
+    src: "{{item}}.j2"
+    dest: "{{ dcos_bootstrap_root_path }}/genconf/{{item}}"
+  with_items:
+    - ip-detect
+    - ip-detect-public
 
 
 - name: Generate a customized DC/OS build file
