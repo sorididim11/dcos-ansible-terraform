@@ -69,7 +69,7 @@
 
 
 - name: Backup  DC/OS installer files
-  shell: tar cf "{{dcos_bootstrap_root_path}}"/dcos-install.tar *
+  shell: tar cf "{{dcos_bootstrap_root_path}}"/dcos-install-{{dcos_version}}.tar *
   args:
     chdir: "{{ dcos_bootstrap_root_path }}/genconf"
   
