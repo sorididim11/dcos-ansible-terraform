@@ -2,7 +2,7 @@
 
 ansible_key_file: ~/.ssh/dcos
 
-dcos_version: "1.10"
+dcos_version: "1.10.5"
 dcos_cli_version: "1.10"
 
 # enterprise
