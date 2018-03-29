@@ -23,6 +23,14 @@
 - name: Install Docker Engine & Selinux 
   yum: name={{docker_pkg_name}}-{{ docker_version }} state=present update_cache=yes
 
+- name: Create symbolic link to docker-proxy, docker-rundeck_acl_policy
+  file:
+    src: "/usr/libexec/docker/{{ item }}-current"
+    dest: "{{ item }}"
+    state: link
+  with_items:
+    - docker-proxy
+    - docker-runc
 
 # from ansible version 2.2
 - name: Reload systemd and restat docker service
