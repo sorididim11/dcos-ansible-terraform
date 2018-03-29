@@ -1,4 +1,7 @@
 ---
 dcos_bootstrap_url: "http://{{groups['dcos_bootstrap'][0]}}:{{dcos_bootstrap_port}}"
-dcos_installer_name: "{{ (dcos_is_enterprise) | ternary( 'dcos_generate_config.ee.sh', 'dcos_generate_config.sh')  }}"
-dcos_installer_download_url: "{{ (dcos_is_enterprise) | ternary(https://downloads.mesosphere.io/dcos-enterprise/stable/dcos_version/dcos_generate_config.ee.sh, https://downloads.dcos.io/dcos/stable/dcos_version/dcos_generate_config.sh) }}"
+dcos_installer: "{{ (dcos_is_enterprise) | ternary( 'dcos_generate_config.ee.sh', 'dcos_generate_config.sh')  }}"
+dcos_installer_base_url: "{{ (dcos_is_enterprise) | ternary('https://downloads.mesosphere.io/dcos-enterprise/stable', 'https://downloads.dcos.io/dcos/stable') }}"
+
+dcos_installer_download_url: "{{dcos_installer_base_url}}/{{dcos_version}}/{{dcos_installer}}"
+dcos_installer_name: "{{ dcos_installer_name | regex_replace('.sh')}}.{{dcos_version}}.sh"
