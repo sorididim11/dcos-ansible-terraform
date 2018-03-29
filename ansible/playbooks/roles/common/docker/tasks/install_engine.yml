@@ -26,7 +26,7 @@
 - name: Create symbolic link to docker-proxy, docker-rundeck_acl_policy
   file:
     src: "/usr/libexec/docker/{{ item }}-current"
-    dest: "{{ item }}"
+    dest: "/usr/libexec/docker/{{ item }}"
     state: link
   with_items:
     - docker-proxy
