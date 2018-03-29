@@ -57,16 +57,30 @@
       line: '%wheel ALL=(ALL) NOPASSWD: ALL'
 
 
-  - name: Disable firewalld. known issue of docker
+  - name: Disable dnsmasq, firewalld(known issue of docker)
     service:
-      name: firewalld.service
+      name: "{{item}}"
       state: stopped
       enabled: no
-    ignore_errors: yes
+    register: service_ret
+    with_items:
+      - firewalld.service
+      - dnsmasq.service
+    failed_when: "service_ret|failed and ('not find' not in service_ret.msg)"
 
     
-  - name: Add group, nogroup
-    group: name=nogroup state=present
+  - name: Add nogroup, docker to group 
+    group: name={{item}} state=present
+    with_items: 
+      - nogroup
+      - docker
+
+  - name: Modify kernal params, watchdog_thresh, disable ipv6
+    sysctl: name={{item.key}} value={{item.val}} state=present sysctl_file=/etc/sysctl.d/dcos_kernal.conf reload=yes
+    with_items:
+      - { key: net.ipv6.conf.all.disable_ipv6, val: 1}
+      - { key: net.ipv6.conf.default.disable_ipv6, val: 1}
+      - { key: kernel.watchdog_thresh, val: "{{watchdog_thresh}}" }
 
 
   # - name: Clean yum packages, metadata, dbcache, all and make new cache.   
@@ -122,9 +136,10 @@
     lineinfile: dest=/etc/locale.conf line='LC_ALL=en_US.utf-8' state=present create=yes
 
 
-  - name: Modify kernal param, kernel.watchdog_thresh to extend threshhold
-    lineinfile: dest=/etc/sysctl.d/kernel.watchdog_thresh.conf line='kernel.watchdog_thresh={{watchdog_thresh}}' state=present create=yes
-    when: watchdog_thresh is defined
+
+    
+    #lineinfile: dest=/etc/sysctl.d/kernel.watchdog_thresh.conf line='kernel.watchdog_thresh={{watchdog_thresh}}' state=present create=yes
+    #when: watchdog_thresh is defined
 
   # - name: reboot for preconditions like overlay, selinux, locale 
   #   command: systemctl reboot

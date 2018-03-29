@@ -7,9 +7,17 @@
 * vagrant: 1.9.7
 * terraform: 0.9.3
 
+# DC/OS infra consideration 
+dns_search - add local dns servers to config
+public IP - moidfy detect-ip-pub. default is the same ip with private ip
+use proxy - change dcos_is_use_proxy to true and add proxy config ex) proxy_env.http_proxy
+docker_credentials 
+docker_registyr_url
+custom ca cert
 
 # ToDo
-1) portus registry to dcos pods (but  pods is not suppored in enterprise strict mode)
+1) portus registry to dcos pods (but  pods is not suppored in  strict mode)
+
 
 # Features
   
@@ -181,7 +189,7 @@ portus installed in bootstrap node.  port https(443) is used basically
 ###### config 
 1) LDAP integration - default config is not based on LDAP. to integrate LDAP, add LDAP config in role/dcos/packages/registry/templates/config-local.yml.j2 
 2) registry certificate - Command name of certficate 
-  update docker_private_url as domain name you use in group_vars/all.yml
+  update docker_registry_url as domain name you use in group_vars/all.yml
 3) add admin account to playbooks/pkg-des/registry-portus for ID, Password
 
 ###### install

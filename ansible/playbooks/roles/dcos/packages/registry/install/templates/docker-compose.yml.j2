@@ -7,12 +7,19 @@ services:
     environment:
       PORTUS_MACHINE_FQDN_VALUE: ${MACHINE_FQDN}
       PORTUS_LOCAL_CONFIG_PATH: /srv/Portus/config/config-local.yml
-      PORTUS_PRODUCTION_HOST: db
-      PORTUS_PRODUCTION_DATABASE: portus_production
-      PORTUS_PRODUCTION_PASSWORD: ${DATABASE_PASSWORD}
+
+      # DB
+      PORTUS_DB_HOST: db
+      PORTUS_DB_DATABASE: portus_production
+      PORTUS_DB_PASSWORD: ${DATABASE_PASSWORD}
+      PORTUS_DB_POOL: 5
+
+      # Secrets
       PORTUS_SECRET_KEY_BASE: ${SECRET_KEY_BASE}
       PORTUS_KEY_PATH: /certificates/portus.key
       PORTUS_PASSWORD: ${PORTUS_PASSWORD}
+
+      # SSL
       PORTUS_PUMA_TLS_KEY: /certificates/portus.key
       PORTUS_PUMA_TLS_CERT: /certificates/portus.crt
     ports:
@@ -24,18 +31,27 @@ services:
       - ./portus/config-local.yml:/srv/Portus/config/config-local.yml
       - static:/srv/Portus/public
 
-  crono:
+  background:
     image: opensuse/portus:head
     restart: on-failure
+    extra_hosts:
+      - "{{service.machine_fqdn}}:{{groups['dcos_bootstrap'][0] }}"
     environment:
       PORTUS_MACHINE_FQDN_VALUE: ${MACHINE_FQDN}
-      PORTUS_PRODUCTION_HOST: db
-      PORTUS_PRODUCTION_DATABASE: portus_production
-      PORTUS_PRODUCTION_PASSWORD: ${DATABASE_PASSWORD}
+      CCONFIG_PREFIX: PORTUS
+     
+      # DB
+      PORTUS_DB_HOST: db
+      PORTUS_DB_DATABASE: portus_production
+      PORTUS_DB_PASSWORD: ${DATABASE_PASSWORD}
+      PORTUS_DB_POOL: 5
+
+      # Secrets
       PORTUS_SECRET_KEY_BASE: ${SECRET_KEY_BASE}
       PORTUS_KEY_PATH: /certificates/portus.key
       PORTUS_PASSWORD: ${PORTUS_PASSWORD}
-      PORTUS_INIT_COMMAND: bin/crono
+
+      PORTUS_BACKGROUND: true
     links:
       - db
     volumes:
@@ -43,6 +59,7 @@ services:
 
   db:
     image: library/mariadb:10.0.23
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0
     restart: on-failure
     environment:
       MYSQL_DATABASE: portus_production
@@ -61,8 +78,11 @@ services:
       REGISTRY_AUTH_TOKEN_SERVICE: ${MACHINE_FQDN}
       REGISTRY_AUTH_TOKEN_ISSUER: ${MACHINE_FQDN}
       REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE: /secrets/portus.crt
+
+      # SSL
       REGISTRY_HTTP_TLS_CERTIFICATE: /secrets/portus.crt
       REGISTRY_HTTP_TLS_KEY: /secrets/portus.key
+
       REGISTRY_NOTIFICATIONS_ENDPOINTS: >
         - name: portus
           url: https://${MACHINE_FQDN}/v2/webhooks/events
