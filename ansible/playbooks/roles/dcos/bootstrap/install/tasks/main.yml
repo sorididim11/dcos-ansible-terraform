@@ -42,8 +42,8 @@
   when: dcos_is_enterprise
 
 
-- name: Generate ip-detect, ip-detect-public
-  template:
+- name: Copy ip-detect, ip-detect-public
+  copy:
     src: "{{item}}.j2"
     dest: "{{ dcos_bootstrap_root_path }}/genconf/{{item}}"
   with_items:
