@@ -12,6 +12,7 @@ customer_key: {{ edcos_license }}
 security: {{ edcos_security_mode }}
 dcos_audit_logging: {{ edcos_audit_logging }}
 superuser_username: {{ edcos_superuser }}
+fault_domain_enabled: false
 {% endif %}
 
 {# cluster setup #}
@@ -33,7 +34,6 @@ cluster_docker_registry_url = {{ dcos_docker_registry_url }}
 {% endif %}
 
 process_timeout: 600
-fault_domain_enabled: false
 enable_ipv6: 'false'
 telemetry_enabled: 'false'
 
