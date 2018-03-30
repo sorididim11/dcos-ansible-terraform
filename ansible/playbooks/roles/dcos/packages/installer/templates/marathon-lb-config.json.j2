@@ -1,8 +1,10 @@
 {
   "marathon-lb": {
     "name": "{{service.name}}",
+{% if dcos_is_enterprise %}
     "principal": "{{service.name}}",
     "secret_name": "{{service.name}}/{{service.secret_name | default('secret')}}",
+{% endif %}
     "marathon-uri": "https://marathon.mesos:8443"
   }
 }
