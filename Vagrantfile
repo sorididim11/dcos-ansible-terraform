@@ -8,7 +8,7 @@ guest_home_dir = '/home/vagrant'
 dcos_config = YAML.load_file('ansible/inventories/dev/group_vars/all.yml')
 settings = YAML.load_file 'vagrantConf.yml'
 dcos_version = dcos_config['dcos_version']
-dcos_installer_package =   dcos_config['dcos_is_enterprise']? "dcos_generate_config.ee.#{dcos_version}.sh" : "dcos_generate_config.#{dcos_version}.sh" 
+dcos_installer_package = dcos_config['dcos_is_enterprise'] ? "dcos_generate_config.ee.#{dcos_version}.sh" : "dcos_generate_config.#{dcos_version}.sh" 
 
 # Check if vagrant confile is in valid order. dcos_bootstrap should be at the bottom of config file
 UI.info 'Checking if the location of dcos_boostrap of vagrantConf.xml is valid...', bold: true
