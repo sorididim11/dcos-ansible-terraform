@@ -1,0 +1,15 @@
+---
+
+- name: Install dcos kubernetees cli 
+  command: dcos package install --cli kubernetes --yes
+
+
+- name: Install kubelet
+  become: yes
+  get_url:
+    url: "https://storage.googleapis.com/kubernetes-release/release/v{{kubectl_version}}/bin/linux/amd64/kubectl"
+    dest: /usr/local/bin/kubectl
+    validate_certs: no
+    mode: 0755
+    force: no
+  environment: "{{proxy_env}}" 
