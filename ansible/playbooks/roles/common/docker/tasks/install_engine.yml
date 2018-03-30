@@ -23,7 +23,7 @@
 - name: Install Docker Engine & Selinux 
   yum: name={{docker_pkg_name}}-{{ docker_version }} state=present update_cache=yes
 
-- name: Create symbolic link to docker-proxy, docker-rundeck_acl_policy
+- name: Create symbolic link to docker-proxy, docker-runc
   file:
     src: "/usr/libexec/docker/{{ item }}-current"
     dest: "/usr/libexec/docker/{{ item }}"

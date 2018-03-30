@@ -5,7 +5,7 @@
 - include_vars: CentOS.yml
 
 - set_fact:
-    docker_pkg_name: "{{ 'docker-engine' if docker_type == 'community' else 'docker-ee'}}"
+    docker_pkg_name: "{{ 'docker-ce' if docker_type == 'community' else 'docker-ee'}}"
 
 - name: Add the YUM Docker repository in CentOS
   get_url:
