@@ -48,7 +48,7 @@ selinux_mode: permissive
 
 # docker 
 docker_type: community #community or enterprise or redhat 
-docker_version: 1.13.1# 17.05.0.ce 
+docker_version: 17.05.0.ce # 1.13.1
 docker_volume_fs: overlay
 docker_compose_version: 1.16
 docker_registry_url: registry.kin.com
