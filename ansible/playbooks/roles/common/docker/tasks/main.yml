@@ -33,6 +33,10 @@
   yum: name={{docker_pkg_name}}-{{ docker_version }} state=present update_cache=yes
 
 
+- name: Add nogroup, docker to group 
+  group: name=docker state=present
+
+
 - name: Check if docker-proxy, docker-runc exist
   stat: path=/usr/libexec/docker
   register: stat_result
