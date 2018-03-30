@@ -7,6 +7,8 @@ UI = Vagrant::UI::Colored.new
 guest_home_dir = '/home/vagrant'
 dcos_config = YAML.load_file('ansible/inventories/dev/group_vars/all.yml')
 settings = YAML.load_file 'vagrantConf.yml'
+dcos_version = dcos_config['dcos_version']
+dcos_installer_package =   dcos_config['dcos_is_enterprise']? "dcos_generate_config.ee.#{dcos_version}.sh" : "dcos_generate_config.#{dcos_version}.sh" 
 
 # Check if vagrant confile is in valid order. dcos_bootstrap should be at the bottom of config file
 UI.info 'Checking if the location of dcos_boostrap of vagrantConf.xml is valid...', bold: true
@@ -82,7 +84,7 @@ Vagrant.configure('2') do |config|
         node.vm.provision 'shell' do |sh|
           sh.inline = <<-SHELL
             [ !  -d /dcos ] && sudo mkdir /dcos && chown vagrant:vagrant /dcos
-            [ ! -e /dcos/dcos_generate_config.ee.sh ] && cp /vagrant/dcos_generate_config.ee.sh /dcos && chown vagrant:vagrant /dcos/dcos_generate_config.ee.sh
+            [ ! -e /dcos/#{dcos_installer_package} ] && cp /vagrant/#{dcos_installer_package}  /dcos && chown vagrant:vagrant /dcos/#{dcos_installer_package} 
             [ ! -e /home/vagrant/.ssh/id_rsa ] && echo "#{ssh_prv_key}" > /home/vagrant/.ssh/id_rsa && chown vagrant:vagrant /home/vagrant/.ssh/id_rsa && chmod 600 /home/vagrant/.ssh/id_rsa
             echo Provisioning of ssh keys completed [Success].
           SHELL
