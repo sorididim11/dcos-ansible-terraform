@@ -13,11 +13,12 @@ security: {{ edcos_security_mode }}
 dcos_audit_logging: {{ edcos_audit_logging }}
 superuser_username: {{ edcos_superuser }}
 fault_domain_enabled: false
+{% else %}
+oauth_enabled: 'true'
 {% endif %}
 
 {# cluster setup #}
 cluster_name: {{ dcos_cluster_name }}
-oauth_enabled: 'false'
 exhibitor_storage_backend: {{ dcos_exhibitor_storage_backend_type }}
 master_discovery: {{ dcos_master_discovery_type }}
 
