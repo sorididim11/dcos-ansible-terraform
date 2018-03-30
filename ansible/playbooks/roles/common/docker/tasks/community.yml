@@ -8,10 +8,19 @@
     docker_pkg_name: "{{ 'docker-engine' if docker_type == 'community' else 'docker-ee'}}"
 
 - name: Add the YUM Docker repository in CentOS
-  yum_repository:
-    name: dockerrepo
-    description: Docker Repository.
-    baseurl: "{{ docker_repo }}"
-    enabled: yes
-    gpgcheck: yes
-    gpgkey:  http://yum.dockerproject.org/gpg
+  get_url:
+    url: "{{ docker_repo }}"
+    dest: "/etc/yum.repos.d"
+    force: no
+    validate_certs: no
+  environment: "{{proxy_env}}"
+
+
+# - name: Add the YUM Docker repository in CentOS
+#   yum_repository:
+#     name: dockerrepo
+#     description: Docker Repository.
+#     baseurl: "{{ docker_repo }}"
+#     enabled: yes
+#     gpgcheck: yes
+#     gpgkey:  http://yum.dockerproject.org/gpg

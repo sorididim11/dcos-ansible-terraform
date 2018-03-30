@@ -101,7 +101,7 @@ Vagrant.configure('2') do |config|
 
         node.vm.provision :ansible_local do |ansible|
           ansible.install_mode = :pip # or default( by os package manager)
-          ansible.version = '2.3.1.0'
+          ansible.version = '2.4.3.0'
           ansible.config_file = 'ansible/ansible.cfg'
           ansible.inventory_path = inventory_file
           ansible.limit = 'all'
