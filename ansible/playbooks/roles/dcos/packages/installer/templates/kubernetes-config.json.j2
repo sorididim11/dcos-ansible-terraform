@@ -3,9 +3,9 @@
         "node_count": {{ (groups['dcos_slaves'] | length) }}
     },
     "service": {
-        "name": "{{service.name}}"{% if dcos_is_enterprise %},
+        "name": "{{service.name}}" {% if dcos_is_enterprise %} ,
         "service_account": "{{service.name}}",
         "service_account_secret": "{{service.name}}/{{service.secret_name | default('secret')}}"
-        {{% endif %}}
+        {% endif %}
     }
 }
