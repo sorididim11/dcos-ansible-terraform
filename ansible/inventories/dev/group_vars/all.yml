@@ -4,6 +4,7 @@ ansible_key_file: ~/.ssh/dcos
 
 dcos_version: "1.10.5"
 dcos_cli_version: "1.10"
+kubectl_version: "1.10.0"
 
 # enterprise
 edcos_license: !vault |
