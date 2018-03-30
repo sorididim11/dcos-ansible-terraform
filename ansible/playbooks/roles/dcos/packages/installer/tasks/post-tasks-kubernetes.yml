@@ -1,9 +1,5 @@
 ---
 
-- name: Install dcos kubernetees cli 
-  command: dcos package install --cli kubernetes --yes
-
-
 - name: Install kubelet
   become: yes
   get_url:

@@ -15,4 +15,3 @@ ansible/ansible.cfg
 node.json
 *.pyc
 object.data
-dcos
