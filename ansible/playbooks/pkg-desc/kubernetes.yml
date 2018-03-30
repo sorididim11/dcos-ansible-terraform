@@ -2,7 +2,7 @@
 services:
   kube-dev:
     name: kube-dev
-    package: beta-kubernetes
+    package: kubernetes
     user: nobody
     role: { name: '*'}
     permissions:
