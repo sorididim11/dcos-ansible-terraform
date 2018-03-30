@@ -1,6 +1,6 @@
 {
     "kubernetes": {
-        "node_count": {{ (groups['dcos_slaves'] | length) }}
+        "node_count": {{ service.options.node_count }}
     },
     "service": {
         "name": "{{service.name}}" {% if dcos_is_enterprise %} ,
