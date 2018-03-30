@@ -15,7 +15,7 @@
   roles:
     - { role: dcos/node/quota, role_def: "{{services['marathon-ee-dev'].role}}" } 
     - { role: dcos/packages/service-account, service:  "{{services['marathon-ee-dev']}}" } 
-    - { role: dcos/packages/installer, custom_type: app, service: "{{services['marathon-ee-dev']}}", tags: marathon-ee}
+    - { role: dcos/packages/installer, custom_type: app, service: "{{services['marathon-ee-dev']}}"}
   environment: "{{ proxy_env }}"
 
 
@@ -26,6 +26,6 @@
   roles:
     - { role: dcos/node/quota,  role_def: "{{services['marathon-ee-svc'].role}}" } 
     - { role: dcos/packages/service-account, service:  "{{services['marathon-ee-svc']}}" } 
-    - { role: dcos/packages/installer, custom_type: app, service: "{{services['marathon-ee-svc']}}", tags: marathon-ee}
+    - { role: dcos/packages/installer, custom_type: app, service: "{{services['marathon-ee-svc']}}"}
   environment: "{{ proxy_env }}"
 

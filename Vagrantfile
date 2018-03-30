@@ -3,12 +3,11 @@ require 'vagrant/ui'
 
 UI = Vagrant::UI::Colored.new
 
-
 guest_home_dir = '/home/vagrant'
 dcos_config = YAML.load_file('ansible/inventories/dev/group_vars/all.yml')
 settings = YAML.load_file 'vagrantConf.yml'
 dcos_version = dcos_config['dcos_version']
-dcos_installer_package = dcos_config['dcos_is_enterprise'] ? "dcos_generate_config.ee.#{dcos_version}.sh" : "dcos_generate_config.#{dcos_version}.sh" 
+dcos_installer_package = dcos_config['dcos_is_enterprise'] ? "dcos_generate_config.ee.#{dcos_version}.sh" : "dcos_generate_config.#{dcos_version}.sh"
 
 # Check if vagrant confile is in valid order. dcos_bootstrap should be at the bottom of config file
 UI.info 'Checking if the location of dcos_boostrap of vagrantConf.xml is valid...', bold: true
@@ -33,12 +32,10 @@ File.open(inventory_file, 'w') do |f|
   f.write("[dcos_nodes:children]\ndcos_masters\ndcos_slaves\ndcos_slaves_public")
 end
 
-
 Vagrant.configure('2') do |config|
   config.vm.box = 'centos/7'
   config.ssh.insert_key = false
   config.vm.synced_folder '.', '/vagrant', type: 'virtualbox'
-  
 
   required_plugins = %w( vagrant-hostmanager vagrant-cachier vagrant-vbguest )
   required_plugins.each do |plugin|
@@ -56,7 +53,7 @@ Vagrant.configure('2') do |config|
     config.proxy.http = 'http://web-proxy.corp.hp.com:8080'
     config.proxy.https = 'http://web-proxy.corp.hp.com:8080'
 
-    no_proxy = 'localhost,127.0.0.1,' + settings.map{|k,v| "#{v['ip']},#{v['name']}" }.join(',')
+    no_proxy = 'localhost,127.0.0.1,' + settings.map { |_, v| "#{v['ip']},#{v['name']}" }.join(',')
     UI.info "no proxies: #{no_proxy}"
     config.proxy.no_proxy = no_proxy
   end
@@ -65,9 +62,7 @@ Vagrant.configure('2') do |config|
     config.vm.define name do |node|
       node.vm.hostname = machine_info['name']
       node.vm.network :private_network, ip: machine_info['ip']
-      if defined?(machine_info['box']) != nil
-        node.vm.box = machine_info['box']
-      end
+      !machine_info['box'].nil? && node.vm.box = machine_info['box']
 
       node.vm.provider 'virtualbox' do |vb|
         vb.linked_clone = true
@@ -84,7 +79,7 @@ Vagrant.configure('2') do |config|
         node.vm.provision 'shell' do |sh|
           sh.inline = <<-SHELL
             [ !  -d /dcos ] && sudo mkdir /dcos && chown vagrant:vagrant /dcos
-            [ ! -e /dcos/#{dcos_installer_package} ] && cp /vagrant/#{dcos_installer_package}  /dcos && chown vagrant:vagrant /dcos/#{dcos_installer_package} 
+            [ ! -e /dcos/#{dcos_installer_package} ] && cp /vagrant/#{dcos_installer_package}  /dcos && chown vagrant:vagrant /dcos/#{dcos_installer_package}
             [ ! -e /home/vagrant/.ssh/id_rsa ] && echo "#{ssh_prv_key}" > /home/vagrant/.ssh/id_rsa && chown vagrant:vagrant /home/vagrant/.ssh/id_rsa && chmod 600 /home/vagrant/.ssh/id_rsa
             echo Provisioning of ssh keys completed [Success].
           SHELL
@@ -102,8 +97,7 @@ Vagrant.configure('2') do |config|
           end
         end
 
-        node.vm.provision 'shell', inline: "echo #{password} > #{guest_home_dir}/password" if defined?(password) != nil
-
+        node.vm.provision 'shell', inline: "echo #{password} > #{guest_home_dir}/password"
 
         node.vm.provision :ansible_local do |ansible|
           ansible.install_mode = :pip # or default( by os package manager)
@@ -111,10 +105,11 @@ Vagrant.configure('2') do |config|
           ansible.config_file = 'ansible/ansible.cfg'
           ansible.inventory_path = inventory_file
           ansible.limit = 'all'
+
           # ansible.playbook = 'ansible/playbooks/util-config-ohmyzsh.yml'
           ansible.playbook = 'ansible/vagrantSite.yml'
           ansible.verbose = 'true'
-          ansible.vault_password_file = guest_home_dir + '/password' if dcos_config['dcos_is_enterprise'] 
+          ansible.vault_password_file = guest_home_dir + '/password' if dcos_config['dcos_is_enterprise']
         end
       end
     end

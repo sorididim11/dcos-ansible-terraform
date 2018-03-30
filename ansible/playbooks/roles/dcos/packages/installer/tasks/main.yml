@@ -1,13 +1,16 @@
 ---
-- name: Do pre-tasks for {{pre_tasks}}
+
+- name: Do pre-tasks
   include: pre-tasks-{{pre_tasks}}.yml
-  when: pre_tasks is defined 
+  when: pre_tasks is defined
+  tags: install
 
 
 - name: Generates config for {{ service.name }}
   template:
     src: "{{service.package}}-config.json.j2"
     dest: "{{dcos_bootstrap_root_path}}/packages/{{service.name}}-config.json"
+  tags: install
 
 
 - name: Deploy {{ service.name }}
@@ -21,8 +24,10 @@
      {% endif %}
   args: 
     chdir: "{{dcos_bootstrap_root_path}}/packages"
+  tags: install
 
 
-- name: Do post-tasks for {{post_tasks}}
+- name: Do post-tasks
   include: post-tasks-{{post_tasks}}.yml
   when: post_tasks is defined 
+  tags: install
