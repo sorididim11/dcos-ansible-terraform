@@ -5,8 +5,17 @@
   vars_files: 
     - pkg-desc/monitoring.yml
   tags: ['pkg']
+  # pre_tasks:
+  #   -   sheLl: echo 'good bye'
   roles:
-    - { role: dcos/packages/installer, service: "{{services['cadvisor']}}" }
-    - { role: dcos/packages/installer, service: "{{services['influxdb']}}" }
-    - { role: dcos/packages/installer, service: "{{services['grafana']}}" }
+    - { role: dcos/packages/installer, service: "{{ services['cadvisor'] }}" }
+    - { role: dcos/packages/installer, service: "{{ services['influxdb'] }}" }
+    - { role: dcos/packages/installer, service: "{{ services['grafana'] }}" }
+  post_tasks:
+    # curl -G http://localhost:8086/query --data-urlencode "q=CREATE DATABASE mydb"
+    - name: Create database, cadvisor in influxdb
+      uri:
+        url: "http://{{ services['influxdb'].name }}.marathon.l4lb.thisdcos.directory:8086/query?u=admin&p=password?{{ 'q=CREATE DATABASE mydb' | urlencode }}"
+        method: GET
+      delegate_to: "{{ groups['dcos_masters'][0] }}"
   environment: "{{ proxy_env }}"
