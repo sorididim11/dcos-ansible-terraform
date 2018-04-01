@@ -1,0 +1,15 @@
+--- 
+
+- include: util-update-fact-cache.yml
+
+- name: Initialzie bootstrap node
+  tags: ['pre-steps', 'install'] 
+  hosts: dcos_bootstrap
+  gather_facts: False
+  become: yes
+  roles:
+    - common/preconditions 
+    - commmn/docker
+    - { role: dcos/packages/registry/install, registry_package: portus, when: install_portus == True } #portus or cesanta
+
+  environment: "{{ proxy_env }}"
