@@ -8,8 +8,8 @@
   gather_facts: False
   become: yes
   roles:
-    - common/preconditions 
-    - commmn/docker
+    - { role: common/preconditions }
+    - { roe: commmn/docker, docker_type: community, docker_version: 17.06.0.ce }
     - { role: dcos/packages/registry/install, registry_package: portus, when: install_portus == True } #portus or cesanta
-
+   # - { role: ansible awx}
   environment: "{{ proxy_env }}"
