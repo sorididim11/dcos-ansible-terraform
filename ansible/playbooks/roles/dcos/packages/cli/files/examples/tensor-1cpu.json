@@ -1,0 +1,44 @@
+{
+  "id": "tensorflow-1cpu",
+  "cpus": 1,
+  "gpus": 0,
+  "mem": 512,
+  "disk": 0,
+  "instances": 1,
+  "container": {
+    "type": "MESOS",
+    "docker": {
+      "image": "tensorflow/tensorflow",
+      "pullConfig": {
+        "secret": "pullConfigSecret"
+      }
+    },
+    "volumes": [],
+    "portMappings": [
+      {
+        "containerPort": 8888,
+        "hostPort": 0,
+        "protocol": "tcp",
+        "servicePort": 12000,
+        "name": "jupyter"
+      }
+    ]
+  },
+  "secrets": {
+    "pullConfigSecret": {
+      "source": "/hub/ucr"
+    }
+  },
+  "requirePorts": false,
+  "networks": [
+    {
+      "mode": "container/bridge"
+    }
+  ],
+  "healthChecks": [],
+  "fetch": [],
+  "constraints": [],
+  "labels": {
+    "HAPROXY_GROUP": "external"
+  }
+}
