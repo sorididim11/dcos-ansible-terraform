@@ -11,16 +11,6 @@
           (ansible_distribution == "RedHat" and ansible_distribution_major_version == "7")
       msg: DC/OS supports only RedHat, CentOS
 
-  
-  - name: Register Redhat subscription and attach automatically
-    redhat_subscription:
-      state: present
-      username: "{{redhat_subscription_user}}"
-      password: "{{redhat_subscription_pwd}}"
-      autosubscribe: true
-    when: redhat_subscription_user is defined and ansible_distribution == "RedHat"
-
-
 
   - name: Set up ENV, DCOS_PRIVATE_IP for ip detect 
     lineinfile:
