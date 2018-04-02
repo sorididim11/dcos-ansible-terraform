@@ -1,5 +1,5 @@
 --- 
-- name: Install cadvisor
+- name: Install Monitoring platform
   gather_facts: False
   hosts: dcos_cli[0]
   vars_files: 
@@ -12,6 +12,16 @@
     - { role: dcos/packages/installer, service: "{{ services['influxdb'] }}" }
     - { role: dcos/packages/installer, service: "{{ services['grafana'] }}" }
   post_tasks:
+    - name: wait for influxdb to become ready
+      wait_for:
+        host: "{{ services['influxdb'].name }}.marathon.l4lb.thisdcos.directory"
+        port: 8086
+        state: started
+        delay: 5
+        connect_timeout: 15
+        timeout: 30
+      delegate_to: "{{ groups['dcos_masters'][0] }}"
+      tags: conf
     # curl -G http://localhost:8086/query --data-urlencode "q=CREATE DATABASE mydb"
     - name: Create database, cadvisor in influxdb
       uri:
@@ -20,7 +30,6 @@
         validate_certs: False
         body_format: json
         body: 
-        # status_code: 202
       delegate_to: "{{ groups['dcos_masters'][0] }}"
       tags: conf
 
