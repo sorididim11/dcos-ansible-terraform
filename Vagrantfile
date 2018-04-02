@@ -58,6 +58,12 @@ Vagrant.configure('2') do |config|
     config.proxy.no_proxy = no_proxy
   end
 
+  if Vagrant.has_plugin?('vagrant-registration')
+    config.registration.proxy = 'mongo:8080'
+    config.registration.proxyUser = 'flash'
+    config.registration.proxyPassword = 'zarkov'
+  end
+
   settings.each do |name, machine_info|
     config.vm.define name do |node|
       node.vm.hostname = machine_info['name']
