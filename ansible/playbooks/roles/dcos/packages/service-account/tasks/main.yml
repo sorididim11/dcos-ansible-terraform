@@ -1,4 +1,4 @@
 ---
 
 - include: create-svc-account.yml
-  when: dcos_is_enterprise == True and edcos_security_mode != "disabed"
+  when: dcos_is_enterprise == True and edcos_security_mode != "disabled"

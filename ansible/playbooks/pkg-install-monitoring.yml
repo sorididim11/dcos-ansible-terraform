@@ -26,7 +26,7 @@
 
     - name: Register Data soruce to Grafana
       uri:
-        url: "http://{{ services['grafana'].name }}.marathon.l4lb.thisdcos.directory:13000/query?q={{ 'CREATE DATABASE cadvisor' | urlencode }}"
+        url: "http://{{ services['grafana'].name }}.marathon.l4lb.thisdcos.directory:13000/api/datasources"
         method: POST
         body_format: json
         body: 
