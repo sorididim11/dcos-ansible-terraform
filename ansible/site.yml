@@ -1,6 +1,8 @@
 
 ---
 
+- include: playbooks/step0-init-bootstrap.yml
+
 - include: playbooks/step1-deploy-preconditions.yml
 
 - include: playbooks/step2-deploy-docker.yml

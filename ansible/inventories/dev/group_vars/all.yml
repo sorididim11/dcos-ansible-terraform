@@ -36,7 +36,9 @@ dcos_is_use_proxy: false
 
 proxy_env:
   dummy: dummy
-
+#  http_proxy: http://web-proxy.kor.hp.com:8080
+#  https_proxy: http://web-proxy.kor.hp.com:8080
+#  no_proxy: ".mesos,.thisdcos.directory,.dcos.directory,.zk,127.0.0.1,localhost,10.0.15.11, 10.0.15.21, 10.0.15.31, 10.0.15.32, 10.0.15.33, 10.0.15.41"
 
 dcos_resolvers:
   - 8.8.8.8
