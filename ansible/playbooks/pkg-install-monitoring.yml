@@ -35,7 +35,7 @@
 
     - name: Register Data soruce to Grafana
       uri:
-        url: "http://{{ groups['dcos_slaves_public'][0] }}:13000/api/datasources"
+        url: "http://admin:{{ services['grafana'].options.password }}@{{ groups['dcos_slaves_public'][0] }}:13000/api/datasources"
         method: POST
         body_format: json
         body: 
