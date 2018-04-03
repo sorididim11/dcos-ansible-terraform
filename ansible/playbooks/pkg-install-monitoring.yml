@@ -33,19 +33,23 @@
       delegate_to: "{{ groups['dcos_masters'][0] }}"
       tags: conf
 
-    - name: Register Data soruce to Grafana
-      uri:
-        url: "http://admin:{{ services['grafana'].options.password }}@{{ groups['dcos_slaves_public'][0] }}:13000/api/datasources"
-        method: POST
-        body_format: json
-        body: 
-          name: "{{ services['influxdb'].name }}"
-          type: influxdb
-          url: "http://{{ services['influxdb'].name }}.marathon.l4lb.thisdcos.directory:8086"
-          access: proxy
-          basicAuth: true
-          basicAuthUser: admin
-          basicAuthPassword: "{{ services['grafana'].options.password }}"      
-        # status_code: 202, 409
-      tags: conf
+    # currently, no way to automate installing datasource because of getting API key from grafana dashboard
+    # - name: Register Data soruce to Grafana
+    #   uri:
+    #     url: "http://admin:{{ services['grafana'].options.password }}@{{ groups['dcos_slaves_public'][0] }}:13000/api/datasources"
+    #     method: POST
+    #     headers: 
+    #       Authorization: "token=dcos_token"
+    #       Accept: "application/json" 
+    #     body_format: json
+    #     body: 
+    #       name: "{{ services['influxdb'].name }}"
+    #       type: influxdb
+    #       url: "http://{{ services['influxdb'].name }}.marathon.l4lb.thisdcos.directory:8086"
+    #       access: proxy
+    #       basicAuth: true
+    #       basicAuthUser: admin
+    #       basicAuthPassword: "{{ services['grafana'].options.password }}"      
+    #     # status_code: 202, 409
+    #   tags: conf
   environment: "{{ proxy_env }}"
