@@ -46,7 +46,7 @@
           basicAuth: true
           basicAuthUser: admin
           basicAuthPassword: "{{ services['grafana'].options.password }}"
-        delegate_to: "{{ groups['dcos_masters'][0] }}"
+      delegate_to: "{{ groups['dcos_masters'][0] }}"
         # status_code: 202, 409
       tags: conf
   environment: "{{ proxy_env }}"
