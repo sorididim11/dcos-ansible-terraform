@@ -11,5 +11,5 @@
     - { role: common/preconditions }
     - { role: common/docker, docker_type: community, docker_version: 17.06.0.ce }
     - { role: dcos/packages/registry/install, registry_package: portus, when: install_portus == True } #portus or cesanta
-   # - { role: ansible awx}
+    - { role: awx }
   environment: "{{ proxy_env }}"
