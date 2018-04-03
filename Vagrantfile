@@ -17,12 +17,12 @@ if settings[settings.keys.last]['type'] != 'dcos_bootstrap'
 end
 
 # create dynamic inventory file. ansible provisioner 's dynamic inventory got some bugs
-UI.info 'Create ansible dynamic inventory...', bold: true
+UI.info 'Create ansible dynamic inventory file...', bold: true
 inventory_file = 'ansible/inventories/dev/hosts'
 File.open(inventory_file, 'w') do |f|
-  %w(dcos_masters dcos_slaves dcos_slaves_public dcos_cli dcos_bootstrap).each do |section|
+  %w(dcos_masters dcos_slaves dcos_slaves_public dcos_cli dcos_bootstrap docker_registry).each do |section|
     f.puts("[#{section}]")
-    section = 'dcos_bootstrap' if section == 'dcos_cli'
+    section = 'dcos_bootstrap' if section == 'dcos_cli' || section == 'docker_registry'
 
     settings.each do |_, machine_info|
       f.puts(machine_info['ip']) if machine_info['type'] == section
