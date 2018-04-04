@@ -1,11 +1,18 @@
 {
     "kubernetes": {
-        "node_count": {{ service.options.node_count }}
+        "node_count": {{ service.options.node_count }},
+        "reserved_resources": {
+            "kube_cpus": {{ kubelet_cpus | default(2)}},
+            "kube_mem": {{ kubelet_mem | default(2048)}},
+            "kube_disk": {{ kubelet_disk | default(10240)}}
+        }
     },
     "service": {
-        "name": "{{service.name}}" {% if dcos_is_enterprise %} ,
+        "name": "{{service.name}}",
+        {% if dcos_is_enterprise %}
         "service_account": "{{service.name}}",
-        "service_account_secret": "{{service.name}}/{{service.secret_name | default('secret')}}"
+        "service_account_secret": "{{service.name}}/{{service.secret_name | default('secret')}}",
         {% endif %}
+        "sleep": 1000
     }
 }
