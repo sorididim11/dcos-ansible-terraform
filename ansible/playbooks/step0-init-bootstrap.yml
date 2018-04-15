@@ -3,13 +3,14 @@
 - include: util-update-fact-cache.yml
 
 - name: Initialzie bootstrap node
-  tags: ['pre-steps', 'install'] 
+  tags: ['step-0'] 
   hosts: dcos_bootstrap
   gather_facts: False
   become: yes
   roles:
     - { role: common/preconditions }
     - { role: common/docker, docker_type: community, docker_version: 17.06.0.ce }
-    - { role: dcos/packages/registry/install, registry_package: portus, when: install_portus == True } #portus or cesanta
+    - { role: dcos/packages/registry/install, registry_package: portus, when: install_portus is defined and install_portus == True } #portus or cesanta
+    - { role: dcos/bootstrap/build-bootfile }
     - { role: awx }
   environment: "{{ proxy_env }}"
