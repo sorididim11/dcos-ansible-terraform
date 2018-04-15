@@ -1,0 +1,72 @@
+---
+- name: Generate DC/OS upgrade scripts
+  hosts: dcos_bootstrap
+  gather_facts: False
+  tags: ['upgrade']
+  pre_tasks:
+    - name: Check version upgarde or security upgrade
+      pause: 
+        prompt: |
+          1) version upgrade 
+          2) security upgrade
+          choose 1 or 2) 
+      register: choice
+      until: choice.user_input|int > 0 and choice.user_input|int < 3 
+    - set_fact:
+        choice: "{{ (choice.user_input|int) == 1 | ternary('version', 'security') }}"
+    - debug:
+        msg: |
+          "upgrade security from {{ edcos_security_mode}} to {{ansible_local['bootstrap-config'].security}}"
+          "upgrade version from {{ dcos_version }}" to {{ansible_local['dcos-version'].version}}"
+  roles:
+    - { role: dcos/bootstrap/upgrade , upgrade_op: "{{ choice }}" }
+    - { role: dcos/bootstrap/boot_web, tags: [ 'upgrade-master' ] }
+  environment: "{{ proxy_env }}"
+
+
+- name: "Upgrade Masters"
+  gather_facts: False
+  hosts: dcos_masters
+  tags: ['upgrade-version']
+  serial: 1
+  roles:
+    - { role: dcos/node/upgrade-node, node_type: master} 
+  environment: "{{ proxy_env }}"
+
+
+- name: "Upgrade Slaves"
+  gather_facts: False
+  hosts: dcos_slaves
+  tags: ['upgrade-version']
+  serial: 1
+  roles:
+    - { role: dcos/node/upgrade-node, node_type: slave, svc_name: dcos-mesos-slave  } 
+  environment: "{{ proxy_env }}"
+
+
+- name: "Upgrade  Slaves public"
+  gather_facts: False
+  hosts: dcos_slaves_public
+  tags: ['upgrade-version']
+  serial: 1
+  roles:
+    - { role: dcos/node/upgrade-node, node_type: slave, svc_name: dcos-mesos-slave-public } 
+  environment: "{{ proxy_env }}"
+
+
+- name: Update group_vars 
+  hosts: dcos_bootstrap
+  gather_facts: False
+  tags: ['upgrade-version', 'update-groupvars']
+  roles:
+    - { role: dcos/bootstrap/local-facts, op_type: update }
+  environment: "{{ proxy_env }}"
+
+
+- name: "Update CLI and Enterprise CLI"
+  hosts: dcos_cli
+  tags: ['pkg']
+  gather_facts: False
+  roles:
+    - dcos/packages/cli
+  environment: "{{ proxy_env }}"
