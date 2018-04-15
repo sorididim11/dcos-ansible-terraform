@@ -3,8 +3,23 @@
   hosts: dcos_bootstrap
   gather_facts: False
   tags: ['upgrade-version']
+  pre_tasks:
+    - name: Check version upgarde or security upgrade
+      pause: 
+        prompt: |
+          1) version upgrade 
+          2) security upgrade
+          choose 1 or 2) 
+      register: choice
+      until: choice.user_input|int > 0 and choice.user_input|int < 3 
+    - set_fact:
+        choice: "{{ (choice.user_input|int) == 1 | ternary('version', 'security') }}"
+    - debug:
+        msg: |
+          "upgrade security from {{ edcos_security_mode}} to {{ansible_local['bootstrap-config'].security}}"
+          "upgrade version from {{ dcos_version }}" to {{ansible_local['dcos-version'].version}}"
   roles:
-    - { role: dcos/bootstrap/upgrade , upgrade_op: version}
+    - { role: dcos/bootstrap/upgrade , upgrade_op: "{{ choice }}" }
     - { role: dcos/bootstrap/boot_web, tags: [ 'upgrade-master' ] }
   environment: "{{ proxy_env }}"
 

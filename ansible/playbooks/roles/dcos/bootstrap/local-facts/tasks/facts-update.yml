@@ -12,3 +12,5 @@
       replace_with: "edcos_security_mode: {{ansible_local['bootstrap-config'].security}}"
     - regex: '^dcos_version:'
       replace_with: "dcos_version: {{ansible_local['dcos-version'].version}}"
+    - regex: '^dcos_cli_version:'
+      replace_with: "dcos_cli_version: {{ansible_local['dcos_cli_version'].version}}"
